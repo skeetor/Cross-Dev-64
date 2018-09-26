@@ -2,6 +2,9 @@ package crossdev64.settings;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import crossdev64.main.Application;
 import crossdev64.utils.CommandlineParser;
@@ -35,9 +38,11 @@ public class GlobalSettings
 
 	private SettingsParser mParser;
 	private File mHome;
+	private ResourceBundle mStrings;
 
 	public GlobalSettings(String args[])
 	{
+		initLanguage(null);
 		createOptions(args);
 
 		if(!mParser.parse(args))
@@ -53,9 +58,9 @@ public class GlobalSettings
 		File home = getHome();
 		if(home == null)
 		{
-			// TODO: Should we enforce that a home directory has to exists?
+			// TODO: Should we enforce that a home directory has to exist?
 			// What about if the user just wants to debug something without storing any settiongs? Is this a valid use case for us?
-			Application.MessageBox("Invalid home directory", "The home directory can not be determined. Aborting!");
+			Application.MessageBox(getResourceString("invalid_home"), getResourceString("settings.invalid_home_directory"));
 			System.exit(-1);
 		}
 
@@ -63,8 +68,23 @@ public class GlobalSettings
 		{
 			// TODO: Should we enforce that a home directory has to be writable?
 			// What about if the user just wants to debug something without storing any settiongs? Is this a valid use case for us?
-			Application.MessageBox("Invalid home directory", "The home "+ home.getAbsolutePath()+" directory can not be used for storing settings. Aborting!");
+			Application.MessageBox(getResourceString("invalid_home"), getResourceString("invalid_home", home.getAbsolutePath()));
 			System.exit(-1);
+		}
+	}
+
+	private void initLanguage(Locale oLocale)
+	{
+		if(oLocale == null)
+			oLocale = Locale.getDefault();
+
+		try
+		{
+			mStrings = ResourceBundle.getBundle("crossdev64.resources.language.MessageResources", oLocale);
+		}
+		catch(MissingResourceException e)
+		{
+			// Ignore because it will use the default langauge file. 
 		}
 	}
 
@@ -72,10 +92,8 @@ public class GlobalSettings
 	{
 		mParser = new SettingsParser(args);
 
-		mParser.addOption("settings",
-			"Set the home directory where the settings are stored."
-					+ " Default is to use the systems home directory."
-			)
+		mParser.addOption("settings", 
+			getResourceString("cmdline.settings_description"))
 			.arguments()
 			.optional()
 		;
@@ -117,5 +135,16 @@ public class GlobalSettings
 		}
 
 		return mHome;
+	}
+
+	public String getResourceString(String oKey, String...oParams)
+	{
+		// We intentionlly don't catch this, as this should be a reminder that a string is missing in the locale.
+		String s = mStrings.getString(oKey);
+
+		if(oParams == null)
+			return s;
+
+		return s;
 	}
 }

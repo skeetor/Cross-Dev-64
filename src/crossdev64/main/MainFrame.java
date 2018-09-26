@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -12,6 +14,7 @@ import bibliothek.gui.dock.common.CControl;
 import bibliothek.gui.dock.common.CGrid;
 import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import bibliothek.gui.dock.common.SingleCDockable;
+import bibliothek.gui.dock.common.menu.CLayoutChoiceMenuPiece;
 import bibliothek.gui.dock.common.menu.SingleCDockableListMenuPiece;
 import bibliothek.gui.dock.facile.menu.RootMenuPiece;
 
@@ -39,8 +42,9 @@ public class MainFrame
 	private void initDockable()
 	{
 		CControl control = new CControl(this);
+		createMenubar(control);
 		
-		add(control.getContentArea());
+		getContentPane().add(control.getContentArea());
 		
 		CGrid grid = new CGrid(control);
 		grid.add( 0, 0, 1, 2, createDockable("White", Color.WHITE));
@@ -55,21 +59,6 @@ public class MainFrame
 		// Output
 		grid.add( 1, 1, 1, 1, createDockable("Black", Color.BLACK));
 		control.getContentArea().deploy(grid);
-		
-		RootMenuPiece menu = new RootMenuPiece("File", false);
-		menu.add(new SingleCDockableListMenuPiece(control));
-
-		//menu.add(new String("Test"));
-		JMenuBar menuBar = new JMenuBar();
-		menuBar.add(menu.getMenu());
-
-		menu = new RootMenuPiece("Edit", false);
-		menu.add(new SingleCDockableListMenuPiece(control));
-
-		//menu.add(new String("Test"));
-		menuBar.add(menu.getMenu());
-
-		setJMenuBar(menuBar);
 	}
 
 	protected SingleCDockable createDockable(String title, Color color)
@@ -81,5 +70,175 @@ public class MainFrame
 		dockable.setCloseable(true);
 
 		return dockable;
+	}
+
+	private void createFileMenu(JMenuBar oMenuBar, CControl oControl)
+	{
+		JMenu root = new JMenu("File");
+		JMenuItem item;
+
+		item = new JMenuItem("New");
+		root.add(item);
+
+		item = new JMenuItem("Open File...");
+		root.add(item);
+
+		item = new JMenuItem("Open Project...");
+		root.add(item);
+
+		root.addSeparator();
+
+		item = new JMenuItem("Close");
+		root.add(item);
+
+		item = new JMenuItem("Close Project");
+		root.add(item);
+
+		root.addSeparator();
+
+		item = new JMenuItem("Exit");
+		root.add(item);
+
+		oMenuBar.add(root);
+	}
+
+	private void createEditMenu(JMenuBar oMenuBar, CControl oControl)
+	{
+		JMenu root = new JMenu("Edit");
+		JMenuItem item;
+
+		item = new JMenuItem("Undo");
+		root.add(item);
+
+		item = new JMenuItem("Redo");
+		root.add(item);
+
+		root.addSeparator();
+
+		item = new JMenuItem("Cut");
+		root.add(item);
+
+		item = new JMenuItem("Copy");
+		root.add(item);
+
+		item = new JMenuItem("Paste");
+		root.add(item);
+
+		root.addSeparator();
+
+		item = new JMenuItem("Select All");
+		root.add(item);
+
+		oMenuBar.add(root);
+	}
+
+	private void createProjectMenu(JMenuBar oMenuBar, CControl oControl)
+	{
+		JMenu root = new JMenu("Project");
+		JMenuItem item;
+
+		item = new JMenuItem("Add New Item...");
+		root.add(item);
+
+		item = new JMenuItem("Add Existing Item...");
+		root.add(item);
+
+		item = new JMenuItem("Project Settings...");
+		root.add(item);
+
+		oMenuBar.add(root);
+	}
+
+	private void createBuildMenu(JMenuBar oMenuBar, CControl oControl)
+	{
+		JMenu root = new JMenu("Build");
+		JMenuItem item;
+
+		item = new JMenuItem("Build Project");
+		root.add(item);
+
+		item = new JMenuItem("Rebuild");
+		root.add(item);
+
+		item = new JMenuItem("Clean");
+		root.add(item);
+
+		oMenuBar.add(root);
+	}
+
+	private void createDebugMenu(JMenuBar oMenuBar, CControl oControl)
+	{
+		JMenu root = new JMenu("Debug");
+		JMenuItem item;
+		JMenu menu;
+		
+		menu = new JMenu("Windows");
+
+		item = new JMenuItem("Breakpoints");
+		menu.add(item);
+		item = new JMenuItem("Memory");
+		menu.add(item);
+		root.add(menu);
+		root.addSeparator();
+		
+		item = new JMenuItem("Run");
+		root.add(item);
+		item = new JMenuItem("Start Debugging");
+		root.add(item);
+		item = new JMenuItem("Stop Debugging");
+		root.add(item);
+
+		root.addSeparator();
+
+		item = new JMenuItem("Single Step");
+		root.add(item);
+
+		item = new JMenuItem("Continue");
+		root.add(item);
+
+		oMenuBar.add(root);
+	}
+
+	private void createToolsMenu(JMenuBar oMenuBar, CControl oControl)
+	{
+		JMenu root = new JMenu("Tools");
+		JMenu menu;
+		JMenuItem item;
+
+		item = new JMenuItem("Sprite Editor...");
+		root.add(item);
+		item = new JMenuItem("Character Editor...");
+		root.add(item);
+
+		menu = new JMenu("Layout");
+		RootMenuPiece layout = new RootMenuPiece(menu);
+		layout.add(new CLayoutChoiceMenuPiece(oControl, true));
+		root.add(menu);
+
+		root.addSeparator();
+
+		item = new JMenuItem("Settings...");
+		root.add(item);
+
+		oMenuBar.add(root);
+	}
+
+	private void createMenubar(CControl oControl)
+	{
+		JMenuBar menuBar = new JMenuBar();
+
+		// Create global menus
+		createFileMenu(menuBar, oControl);
+		createEditMenu(menuBar, oControl);
+		createProjectMenu(menuBar, oControl);
+		createBuildMenu(menuBar, oControl);
+		createDebugMenu(menuBar, oControl);
+		createToolsMenu(menuBar, oControl);
+
+		RootMenuPiece menu = new RootMenuPiece("Windows", false);
+		menu.add(new SingleCDockableListMenuPiece(oControl));
+		menuBar.add(menu.getMenu());
+
+		setJMenuBar(menuBar);
 	}
 }
