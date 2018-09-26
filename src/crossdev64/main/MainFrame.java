@@ -24,7 +24,7 @@ public class MainFrame
 {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private GlobalSettings mSettings = Application.getSettings();
+	private GlobalSettings mSettings = GlobalSettings.getInstance();
 
 	/**
 	 * Create the frame.

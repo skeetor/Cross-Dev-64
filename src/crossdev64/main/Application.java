@@ -14,8 +14,6 @@ public class Application
 	protected static Application main;
 	protected static String[] mParams;
 
-	private GlobalSettings mGlobalSettings;
-
 	/**
 	 * Launch the application.
 	 */
@@ -55,7 +53,7 @@ public class Application
 			System.err.println(theme);
 		}
 
-		mGlobalSettings = new GlobalSettings(args);
+		GlobalSettings.create(args);
 
 		MainFrame frame = new MainFrame();
 		try
@@ -72,11 +70,6 @@ public class Application
 		frame.setLocationByPlatform(true);
 		frame.pack();
 		frame.setVisible(true);
-	}
-
-	public static GlobalSettings getSettings()
-	{
-		return main.mGlobalSettings;
 	}
 	
 	public static void MessageBox(String oTitle, String oMessage)

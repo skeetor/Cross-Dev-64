@@ -37,11 +37,23 @@ public class GlobalSettings
 		}
 	};
 
+	private static GlobalSettings mSettings;
 	private SettingsParser mParser;
 	private File mHome;
 	private ResourceBundle mStrings;
 
-	public GlobalSettings(String args[])
+	public static void create(String[] args)
+	{
+		if(mSettings == null)
+			mSettings = new GlobalSettings(args);
+	}
+
+	public static GlobalSettings getInstance()
+	{
+		return mSettings;
+	}
+
+	protected GlobalSettings(String args[])
 	{
 		initLanguage(null, null);
 		createOptions(args);
