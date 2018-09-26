@@ -2,6 +2,8 @@ package crossdev64.settings;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -41,13 +43,26 @@ public class GlobalSettings
 
 	public GlobalSettings(String args[])
 	{
-		initLanguage(null);
+		initLanguage(null, null);
 		createOptions(args);
 
 		if(!mParser.parse(args))
 		{
 			// This will not return and terminate the application.
 			mParser.help();
+		}
+
+		if(mParser.hasArgument("locale"))
+		{
+			String loc = mParser.getArgument("locale").get(0).get(0);
+			Locale l = new Locale(loc);
+
+			// restart, so that the user may get localized error messages.
+			initLanguage(loc, l);
+			createOptions(args);
+
+			// We already know that parsing worked if we reached here, so we don't need to check it again.
+			mParser.parse(args);
 		}
 
 		// Check if the home directory is to be overridden
@@ -58,36 +73,53 @@ public class GlobalSettings
 		if(home == null)
 		{
 			// TODO: Should we enforce that a home directory has to exist?
-			// What about if the user just wants to debug something without storing any settiongs? Is this a valid use case for us?
+			// What about if the user just wants to debug something without storing any settings? Is this a valid use case for us?
 			Application.MessageBox(getResourceString("invalid_home"), getResourceString("settings.invalid_home_directory"));
 			System.exit(-1);
 		}
 
-		String s = getResourceString("test1", Arrays.toString(args).toString());
-		s = getResourceString("settings.invalid_home_description", Arrays.toString(args).toString());
-		System.out.println("Test: "+s);
-
 		if(!home.isDirectory() || !home.canWrite())
 		{
 			// TODO: Should we enforce that a home directory has to be writable?
-			// What about if the user just wants to debug something without storing any settiongs? Is this a valid use case for us?
+			// What about if the user just wants to debug something without storing any settings? Is this a valid use case for us?
 			Application.MessageBox(getResourceString("invalid_home"), getResourceString("settings.invalid_home_description", home.getAbsolutePath()));
 			System.exit(-1);
 		}
 	}
 
-	private void initLanguage(Locale oLocale)
+	private void initLanguage(String oLocaleName, Locale oLocale)
 	{
 		if(oLocale == null)
 			oLocale = Locale.getDefault();
 
-		try
+		if(mStrings != null)
+			ResourceBundle.clearCache();
+
+		if(oLocaleName != null && oLocaleName.toLowerCase().equals("default"))
 		{
-			mStrings = ResourceBundle.getBundle("crossdev64.resources.language.MessageResources", oLocale);
+			// Force to use the default settings. This is necessary, because otherwise
+			// ResourceBundle would always load the default setting instead.
+			mStrings = ResourceBundle.getBundle("crossdev64.resources.language.MessageResources",
+			    new ResourceBundle.Control()
+				{
+			        @Override
+			        public List<Locale> getCandidateLocales(String name,
+			                                                Locale locale) {
+			            return Collections.singletonList(Locale.ROOT);
+			        }
+			    }
+			);
 		}
-		catch(MissingResourceException e)
+		else
 		{
-			// Ignore because it will use the default langauge file. 
+			try
+			{
+				mStrings = ResourceBundle.getBundle("crossdev64.resources.language.MessageResources", oLocale);
+			}
+			catch(MissingResourceException e)
+			{
+				// Ignore because it will use the default langauge file. 
+			}
 		}
 	}
 
@@ -97,6 +129,12 @@ public class GlobalSettings
 
 		mParser.addOption("settings", 
 			getResourceString("cmdline.settings_description"))
+			.arguments()
+			.optional()
+		;
+
+		mParser.addOption("locale", 
+			getResourceString("cmdline.locale_description"))
 			.arguments()
 			.optional()
 		;
@@ -140,15 +178,31 @@ public class GlobalSettings
 		return mHome;
 	}
 
+	/**
+	 * Fetch a string from the resources. The resources can contain positional parameters which are
+	 * set by '%n'. In order to use the '%' character itself a second '%' has to follow. Otherwise
+	 * a number 1...N follows the '%' which indicates the position in the array that should be used in the string.
+	 * Thus the parameters can be freely positioned within a string, which may be required depending on the
+	 * translation, as not all languages will have the same order of wording.
+	 * 
+	 * In case of errors or unused parameters in the translation, a RuntimeException is thrown. This should
+	 * NOT be caught and should remind the developer that he forgot to add a correct translation.
+	 * 
+	 * @param oKey
+	 * @param oParams
+	 * @return
+	 */
 	public String getResourceString(String oKey, String...oParams)
 	{
-		// We intentionally don't catch this, as this should be a reminder that a string is missing in the locale.
 		String s = mStrings.getString(oKey);
 
 		if(oParams == null || oParams.length == 0)
 			return s;
 
-		int translated = 0;
+		boolean translated[] = new boolean[oParams.length];
+		for(int i = 0; i < translated.length; i++)
+			translated[i] = false;
+
 		String str = "";
 		do
 		{
@@ -176,17 +230,42 @@ public class GlobalSettings
 				str += "%";
 			}
 
-			int index = 0;
-			
+			String num = "";
+			while(true)
+			{
+				if(pos >= s.length())
+					break;
+
+				char ch = s.charAt(pos);
+				if(ch < '0' || ch > '9')
+					break;
+
+				num += ch;
+				pos++;
+			}
+
+			if(num.length() == 0)
+				throw new RuntimeException("The resource key ["+oKey+"] contains no parameter index!");
+
+			int index = Integer.parseInt(num)-1;
+			if(index < 0 || index >= oParams.length)
+				throw new RuntimeException("The resource key ["+oKey+"] contains an invalid index! %"+(index+1) + "/"+oParams.length);
+
+			translated[index] = true;
+			str += oParams[index];
 			s = s.substring(pos);
 		}
 		while(true);
 
-		if(translated != oParams.length)
+		for(int i = 0; i < translated.length; i++)
 		{
-			// An untranslated parameter means that there is something wrong with the translation and the developer should fix it.
-			throw new RuntimeException("The resource key ["+oKey+"] contains untranslated parameters: "+ translated + " != " + oParams.length);
+			if(translated[i] == false)
+			{
+				// An untranslated parameter means that there is something wrong with the translation and the developer should fix it.
+				throw new RuntimeException("The resource key ["+oKey+"] contains untranslated parameters: "+ (i+1));
+			}
 		}
+
 		return str;
 	}
 }

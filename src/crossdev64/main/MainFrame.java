@@ -17,12 +17,14 @@ import bibliothek.gui.dock.common.SingleCDockable;
 import bibliothek.gui.dock.common.menu.CLayoutChoiceMenuPiece;
 import bibliothek.gui.dock.common.menu.SingleCDockableListMenuPiece;
 import bibliothek.gui.dock.facile.menu.RootMenuPiece;
+import crossdev64.settings.GlobalSettings;
 
 public class MainFrame
 	extends JFrame
 {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private GlobalSettings mSettings = Application.getSettings();
 
 	/**
 	 * Create the frame.
@@ -74,29 +76,29 @@ public class MainFrame
 
 	private void createFileMenu(JMenuBar oMenuBar, CControl oControl)
 	{
-		JMenu root = new JMenu("File");
+		JMenu root = new JMenu(mSettings.getResourceString("string.file"));
 		JMenuItem item;
 
-		item = new JMenuItem("New");
+		item = new JMenuItem(mSettings.getResourceString("string.new"));
 		root.add(item);
 
-		item = new JMenuItem("Open File...");
+		item = new JMenuItem(mSettings.getResourceString("string.open_file")+"...");
 		root.add(item);
 
-		item = new JMenuItem("Open Project...");
-		root.add(item);
-
-		root.addSeparator();
-
-		item = new JMenuItem("Close");
-		root.add(item);
-
-		item = new JMenuItem("Close Project");
+		item = new JMenuItem(mSettings.getResourceString("string.open_project")+"...");
 		root.add(item);
 
 		root.addSeparator();
 
-		item = new JMenuItem("Exit");
+		item = new JMenuItem(mSettings.getResourceString("string.close"));
+		root.add(item);
+
+		item = new JMenuItem(mSettings.getResourceString("string.close_project"));
+		root.add(item);
+
+		root.addSeparator();
+
+		item = new JMenuItem(mSettings.getResourceString("string.exit"));
 		root.add(item);
 
 		oMenuBar.add(root);
@@ -104,29 +106,29 @@ public class MainFrame
 
 	private void createEditMenu(JMenuBar oMenuBar, CControl oControl)
 	{
-		JMenu root = new JMenu("Edit");
+		JMenu root = new JMenu(mSettings.getResourceString("string.edit"));
 		JMenuItem item;
 
-		item = new JMenuItem("Undo");
+		item = new JMenuItem(mSettings.getResourceString("string.undo"));
 		root.add(item);
 
-		item = new JMenuItem("Redo");
-		root.add(item);
-
-		root.addSeparator();
-
-		item = new JMenuItem("Cut");
-		root.add(item);
-
-		item = new JMenuItem("Copy");
-		root.add(item);
-
-		item = new JMenuItem("Paste");
+		item = new JMenuItem(mSettings.getResourceString("string.redo"));
 		root.add(item);
 
 		root.addSeparator();
 
-		item = new JMenuItem("Select All");
+		item = new JMenuItem(mSettings.getResourceString("string.cut"));
+		root.add(item);
+
+		item = new JMenuItem(mSettings.getResourceString("string.copy"));
+		root.add(item);
+
+		item = new JMenuItem(mSettings.getResourceString("string.paste"));
+		root.add(item);
+
+		root.addSeparator();
+
+		item = new JMenuItem(mSettings.getResourceString("string.select_all"));
 		root.add(item);
 
 		oMenuBar.add(root);

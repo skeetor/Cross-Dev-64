@@ -29,7 +29,7 @@ public class Application
 			{
 				try
 				{
-					main = new Application(Application.mParams);
+					new Application(Application.mParams);
 				}
 				catch (Exception e)
 				{
@@ -42,6 +42,7 @@ public class Application
 
 	public Application(String[] args)
 	{
+		main = this;
 		String theme = UIManager.getSystemLookAndFeelClassName();
 		try
 		{
@@ -73,6 +74,11 @@ public class Application
 		frame.setVisible(true);
 	}
 
+	public static GlobalSettings getSettings()
+	{
+		return main.mGlobalSettings;
+	}
+	
 	public static void MessageBox(String oTitle, String oMessage)
 	{
 		JOptionPane.showMessageDialog(null, oMessage, "CrossDev64: " + oTitle, JOptionPane.INFORMATION_MESSAGE);
