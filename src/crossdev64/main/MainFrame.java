@@ -136,16 +136,16 @@ public class MainFrame
 
 	private void createProjectMenu(JMenuBar oMenuBar, CControl oControl)
 	{
-		JMenu root = new JMenu("Project");
+		JMenu root = new JMenu(mSettings.getResourceString("string.project"));
 		JMenuItem item;
 
-		item = new JMenuItem("Add New Item...");
+		item = new JMenuItem(mSettings.getResourceString("string.add_new_item")+"...");
 		root.add(item);
 
-		item = new JMenuItem("Add Existing Item...");
+		item = new JMenuItem(mSettings.getResourceString("string.add_existing_item")+"...");
 		root.add(item);
 
-		item = new JMenuItem("Project Settings...");
+		item = new JMenuItem(mSettings.getResourceString("string.project_settings")+"...");
 		root.add(item);
 
 		oMenuBar.add(root);
@@ -153,16 +153,16 @@ public class MainFrame
 
 	private void createBuildMenu(JMenuBar oMenuBar, CControl oControl)
 	{
-		JMenu root = new JMenu("Build");
+		JMenu root = new JMenu(mSettings.getResourceString("string.build"));
 		JMenuItem item;
 
-		item = new JMenuItem("Build Project");
+		item = new JMenuItem(mSettings.getResourceString("string.build_project"));
 		root.add(item);
 
-		item = new JMenuItem("Rebuild");
+		item = new JMenuItem(mSettings.getResourceString("string.rebuild"));
 		root.add(item);
 
-		item = new JMenuItem("Clean");
+		item = new JMenuItem(mSettings.getResourceString("string.clean"));
 		root.add(item);
 
 		oMenuBar.add(root);
@@ -170,32 +170,35 @@ public class MainFrame
 
 	private void createDebugMenu(JMenuBar oMenuBar, CControl oControl)
 	{
-		JMenu root = new JMenu("Debug");
+		JMenu root = new JMenu(mSettings.getResourceString("string.debug"));
 		JMenuItem item;
 		JMenu menu;
 		
-		menu = new JMenu("Windows");
+		menu = new JMenu(mSettings.getResourceString("string.windows"));
 
-		item = new JMenuItem("Breakpoints");
+		item = new JMenuItem(mSettings.getResourceString("string.breakpoints"));
 		menu.add(item);
-		item = new JMenuItem("Memory");
+		item = new JMenuItem(mSettings.getResourceString("string.memory"));
 		menu.add(item);
 		root.add(menu);
+
+		item = new JMenuItem(mSettings.getResourceString("string.console"));
+		root.add(item);
 		root.addSeparator();
 		
-		item = new JMenuItem("Run");
+		item = new JMenuItem(mSettings.getResourceString("string.run"));
 		root.add(item);
-		item = new JMenuItem("Start Debugging");
+		item = new JMenuItem(mSettings.getResourceString("string.start_debugging"));
 		root.add(item);
-		item = new JMenuItem("Stop Debugging");
+		item = new JMenuItem(mSettings.getResourceString("string.stop_debugging"));
 		root.add(item);
 
 		root.addSeparator();
 
-		item = new JMenuItem("Single Step");
+		item = new JMenuItem(mSettings.getResourceString("string.single_step"));
 		root.add(item);
 
-		item = new JMenuItem("Continue");
+		item = new JMenuItem(mSettings.getResourceString("string.continue"));
 		root.add(item);
 
 		oMenuBar.add(root);
@@ -203,13 +206,13 @@ public class MainFrame
 
 	private void createToolsMenu(JMenuBar oMenuBar, CControl oControl)
 	{
-		JMenu root = new JMenu("Tools");
+		JMenu root = new JMenu(mSettings.getResourceString("string.tools"));
 		JMenu menu;
 		JMenuItem item;
 
-		item = new JMenuItem("Sprite Editor...");
+		item = new JMenuItem(mSettings.getResourceString("string.sprite_editor")+"...");
 		root.add(item);
-		item = new JMenuItem("Character Editor...");
+		item = new JMenuItem(mSettings.getResourceString("string.character_editor")+"...");
 		root.add(item);
 
 		menu = new JMenu("Layout");
@@ -219,7 +222,7 @@ public class MainFrame
 
 		root.addSeparator();
 
-		item = new JMenuItem("Settings...");
+		item = new JMenuItem(mSettings.getResourceString("string.settings")+"...");
 		root.add(item);
 
 		oMenuBar.add(root);
@@ -237,7 +240,7 @@ public class MainFrame
 		createDebugMenu(menuBar, oControl);
 		createToolsMenu(menuBar, oControl);
 
-		RootMenuPiece menu = new RootMenuPiece("Windows", false);
+		RootMenuPiece menu = new RootMenuPiece(mSettings.getResourceString("string.windows"), false);
 		menu.add(new SingleCDockableListMenuPiece(oControl));
 		menuBar.add(menu.getMenu());
 
