@@ -25,8 +25,7 @@ public class GlobalSettings
 
 		public void help()
 		{
-			String s = "Invalid parameters in the commandline. Terminating!\n"+Arrays.toString(mParams);
-			Application.MessageBox("Invalid commandline", s);
+			Application.MessageBox("Invalid commandline", getResourceString("settings.invalid_parameters", Arrays.toString(mParams)).toString());
 			System.exit(-1);
 		}
 
@@ -64,11 +63,15 @@ public class GlobalSettings
 			System.exit(-1);
 		}
 
+		String s = getResourceString("test1", Arrays.toString(args).toString());
+		s = getResourceString("settings.invalid_home_description", Arrays.toString(args).toString());
+		System.out.println("Test: "+s);
+
 		if(!home.isDirectory() || !home.canWrite())
 		{
 			// TODO: Should we enforce that a home directory has to be writable?
 			// What about if the user just wants to debug something without storing any settiongs? Is this a valid use case for us?
-			Application.MessageBox(getResourceString("invalid_home"), getResourceString("invalid_home", home.getAbsolutePath()));
+			Application.MessageBox(getResourceString("invalid_home"), getResourceString("settings.invalid_home_description", home.getAbsolutePath()));
 			System.exit(-1);
 		}
 	}
@@ -139,12 +142,51 @@ public class GlobalSettings
 
 	public String getResourceString(String oKey, String...oParams)
 	{
-		// We intentionlly don't catch this, as this should be a reminder that a string is missing in the locale.
+		// We intentionally don't catch this, as this should be a reminder that a string is missing in the locale.
 		String s = mStrings.getString(oKey);
 
-		if(oParams == null)
+		if(oParams == null || oParams.length == 0)
 			return s;
 
-		return s;
+		int translated = 0;
+		String str = "";
+		do
+		{
+			int pos = s.indexOf('%');
+			if(pos == -1)
+			{
+				str += s;
+				break;
+			}
+
+			str += s.substring(0,  pos);
+			pos++;
+
+			// The '%' was the last character of the string which may be valid.
+			if(pos >= s.length())
+			{
+				str += s;
+				break;
+			}
+
+			char c = s.charAt(pos);
+			if(c == '%')
+			{
+				pos++;
+				str += "%";
+			}
+
+			int index = 0;
+			
+			s = s.substring(pos);
+		}
+		while(true);
+
+		if(translated != oParams.length)
+		{
+			// An untranslated parameter means that there is something wrong with the translation and the developer should fix it.
+			throw new RuntimeException("The resource key ["+oKey+"] contains untranslated parameters: "+ translated + " != " + oParams.length);
+		}
+		return str;
 	}
 }
