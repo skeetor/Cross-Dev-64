@@ -3,10 +3,14 @@ package crossdev64.main;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -45,12 +49,27 @@ public class MainFrame
 	        }
 
 	    });		setBounds(100, 100, 450, 300);
+
+	    initApplicationIcon();
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 
 		initDockable();
+	}
+
+	private void initApplicationIcon()
+	{
+		List<Image> images = new ArrayList<>();
+	
+//		images.add(new ImageIcon(getClass().getResource("/crossdev64/resources/icons/app/commodore_016x016.png")).getImage());
+//		images.add(new ImageIcon(getClass().getResource("/crossdev64/resources/icons/app/commodore_032x032.png")).getImage());
+//		images.add(new ImageIcon(getClass().getResource("/crossdev64/resources/icons/app/commodore_064x064.png")).getImage());
+//		images.add(new ImageIcon(getClass().getResource("/crossdev64/resources/icons/app/commodore_128x128.png")).getImage());
+		images.add(new ImageIcon(getClass().getResource("/crossdev64/resources/icons/app/commodore_256x256.png")).getImage());
+//		images.add(new ImageIcon(getClass().getResource("/crossdev64/resources/icons/app/commodore_512x512.png")).getImage());
+		setIconImages(images);
 	}
 
 	private void initDockable()

@@ -11,9 +11,14 @@ This editor works together with common cross assemblers. Currently supported ass
 
 Code is partially taken from [Relaunch64](https://github.com/sjPlot/Relaunch64)  
 
+The icons and graphics is taken from external sources with a free license. However those are not covered under the GPL and may have their own license.
+
+Application icon made by Freepik from [https://www.flaticon.com](https://www.flaticon.com/free-icon/commodore_447535#term=commodore&page=1&position=4)
+Various free icons taken from [http://www.small-icons.com](http://www.small-icons.com/stock-icons/24x24-free-application-icons.htm)
+
 # Planned features
 
-These majro features are planned for future releases. The order reflects the intended priority.
+These major features are planned for future releases. The order reflects the intended priority.
 
 * Global and project specific settings
 * Debugger for stepping through code with an emulator
