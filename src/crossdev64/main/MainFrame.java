@@ -22,6 +22,7 @@ import bibliothek.gui.dock.common.menu.CLayoutChoiceMenuPiece;
 import bibliothek.gui.dock.common.menu.SingleCDockableListMenuPiece;
 import bibliothek.gui.dock.facile.menu.RootMenuPiece;
 import crossdev64.settings.GlobalSettings;
+import crossdev64.settings.GlobalSettingsDlg;
 
 public class MainFrame
 	extends JFrame
@@ -40,7 +41,7 @@ public class MainFrame
 		{
 	        public void windowClosing(WindowEvent e)
 	        {
-	        	OnExit();
+	        	onExit();
 	        }
 
 	    });		setBounds(100, 100, 450, 300);
@@ -114,7 +115,7 @@ public class MainFrame
 		{
 			public void actionPerformed(java.awt.event.ActionEvent e)
 			{
-				OnExit();
+				onExit();
 			}
 		});
 
@@ -244,6 +245,13 @@ public class MainFrame
 		root.addSeparator();
 
 		item = new JMenuItem(mSettings.getResourceString("string.settings")+"...");
+		item.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent e)
+			{
+				onGlobalSettings();
+			}
+		});
 		root.add(item);
 
 		oMenuBar.add(root);
@@ -268,10 +276,22 @@ public class MainFrame
 		setJMenuBar(menuBar);
 	}
 
-	public void OnExit()
+	public void onExit()
 	{
 		Toolkit t = Toolkit.getDefaultToolkit();
         EventQueue eq = t.getSystemEventQueue();
         eq.postEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+	}
+
+	/**
+	 * Show the global preference dialog
+	 */
+	public void onGlobalSettings()
+	{
+		GlobalSettingsDlg dlg = new GlobalSettingsDlg(this);
+		if(!dlg.showModal())
+			return;
+
+		System.out.println("Settings OK");
 	}
 }
