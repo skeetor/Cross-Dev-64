@@ -2,6 +2,10 @@ package crossdev64.main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -32,7 +36,14 @@ public class MainFrame
 	public MainFrame()
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		addWindowListener(new WindowAdapter()
+		{
+	        public void windowClosing(WindowEvent e)
+	        {
+	        	OnExit();
+	        }
+
+	    });		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -99,6 +110,14 @@ public class MainFrame
 		root.addSeparator();
 
 		item = new JMenuItem(mSettings.getResourceString("string.exit"));
+		item.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent e)
+			{
+				OnExit();
+			}
+		});
+
 		root.add(item);
 
 		oMenuBar.add(root);
@@ -176,9 +195,11 @@ public class MainFrame
 		
 		menu = new JMenu(mSettings.getResourceString("string.windows"));
 
-		item = new JMenuItem(mSettings.getResourceString("string.breakpoints"));
-		menu.add(item);
 		item = new JMenuItem(mSettings.getResourceString("string.memory"));
+		menu.add(item);
+		item = new JMenuItem(mSettings.getResourceString("string.registers"));
+		menu.add(item);
+		item = new JMenuItem(mSettings.getResourceString("string.breakpoints"));
 		menu.add(item);
 		root.add(menu);
 
@@ -245,5 +266,12 @@ public class MainFrame
 		menuBar.add(menu.getMenu());
 
 		setJMenuBar(menuBar);
+	}
+
+	public void OnExit()
+	{
+		Toolkit t = Toolkit.getDefaultToolkit();
+        EventQueue eq = t.getSystemEventQueue();
+        eq.postEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 	}
 }
