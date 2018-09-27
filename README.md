@@ -13,17 +13,20 @@ Code is partially taken from [Relaunch64](https://github.com/sjPlot/Relaunch64)
 
 # Planned features
 
-These features are planned for future releases. The order reflects the intended priority.
+These majro features are planned for future releases. The order reflects the intended priority.
 
-* Allow running multiple instances with their own individual home directories.
-* Add support for dockable windows, so users can move around the windows as they want.
-* Debugger for stepping through code with in an emulator
-* Support for projects instead of the current mechanism of scripts.
+* Global and project specific settings
+* Debugger for stepping through code with an emulator
+* Support for projects
 * Sprite editor
 * Character editor
 * Sound editor(?)
 
 # Completed features
+
+* Allow running multiple instances with their own individual home directories.
+* Add support for dockable windows, so users can move around the windows as they want.
+* Support for localisation
 
 # License
 
