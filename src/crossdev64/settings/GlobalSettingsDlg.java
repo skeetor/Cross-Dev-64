@@ -11,12 +11,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.EmptyBorder;
 
+import crossdev64.gui.ButtonPanel;
 import crossdev64.gui.DialogBaseDlg;
-import javax.swing.ImageIcon;
 
 public class GlobalSettingsDlg
 	extends DialogBaseDlg
@@ -24,8 +24,9 @@ public class GlobalSettingsDlg
 	private static final long serialVersionUID = 1L;
 	private GlobalSettings mSettings = GlobalSettings.getInstance();
 
-	private JPanel mConfigPanel;
 	private JTree mModuleTree;
+	private ButtonPanel mButtonPanel;
+	private JPanel mConfigPanel;
 
 	public GlobalSettingsDlg(Window parent)
 	{
@@ -37,88 +38,73 @@ public class GlobalSettingsDlg
 		setBounds(100, 100, 530, 421);
 		final JPanel contentPanel = new JPanel();
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[]{212, 212, 0};
-		gbl_contentPanel.rowHeights = new int[]{0, 218, 0};
-		gbl_contentPanel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_contentPanel.columnWidths = new int[] {212};
+		gbl_contentPanel.rowHeights = new int[] {30};
+		gbl_contentPanel.columnWeights = new double[]{1.0};
+		gbl_contentPanel.rowWeights = new double[]{1.0};
 		contentPanel.setLayout(gbl_contentPanel);
 		{
-			JPanel panel = new JPanel();
-			GridBagConstraints gbc_panel = new GridBagConstraints();
-			gbc_panel.anchor = GridBagConstraints.NORTHWEST;
-			gbc_panel.insets = new Insets(0, 0, 5, 5);
-			gbc_panel.gridx = 0;
-			gbc_panel.gridy = 0;
-			contentPanel.add(panel, gbc_panel);
-			panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+			JSplitPane splitPane = new JSplitPane();
+			GridBagConstraints gbc_splitPane = new GridBagConstraints();
+			gbc_splitPane.fill = GridBagConstraints.BOTH;
+			gbc_splitPane.gridx = 0;
+			gbc_splitPane.gridy = 0;
+			contentPanel.add(splitPane, gbc_splitPane);
 			{
-				JButton button = new JButton("");
-				button.setIcon(new ImageIcon(GlobalSettingsDlg.class.getResource("/crossdev64/resources/icons/small-icons-com/add.png")));
-				button.addActionListener(new ActionListener()
+				JPanel panel = new JPanel();
+				splitPane.setLeftComponent(panel);
+				GridBagLayout gbl_panel = new GridBagLayout();
+				gbl_panel.columnWidths = new int[]{0, 0};
+				gbl_panel.rowHeights = new int[]{0, 0, 0};
+				gbl_panel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+				gbl_panel.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+				panel.setLayout(gbl_panel);
 				{
-					@Override
-					public void actionPerformed(ActionEvent e)
+					mButtonPanel = new ButtonPanel()
 					{
-						onAddItem();
+						@Override
+						protected void onNew()
+						{
+							onAddItem();
+						}
+
+						@Override
+						protected void onDelete()
+						{
+							onRemoveItem();
+						}
+
+						@Override
+						protected void onCopy()
+						{
+							onCopyItem();
+						}
 					}
-				});
-				panel.add(button);
+					;
+					GridBagConstraints gbc_mButtonPanel = new GridBagConstraints();
+					gbc_mButtonPanel.insets = new Insets(0, 0, 5, 0);
+					gbc_mButtonPanel.anchor = GridBagConstraints.NORTHWEST;
+					gbc_mButtonPanel.gridx = 0;
+					gbc_mButtonPanel.gridy = 0;
+					panel.add(mButtonPanel, gbc_mButtonPanel);
+				}
+				{
+					mModuleTree = new JTree();
+					mModuleTree.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+					GridBagConstraints gbc_mModuleTree = new GridBagConstraints();
+					gbc_mModuleTree.fill = GridBagConstraints.BOTH;
+					gbc_mModuleTree.gridx = 0;
+					gbc_mModuleTree.gridy = 1;
+					panel.add(mModuleTree, gbc_mModuleTree);
+				}
 			}
 			{
-				JButton button = new JButton("");
-				button.setIcon(new ImageIcon(GlobalSettingsDlg.class.getResource("/crossdev64/resources/icons/small-icons-com/delete.png")));
-				button.addActionListener(new ActionListener()
-				{
-					@Override
-					public void actionPerformed(ActionEvent e)
-					{
-						onRemoveItem();
-					}
-				});
-				panel.add(button);
+				mConfigPanel = new JPanel();
+				splitPane.setRightComponent(mConfigPanel);
 			}
-			{
-				JButton button = new JButton("");
-				button.setIcon(new ImageIcon(GlobalSettingsDlg.class.getResource("/crossdev64/resources/icons/small-icons-com/copy.png")));
-				button.addActionListener(new ActionListener()
-				{
-					@Override
-					public void actionPerformed(ActionEvent e)
-					{
-						onCopyItem();
-					}
-				});
-				panel.add(button);
-			}
-		}
-		{
-			mModuleTree = new JTree();
-			GridBagConstraints gbc_mModuleTree = new GridBagConstraints();
-			gbc_mModuleTree.anchor = GridBagConstraints.WEST;
-			gbc_mModuleTree.fill = GridBagConstraints.VERTICAL;
-			gbc_mModuleTree.insets = new Insets(0, 0, 0, 5);
-			gbc_mModuleTree.gridx = 0;
-			gbc_mModuleTree.gridy = 1;
-			contentPanel.add(mModuleTree, gbc_mModuleTree);
-			mModuleTree.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		}
-		{
-			mConfigPanel = new JPanel();
-			GridBagConstraints gbc_mConfigPanel = new GridBagConstraints();
-			gbc_mConfigPanel.gridheight = 2;
-			gbc_mConfigPanel.fill = GridBagConstraints.BOTH;
-			gbc_mConfigPanel.gridx = 1;
-			gbc_mConfigPanel.gridy = 0;
-			contentPanel.add(mConfigPanel, gbc_mConfigPanel);
-			GridBagLayout gbl_mConfigPanel = new GridBagLayout();
-			gbl_mConfigPanel.columnWidths = new int[]{0, 0, 0, 0};
-			gbl_mConfigPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
-			gbl_mConfigPanel.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-			gbl_mConfigPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-			mConfigPanel.setLayout(gbl_mConfigPanel);
 		}
 		{
 			JPanel mButtonPane = new JPanel();
@@ -162,15 +148,23 @@ public class GlobalSettingsDlg
 		return mModuleTree;
 	}
 
+	protected ButtonPanel getButtonPanel()
+	{
+		return mButtonPanel;
+	}
+
 	protected void onAddItem()
 	{
+		System.out.println("Add");
 	}
 
 	protected void onRemoveItem()
 	{
+		System.out.println("Remove");
 	}
 
 	protected void onCopyItem()
 	{
+		System.out.println("Copy");
 	}
 }
