@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
 import crossdev64.settings.GlobalSettingsDlg;
+import crossdev64.utils.GraphicTools;
 
 public class ButtonPanel
 	extends JPanel
@@ -31,7 +32,7 @@ public class ButtonPanel
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		
 		mNewBtn = new JButton();
-		mNewBtn.setIcon(new ImageIcon(GlobalSettingsDlg.class.getResource("/crossdev64/resources/icons/small-icons-com/add.png")));
+		mNewBtn.setIcon(GraphicTools.loadIcon("/crossdev64/resources/icons/small-icons-com/add.png", 16, 16));
 		mNewBtn.addActionListener(new ActionListener()
 		{
 			@Override
@@ -43,7 +44,7 @@ public class ButtonPanel
 		add(mNewBtn);
 		
 		mDeleteBtn = new JButton();
-		mDeleteBtn.setIcon(new ImageIcon(GlobalSettingsDlg.class.getResource("/crossdev64/resources/icons/small-icons-com/delete.png")));
+		mDeleteBtn.setIcon(GraphicTools.loadIcon("/crossdev64/resources/icons/small-icons-com/delete.png", 16, 16));
 		mDeleteBtn.addActionListener(new ActionListener()
 		{
 			@Override
@@ -55,7 +56,7 @@ public class ButtonPanel
 		add(mDeleteBtn);
 		
 		mCopyBtn = new JButton();
-		mCopyBtn.setIcon(new ImageIcon(GlobalSettingsDlg.class.getResource("/crossdev64/resources/icons/small-icons-com/copy.png")));
+		mCopyBtn.setIcon(GraphicTools.loadIcon("/crossdev64/resources/icons/small-icons-com/copy.png", 16, 16));
 		mCopyBtn.addActionListener(new ActionListener()
 		{
 			@Override

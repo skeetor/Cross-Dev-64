@@ -65,6 +65,8 @@ public class GlobalSettingsDlg
 				{
 					mButtonPanel = new ButtonPanel()
 					{
+						private static final long serialVersionUID = 1L;
+
 						@Override
 						protected void onNew()
 						{
