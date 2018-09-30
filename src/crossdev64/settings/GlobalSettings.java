@@ -206,7 +206,16 @@ public class GlobalSettings
 	 */
 	public String getResourceString(String oKey, String...oParams)
 	{
-		String s = mStrings.getString(oKey);
+		String s;
+		
+		try
+		{
+			s = mStrings.getString(oKey);
+		}
+		catch(Exception e)
+		{
+			return oKey;
+		}
 
 		if(oParams == null || oParams.length == 0)
 			return s;

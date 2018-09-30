@@ -4,12 +4,10 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
-import crossdev64.settings.GlobalSettingsDlg;
 import crossdev64.utils.GraphicTools;
 
 public class ButtonPanel
@@ -21,9 +19,6 @@ public class ButtonPanel
 	private JButton mDeleteBtn;
 	private JButton mCopyBtn;
 
-	/**
-	 * Create the panel.
-	 */
 	public ButtonPanel()
 	{
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -32,7 +27,7 @@ public class ButtonPanel
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		
 		mNewBtn = new JButton();
-		mNewBtn.setIcon(GraphicTools.loadIcon("/crossdev64/resources/icons/small-icons-com/add.png", 16, 16));
+		putIcon(mNewBtn, "/crossdev64/resources/icons/small-icons-com/add.png", "Add");
 		mNewBtn.addActionListener(new ActionListener()
 		{
 			@Override
@@ -44,7 +39,7 @@ public class ButtonPanel
 		add(mNewBtn);
 		
 		mDeleteBtn = new JButton();
-		mDeleteBtn.setIcon(GraphicTools.loadIcon("/crossdev64/resources/icons/small-icons-com/delete.png", 16, 16));
+		putIcon(mDeleteBtn, "/crossdev64/resources/icons/small-icons-com/delete.png", "Delete");
 		mDeleteBtn.addActionListener(new ActionListener()
 		{
 			@Override
@@ -56,7 +51,7 @@ public class ButtonPanel
 		add(mDeleteBtn);
 		
 		mCopyBtn = new JButton();
-		mCopyBtn.setIcon(GraphicTools.loadIcon("/crossdev64/resources/icons/small-icons-com/copy.png", 16, 16));
+		putIcon(mCopyBtn, "/crossdev64/resources/icons/small-icons-com/copy.png", "Delete");
 		mCopyBtn.addActionListener(new ActionListener()
 		{
 			@Override
@@ -67,6 +62,18 @@ public class ButtonPanel
 		});
 		add(mCopyBtn);
 
+	}
+
+	private void putIcon(JButton oButton, String oResource, String oDefault)
+	{
+		try
+		{
+			oButton.setIcon(GraphicTools.loadIcon(oResource, 16, 16));
+		}
+		catch(Exception e)
+		{
+			oButton.setText(oDefault);
+		}
 	}
 
 	protected JButton getNewBtn()

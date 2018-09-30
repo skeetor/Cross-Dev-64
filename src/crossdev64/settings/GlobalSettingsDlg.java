@@ -65,8 +65,6 @@ public class GlobalSettingsDlg
 				{
 					mButtonPanel = new ButtonPanel()
 					{
-						private static final long serialVersionUID = 1L;
-
 						@Override
 						protected void onNew()
 						{
@@ -83,9 +81,8 @@ public class GlobalSettingsDlg
 						protected void onCopy()
 						{
 							onCopyItem();
-						}
-					}
-					;
+						}						
+					};
 					GridBagConstraints gbc_mButtonPanel = new GridBagConstraints();
 					gbc_mButtonPanel.insets = new Insets(0, 0, 5, 0);
 					gbc_mButtonPanel.anchor = GridBagConstraints.NORTHWEST;
