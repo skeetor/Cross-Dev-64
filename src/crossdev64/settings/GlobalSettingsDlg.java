@@ -1,19 +1,18 @@
 package crossdev64.settings;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreeSelectionModel;
 
 import crossdev64.gui.ButtonPanel;
 import crossdev64.gui.DialogBaseDlg;
@@ -27,12 +26,11 @@ public class GlobalSettingsDlg
 	private JTree mModuleTree;
 	private ButtonPanel mButtonPanel;
 	private JPanel mConfigPanel;
+	private SettingsTreeModel mSettingsModel;
 
 	public GlobalSettingsDlg(Window parent)
 	{
 		super(parent);
-
-		setOK(false);
 
 		setTitle(mSettings.getResourceString("settings.global_preferences"));
 		setBounds(100, 100, 530, 421);
@@ -65,6 +63,8 @@ public class GlobalSettingsDlg
 				{
 					mButtonPanel = new ButtonPanel()
 					{
+						private static final long serialVersionUID = 1L;
+
 						@Override
 						protected void onNew()
 						{
@@ -83,6 +83,11 @@ public class GlobalSettingsDlg
 							onCopyItem();
 						}						
 					};
+
+					mButtonPanel.enableNew(false);
+					mButtonPanel.enableDelete(false);
+					mButtonPanel.enableCopy(false);
+
 					GridBagConstraints gbc_mButtonPanel = new GridBagConstraints();
 					gbc_mButtonPanel.insets = new Insets(0, 0, 5, 0);
 					gbc_mButtonPanel.anchor = GridBagConstraints.NORTHWEST;
@@ -91,8 +96,20 @@ public class GlobalSettingsDlg
 					panel.add(mButtonPanel, gbc_mButtonPanel);
 				}
 				{
-					mModuleTree = new JTree();
+					mSettingsModel = new SettingsTreeModel();
+					mModuleTree = new JTree(mSettingsModel);
+					mModuleTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 					mModuleTree.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+					mModuleTree.addTreeSelectionListener(
+						new TreeSelectionListener()
+						{
+							@Override
+							public void valueChanged(TreeSelectionEvent e)
+							{
+								onTreenodeSelected(e);
+							}
+						}
+					);
 					GridBagConstraints gbc_mModuleTree = new GridBagConstraints();
 					gbc_mModuleTree.fill = GridBagConstraints.BOTH;
 					gbc_mModuleTree.gridx = 0;
@@ -103,36 +120,6 @@ public class GlobalSettingsDlg
 			{
 				mConfigPanel = new JPanel();
 				splitPane.setRightComponent(mConfigPanel);
-			}
-		}
-		{
-			JPanel mButtonPane = new JPanel();
-			mButtonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(mButtonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton(mSettings.getResourceString("string.ok"));
-				okButton.addActionListener(new ActionListener()
-				{
-					@Override
-					public void actionPerformed(ActionEvent e)
-					{
-						onOK();
-					}
-				});
-				mButtonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton(mSettings.getResourceString("string.cancel"));
-				cancelButton.addActionListener(new ActionListener()
-				{
-					@Override
-					public void actionPerformed(ActionEvent e)
-					{
-						onCancel();
-					}
-				});
-				mButtonPane.add(cancelButton);
 			}
 		}
 	}
@@ -154,16 +141,28 @@ public class GlobalSettingsDlg
 
 	protected void onAddItem()
 	{
-		System.out.println("Add");
+		SettingsModuleNode node = (SettingsModuleNode)mModuleTree.getLastSelectedPathComponent();
+		System.out.println("Add:"+node);
 	}
 
 	protected void onRemoveItem()
 	{
-		System.out.println("Remove");
+		SettingsModuleNode node = (SettingsModuleNode)mModuleTree.getLastSelectedPathComponent();
+		System.out.println("Remove:"+node);
 	}
 
 	protected void onCopyItem()
 	{
-		System.out.println("Copy");
+		SettingsModuleNode node = (SettingsModuleNode)mModuleTree.getLastSelectedPathComponent();
+		System.out.println("Copy:"+node);
+	}
+
+	protected void onTreenodeSelected(TreeSelectionEvent oEvent)
+	{
+		SettingsModuleNode node = (SettingsModuleNode)mModuleTree.getLastSelectedPathComponent();
+
+		mButtonPanel.enableNew(node.canAdd());
+		mButtonPanel.enableDelete(node.canDelete());
+		mButtonPanel.enableCopy(node.canCopy());
 	}
 }

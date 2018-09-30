@@ -91,6 +91,21 @@ public class ButtonPanel
 		return mCopyBtn;
 	}
 
+	public void enableNew(boolean bEnabled)
+	{
+			mNewBtn.setEnabled(bEnabled);
+	}
+
+	public void enableDelete(boolean bEnabled)
+	{
+			mDeleteBtn.setEnabled(bEnabled);
+	}
+
+	public void enableCopy(boolean bEnabled)
+	{
+			mCopyBtn.setEnabled(bEnabled);
+	}
+
 	protected void onNew()
 	{
 	}

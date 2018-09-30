@@ -1,8 +1,16 @@
 package crossdev64.gui;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JPanel;
+
+import crossdev64.settings.GlobalSettings;
 
 public class DialogBaseDlg
 	extends JDialog
@@ -15,8 +23,42 @@ public class DialogBaseDlg
 	{
 		super(oParent);
 		mOK = false;
+		initDialog();
 	}
 
+	protected void initDialog()
+	{
+		{
+			JPanel buttonPane = new JPanel();
+			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			{
+				JButton okButton = new JButton(GlobalSettings.getInstance().getResourceString("string.ok"));
+				okButton.addActionListener(new ActionListener()
+				{
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						onOK();
+					}
+				});
+				buttonPane.add(okButton);
+				getRootPane().setDefaultButton(okButton);
+			}
+			{
+				JButton cancelButton = new JButton(GlobalSettings.getInstance().getResourceString("string.cancel"));
+				cancelButton.addActionListener(new ActionListener()
+				{
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						onCancel();
+					}
+				});
+				buttonPane.add(cancelButton);
+			}
+		}
+	}
 	/**
 	 * Returns true if the OK button was used, otherwise false.
 	 * 
