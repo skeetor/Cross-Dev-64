@@ -144,8 +144,8 @@ public class GlobalSettingsPanel
 	protected void onAddItem()
 	{
 		TreePath path = mModuleTree.getSelectionPath();
-		SettingsModuleNode node = (SettingsModuleNode)path.getLastPathComponent();
-		SettingsModuleNode newNode = node.createItem(mParent);
+		SettingsNode node = (SettingsNode)path.getLastPathComponent();
+		SettingsNode newNode = node.createItem(mParent);
 		if(newNode != null)
 		{
 			node.add(newNode);
@@ -156,19 +156,19 @@ public class GlobalSettingsPanel
 
 	protected void onRemoveItem()
 	{
-		SettingsModuleNode node = (SettingsModuleNode)mModuleTree.getLastSelectedPathComponent();
+		SettingsNode node = (SettingsNode)mModuleTree.getLastSelectedPathComponent();
 		System.out.println("Remove:"+node);
 	}
 
 	protected void onCopyItem()
 	{
-		SettingsModuleNode node = (SettingsModuleNode)mModuleTree.getLastSelectedPathComponent();
+		SettingsNode node = (SettingsNode)mModuleTree.getLastSelectedPathComponent();
 		System.out.println("Copy:"+node);
 	}
 
 	protected void onTreenodeSelected(TreeSelectionEvent oEvent)
 	{
-		SettingsModuleNode node = (SettingsModuleNode)mModuleTree.getLastSelectedPathComponent();
+		SettingsNode node = (SettingsNode)mModuleTree.getLastSelectedPathComponent();
 
 		mButtonPanel.enableNew(node.canAdd());
 		mButtonPanel.enableDelete(node.canDelete());

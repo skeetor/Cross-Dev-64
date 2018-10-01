@@ -10,17 +10,24 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @author sparhawk
  *
  */
-public class SettingsModuleNode
+public class SettingsNode
 	extends DefaultMutableTreeNode
 {
 	private static final long serialVersionUID = 1L;
 
 	private String mName;
+	private boolean mDirty;
 
-	public SettingsModuleNode(String oName)
+	public SettingsNode(String oName)
 	{
 		super(oName);
 		mName = oName;
+		mDirty = false;
+	}
+
+	public String getModuleId()
+	{
+		return null;
 	}
 
 	public String getModuleName()
@@ -33,6 +40,21 @@ public class SettingsModuleNode
 		return null;
 	}
 
+	protected void setDirty(boolean bDirty)
+	{
+		mDirty = bDirty;
+	}
+
+	public boolean isDirty()
+	{
+		return mDirty;
+	}
+
+	public void clearDirty()
+	{
+		mDirty = false;
+	}
+	
 	public boolean canAdd()
 	{
 		return false;
@@ -53,12 +75,12 @@ public class SettingsModuleNode
 		return false;
 	}
 
-	public SettingsModuleNode createItem(Window oParent)
+	public SettingsNode createItem(Window oParent)
 	{
 		return null;
 	}
 
-	public SettingsModuleNode createItem(Window oParent, SettingsModuleNode oModuleItem)
+	public SettingsNode createItem(Window oParent, SettingsNode oModuleItem)
 	{
 		return null;
 	}

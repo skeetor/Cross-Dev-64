@@ -10,12 +10,12 @@ public class SettingsTreeModel
 {
 	private static final long serialVersionUID = 1L;
 
-	private SettingsModuleNode mRoot;
+	private SettingsNode mRoot;
 	
 	public SettingsTreeModel()
 	{
-		super(new SettingsModuleNode(GlobalSettings.getInstance().getResourceString("string.settings")));
-		mRoot = (SettingsModuleNode)super.getRoot();
+		super(new SettingsNode(GlobalSettings.getInstance().getResourceString("string.settings")));
+		mRoot = (SettingsNode)super.getRoot();
 		initModules();
 	}
 
@@ -27,9 +27,9 @@ public class SettingsTreeModel
 
 	private void initGeneral(DefaultMutableTreeNode oNode)
 	{
-		SettingsModuleNode general = new SettingsModuleNode(GlobalSettings.getInstance().getResourceString("string.general"));
+		SettingsNode general = new SettingsNode(GlobalSettings.getInstance().getResourceString("string.general"));
 		oNode.add(general);
-		SettingsModuleNode layout = new SettingsModuleNode(GlobalSettings.getInstance().getResourceString("string.layout"));
+		SettingsNode layout = new SettingsNode(GlobalSettings.getInstance().getResourceString("string.layout"));
 		general.add(layout);
 	}
 }

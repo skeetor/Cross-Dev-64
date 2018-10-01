@@ -5,10 +5,10 @@ import java.awt.Window;
 import javax.swing.JPanel;
 
 import crossdev64.settings.GlobalSettings;
-import crossdev64.settings.SettingsModuleNode;
+import crossdev64.settings.SettingsNode;
 
 public class EmulatorModuleNode
-	extends SettingsModuleNode
+	extends SettingsNode
 {
 	private static final long serialVersionUID = 1L;
 
@@ -48,13 +48,13 @@ public class EmulatorModuleNode
 	}
 
 	@Override
-	public SettingsModuleNode createItem(Window oParent)
+	public SettingsNode createItem(Window oParent)
 	{
 		return null;
 	}
 
 	@Override
-	public SettingsModuleNode createItem(Window oParent, SettingsModuleNode oModuleItem)
+	public SettingsNode createItem(Window oParent, SettingsNode oModuleItem)
 	{
 		return null;
 	}
