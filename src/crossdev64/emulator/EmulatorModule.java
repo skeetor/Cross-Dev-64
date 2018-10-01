@@ -1,5 +1,7 @@
 package crossdev64.emulator;
 
+import java.awt.Window;
+
 import javax.swing.JPanel;
 
 import crossdev64.settings.GlobalSettings;
@@ -40,13 +42,13 @@ public class EmulatorModule
 	}
 
 	@Override
-	public SettingsModuleNode createItem()
+	public SettingsModuleNode createItem(Window oParent)
 	{
 		return null;
 	}
 
 	@Override
-	public SettingsModuleNode createItem(SettingsModuleNode oModuleItem)
+	public SettingsModuleNode createItem(Window oParent, SettingsModuleNode oModuleItem)
 	{
 		return null;
 	}

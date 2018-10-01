@@ -1,5 +1,7 @@
 package crossdev64.settings;
 
+import java.awt.Window;
+
 import javax.swing.JPanel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -46,12 +48,12 @@ public class SettingsModuleNode
 		return false;
 	}
 
-	public SettingsModuleNode createItem()
+	public SettingsModuleNode createItem(Window oParent)
 	{
 		return null;
 	}
 
-	public SettingsModuleNode createItem(SettingsModuleNode oModuleItem)
+	public SettingsModuleNode createItem(Window oParent, SettingsModuleNode oModuleItem)
 	{
 		return null;
 	}

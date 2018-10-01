@@ -50,6 +50,9 @@ public class GlobalSettings
 
 	public static GlobalSettings getInstance()
 	{
+		if(mSettings == null)
+			mSettings = new GlobalSettings(null);
+
 		return mSettings;
 	}
 
@@ -58,7 +61,7 @@ public class GlobalSettings
 		initLanguage(null, null);
 		createOptions(args);
 
-		if(!mParser.parse(args))
+		if(args != null && !mParser.parse(args))
 		{
 			// This will not return and terminate the application.
 			mParser.help();

@@ -10,8 +10,6 @@ public class SettingsTreeModel
 {
 	private static final long serialVersionUID = 1L;
 
-	private GlobalSettings mSettings = GlobalSettings.getInstance();
-
 	private SettingsModuleNode mRoot;
 	
 	public SettingsTreeModel()
