@@ -7,12 +7,12 @@ import javax.swing.JPanel;
 import crossdev64.settings.GlobalSettings;
 import crossdev64.settings.SettingsModuleNode;
 
-public class EmulatorModule
+public class EmulatorModuleNode
 	extends SettingsModuleNode
 {
 	private static final long serialVersionUID = 1L;
 
-	public EmulatorModule()
+	public EmulatorModuleNode()
 	{
 		super(GlobalSettings.getInstance().getResourceString("string.emulator"));
 	}
@@ -37,6 +37,12 @@ public class EmulatorModule
 
 	@Override
 	public boolean canDelete()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean canRename()
 	{
 		return true;
 	}

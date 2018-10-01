@@ -48,6 +48,11 @@ public class SettingsModuleNode
 		return false;
 	}
 
+	public boolean canRename()
+	{
+		return false;
+	}
+
 	public SettingsModuleNode createItem(Window oParent)
 	{
 		return null;

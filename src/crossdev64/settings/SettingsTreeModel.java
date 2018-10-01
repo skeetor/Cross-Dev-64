@@ -3,7 +3,7 @@ package crossdev64.settings;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import crossdev64.emulator.EmulatorNodes;
+import crossdev64.emulator.EmulatorModuleNodes;
 
 public class SettingsTreeModel
 	extends DefaultTreeModel
@@ -22,7 +22,7 @@ public class SettingsTreeModel
 	private void initModules()
 	{
 		initGeneral(mRoot);
-		mRoot.add(new EmulatorNodes());
+		mRoot.add(new EmulatorModuleNodes());
 	}
 
 	private void initGeneral(DefaultMutableTreeNode oNode)

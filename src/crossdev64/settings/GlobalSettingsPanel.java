@@ -11,6 +11,7 @@ import javax.swing.JTree;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import crossdev64.gui.ButtonPanel;
@@ -142,9 +143,15 @@ public class GlobalSettingsPanel
 
 	protected void onAddItem()
 	{
-		SettingsModuleNode node = (SettingsModuleNode)mModuleTree.getLastSelectedPathComponent();
+		TreePath path = mModuleTree.getSelectionPath();
+		SettingsModuleNode node = (SettingsModuleNode)path.getLastPathComponent();
 		SettingsModuleNode newNode = node.createItem(mParent);
-		System.out.println("Add:"+newNode);
+		if(newNode != null)
+		{
+			node.add(newNode);
+			mSettingsModel.nodeStructureChanged(node);
+			mModuleTree.expandPath(path);
+		}
 	}
 
 	protected void onRemoveItem()
