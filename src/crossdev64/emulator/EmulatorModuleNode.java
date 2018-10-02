@@ -1,10 +1,5 @@
 package crossdev64.emulator;
 
-import java.awt.Window;
-
-import javax.swing.JPanel;
-
-import crossdev64.settings.GlobalSettings;
 import crossdev64.settings.SettingsNode;
 
 public class EmulatorModuleNode
@@ -12,15 +7,9 @@ public class EmulatorModuleNode
 {
 	private static final long serialVersionUID = 1L;
 
-	public EmulatorModuleNode()
+	public EmulatorModuleNode(String oTitle)
 	{
-		super(GlobalSettings.getInstance().getResourceString("string.emulator"));
-	}
-
-	@Override
-	public JPanel getConfigPanel()
-	{
-		return null;
+		super(oTitle);
 	}
 
 	@Override
@@ -45,17 +34,5 @@ public class EmulatorModuleNode
 	public boolean canRename()
 	{
 		return true;
-	}
-
-	@Override
-	public SettingsNode createItem(Window oParent)
-	{
-		return null;
-	}
-
-	@Override
-	public SettingsNode createItem(Window oParent, SettingsNode oModuleItem)
-	{
-		return null;
 	}
 }

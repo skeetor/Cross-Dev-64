@@ -1,6 +1,8 @@
 package crossdev64.settings;
 
 import java.awt.Window;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -15,6 +17,8 @@ public class SettingsNode
 {
 	private static final long serialVersionUID = 1L;
 
+	private List<SettingsNode> mChilds = new ArrayList<>();
+
 	private String mName;
 	private boolean mDirty;
 
@@ -25,6 +29,11 @@ public class SettingsNode
 		mDirty = false;
 	}
 
+	public void registerChild(SettingsNode oModuleNode)
+	{
+		mChilds.add(oModuleNode);
+	}
+	
 	public String getModuleId()
 	{
 		return null;

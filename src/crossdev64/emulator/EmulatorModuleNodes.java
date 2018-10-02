@@ -2,6 +2,7 @@ package crossdev64.emulator;
 
 import java.awt.Window;
 
+import crossdev64.emulator.vice.VICESettingsNode;
 import crossdev64.settings.GlobalSettings;
 import crossdev64.settings.SettingsNode;
 
@@ -13,6 +14,9 @@ public class EmulatorModuleNodes
 	public EmulatorModuleNodes()
 	{
 		super(GlobalSettings.getInstance().getResourceString("string.emulator"));
+
+		// Register all our supported emulators. This instance serves as the default when a new configuration node will be added.
+		registerChild(new VICESettingsNode());
 	}
 
 	@Override
@@ -24,6 +28,7 @@ public class EmulatorModuleNodes
 	@Override
 	public SettingsNode createItem(Window oParent)
 	{
-		return new EmulatorModuleNode();
+		// TODO: For now we just create a VICE node. If we support other emulators as well, we need to replace it with a selection dialog. 
+		return new VICESettingsNode();
 	}
 }
