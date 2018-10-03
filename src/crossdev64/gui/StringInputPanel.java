@@ -18,6 +18,8 @@ public class StringInputPanel
 
 	public StringInputPanel(String oTitle, String oInfotext, String oValue)
 	{
+		super();
+
 		mTitle = oTitle;
 
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));

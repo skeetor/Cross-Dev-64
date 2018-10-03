@@ -1,4 +1,4 @@
-package crossdev64.settings;
+package crossdev64.settings.nodes;
 
 import java.awt.Window;
 import java.util.ArrayList;
@@ -12,31 +12,43 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @author sparhawk
  *
  */
-public class SettingsNode
+public abstract class SettingsNodeBase
 	extends DefaultMutableTreeNode
 {
 	private static final long serialVersionUID = 1L;
 
-	private List<SettingsNode> mChilds = new ArrayList<>();
+	private List<SettingsNodeBase> mChilds = new ArrayList<>();
 
-	private String mName;
+	private final String mName;
+	private String mModuleId;
 	private boolean mDirty;
 
-	public SettingsNode(String oName)
+	public SettingsNodeBase(String oName, String oModuleId)
 	{
 		super(oName);
 		mName = oName;
+		mModuleId = oModuleId;
 		mDirty = false;
 	}
 
-	public void registerChild(SettingsNode oModuleNode)
+	public void registerChild(SettingsNodeBase oModuleNode)
 	{
 		mChilds.add(oModuleNode);
+	}
+
+	public List<SettingsNodeBase> getChildModules()
+	{
+		return mChilds;
 	}
 	
 	public String getModuleId()
 	{
-		return null;
+		return mModuleId;
+	}
+	
+	protected void setModuleId(String oModuleId)
+	{
+		mModuleId = oModuleId;
 	}
 
 	public String getModuleName()
@@ -63,8 +75,13 @@ public class SettingsNode
 	{
 		mDirty = false;
 	}
-	
+
 	public boolean canAdd()
+	{
+		return false;
+	}
+
+	public boolean addByParent()
 	{
 		return false;
 	}
@@ -84,12 +101,20 @@ public class SettingsNode
 		return false;
 	}
 
-	public SettingsNode createItem(Window oParent)
+	public boolean canRemove()
 	{
-		return null;
+		return false;
 	}
 
-	public SettingsNode createItem(Window oParent, SettingsNode oModuleItem)
+	/**
+	 * Create a new node. If oDefault is not null, then it should be used to create a copy
+	 * with the same settings.
+	 * 
+	 * @param oParent
+	 * @param oDefault
+	 * @return
+	 */
+	public SettingsNodeBase createItem(Window oParent, SettingsNodeBase oDefault)
 	{
 		return null;
 	}

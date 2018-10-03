@@ -1,35 +1,30 @@
 package crossdev64.settings;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import crossdev64.emulator.EmulatorModuleNodes;
+import crossdev64.settings.nodes.SettingsNodeBase;
 
 public class SettingsTreeModel
 	extends DefaultTreeModel
 {
 	private static final long serialVersionUID = 1L;
 
-	private SettingsNode mRoot;
+	private SettingsNodeBase mRoot;
 	
 	public SettingsTreeModel()
 	{
-		super(new SettingsNode(GlobalSettings.getInstance().getResourceString("string.settings")));
-		mRoot = (SettingsNode)super.getRoot();
-		initModules();
+		super(GlobalSettings.getInstance().getRootNode());
+		mRoot = (SettingsNodeBase)super.getRoot();
+		initModules(mRoot);
 	}
 
-	private void initModules()
+	private void initModules(SettingsNodeBase oRoot)
 	{
-		initGeneral(mRoot);
-		mRoot.add(new EmulatorModuleNodes());
-	}
-
-	private void initGeneral(DefaultMutableTreeNode oNode)
-	{
-		SettingsNode general = new SettingsNode(GlobalSettings.getInstance().getResourceString("string.general"));
-		oNode.add(general);
-		SettingsNode layout = new SettingsNode(GlobalSettings.getInstance().getResourceString("string.layout"));
-		general.add(layout);
+		for(SettingsNodeBase node : oRoot.getChildModules())
+		{
+			oRoot.add(node);
+			if(oRoot.getChildModules().size() > 0)
+				initModules(node);
+		}
 	}
 }

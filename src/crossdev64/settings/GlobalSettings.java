@@ -9,6 +9,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import crossdev64.main.Application;
+import crossdev64.settings.nodes.SettingsRootNode;
 import crossdev64.utils.CommandlineParser;
 
 public class GlobalSettings
@@ -41,6 +42,7 @@ public class GlobalSettings
 	private SettingsParser mParser;
 	private File mHome;
 	private ResourceBundle mStrings;
+	private SettingsRootNode mRootNode;
 
 	public static void create(String[] args)
 	{
@@ -291,5 +293,13 @@ public class GlobalSettings
 		}
 
 		return str;
+	}
+
+	public SettingsRootNode getRootNode()
+	{
+		if(mRootNode == null)
+			mRootNode = new SettingsRootNode();
+
+		return mRootNode;
 	}
 }

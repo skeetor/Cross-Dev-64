@@ -11,8 +11,9 @@ public class GlobalSettingsDlg
 
 	public GlobalSettingsDlg(Window oParent)
 	{
-		super(oParent, new GlobalSettingsPanel(oParent));
+		super(oParent, new GlobalSettingsPanel());
 
+		getPanel().setDialogParent(this);
 		setBounds(100, 100, 530, 421);
 	}
 }

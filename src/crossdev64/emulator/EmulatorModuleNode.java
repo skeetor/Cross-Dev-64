@@ -1,15 +1,21 @@
 package crossdev64.emulator;
 
-import crossdev64.settings.SettingsNode;
+import crossdev64.settings.nodes.SettingsNodeBase;
 
-public class EmulatorModuleNode
-	extends SettingsNode
+/**
+ * EmulatorModuleNode is a base class for emulators.
+ * 
+ * @author sparhawk
+ *
+ */
+public abstract class EmulatorModuleNode
+	extends SettingsNodeBase
 {
 	private static final long serialVersionUID = 1L;
 
-	public EmulatorModuleNode(String oTitle)
+	public EmulatorModuleNode(String oTitle, String oUUID)
 	{
-		super(oTitle);
+		super(oTitle, oUUID);
 	}
 
 	@Override
@@ -32,6 +38,18 @@ public class EmulatorModuleNode
 
 	@Override
 	public boolean canRename()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean addByParent()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean canRemove()
 	{
 		return true;
 	}

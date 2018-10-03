@@ -27,6 +27,7 @@ import bibliothek.gui.dock.common.menu.SingleCDockableListMenuPiece;
 import bibliothek.gui.dock.facile.menu.RootMenuPiece;
 import crossdev64.settings.GlobalSettings;
 import crossdev64.settings.GlobalSettingsDlg;
+import crossdev64.utils.Stack;
 
 public class MainFrame
 	extends JFrame
@@ -311,6 +312,6 @@ public class MainFrame
 		if(!dlg.showModal())
 			return;
 
-		System.out.println("Settings OK");
+		System.out.println(Stack.getSourcePosition()+"Settings OK");
 	}
 }

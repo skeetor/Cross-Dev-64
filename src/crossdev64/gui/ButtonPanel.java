@@ -93,17 +93,17 @@ public class ButtonPanel
 
 	public void enableNew(boolean bEnabled)
 	{
-			mNewBtn.setEnabled(bEnabled);
+		mNewBtn.setEnabled(bEnabled);
 	}
 
 	public void enableDelete(boolean bEnabled)
 	{
-			mDeleteBtn.setEnabled(bEnabled);
+		mDeleteBtn.setEnabled(bEnabled);
 	}
 
 	public void enableCopy(boolean bEnabled)
 	{
-			mCopyBtn.setEnabled(bEnabled);
+		mCopyBtn.setEnabled(bEnabled);
 	}
 
 	protected void onNew()
