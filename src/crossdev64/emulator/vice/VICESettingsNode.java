@@ -19,6 +19,22 @@ public class VICESettingsNode
 	{
 		super("VICE", UUID.randomUUID().toString().toUpperCase());
 		mPanel = new VICESettingsPanel();
+		mPanel.setPort(6510);
+	}
+
+	public VICESettingsNode(VICESettingsNode oSource)
+	{
+		this();
+		copy(oSource);
+	}
+
+	public void copy(VICESettingsNode oSource)
+	{
+		if(oSource == null)
+			return;
+
+		setInstallationPath(oSource.getInstallationPath());
+		setPort(oSource.getPort());
 	}
 
 	/**
@@ -42,11 +58,31 @@ public class VICESettingsNode
 	@Override
 	public TreeNodeBase createItem(Window oParent, TreeNodeBase oDefault)
 	{
-		return null;
+		return new VICESettingsNode((VICESettingsNode)oDefault);
 	}
 
 	private VICESettingsPanel getPanel()
 	{
 		return mPanel;
+	}
+	
+	public String getInstallationPath()
+	{
+		return mPanel.getInstallationPath();
+	}
+
+	public void setInstallationPath(String oPath)
+	{
+		mPanel.setInstallationPath(oPath);
+	}
+
+	public int getPort()
+	{
+		return mPanel.getPort();
+	}
+	
+	public void setPort(int nPort)
+	{
+		mPanel.setPort(nPort);
 	}
 }

@@ -81,7 +81,7 @@ public abstract class TreeNodeBase
 		return false;
 	}
 
-	public boolean addByParent()
+	public boolean addToParent()
 	{
 		return false;
 	}

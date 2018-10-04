@@ -215,32 +215,44 @@ public class GlobalSettingsPanel
 		return mButtonPanel;
 	}
 
-	protected void createNode(TreeNodeBase oDefault)
+	protected TreeNodeBase createNode(TreeNodeBase oDefault)
 	{
 		TreePath path = mSettingsTree.getSelectionPath();
 		TreeNodeBase node = (TreeNodeBase)path.getLastPathComponent();
 		TreeNodeBase newNode;
+		TreeNodeBase parent = null;
 
-		if(node.addByParent())
+		if(node.addToParent())
 		{
 			path = path.getParentPath();
-			node = (TreeNodeBase)path.getLastPathComponent();
+			parent = (TreeNodeBase)path.getLastPathComponent();
 		}
 
 		newNode = node.createItem(mParent, oDefault);
 		if(newNode != null)
 		{
+			if(parent != null)
+				node = parent;
+
 			node.add(newNode);
 			mSettingsModel.nodeStructureChanged(node);
 			mSettingsTree.expandPath(path);
 			path = path.pathByAddingChild(newNode);
 			mSettingsTree.setSelectionPath(path);
 		}
+
+		return newNode;
 	}
 
 	protected void onAddItem()
 	{
 		createNode(null);
+	}
+
+	protected void onCopyItem()
+	{
+		TreeNodeBase node = (TreeNodeBase)mSettingsTree.getLastSelectedPathComponent();
+		TreeNodeBase newNode = createNode(node);
 	}
 
 	protected void onRemoveItem()
@@ -255,12 +267,6 @@ public class GlobalSettingsPanel
 			node = (TreeNodeBase)path.getLastPathComponent();
 			mSettingsModel.nodeStructureChanged(node);
 		}
-	}
-
-	protected void onCopyItem()
-	{
-		TreeNodeBase node = (TreeNodeBase)mSettingsTree.getLastSelectedPathComponent();
-		createNode(node);
 	}
 
 	protected void onTreenodeSelected(TreeSelectionEvent oEvent)

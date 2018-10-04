@@ -43,7 +43,7 @@ public abstract class EmulatorModuleNode
 	}
 
 	@Override
-	public boolean addByParent()
+	public boolean addToParent()
 	{
 		return true;
 	}
