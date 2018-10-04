@@ -1,4 +1,4 @@
-package crossdev64.settings.nodes;
+package crossdev64.gui;
 
 import java.awt.Window;
 import java.util.ArrayList;
@@ -12,18 +12,18 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @author sparhawk
  *
  */
-public abstract class SettingsNodeBase
+public abstract class TreeNodeBase
 	extends DefaultMutableTreeNode
 {
 	private static final long serialVersionUID = 1L;
 
-	private List<SettingsNodeBase> mChilds = new ArrayList<>();
+	private List<TreeNodeBase> mChilds = new ArrayList<>();
 
 	private final String mName;
 	private String mModuleId;
 	private boolean mDirty;
 
-	public SettingsNodeBase(String oName, String oModuleId)
+	public TreeNodeBase(String oName, String oModuleId)
 	{
 		super(oName);
 		mName = oName;
@@ -31,12 +31,12 @@ public abstract class SettingsNodeBase
 		mDirty = false;
 	}
 
-	public void registerChild(SettingsNodeBase oModuleNode)
+	public void registerChild(TreeNodeBase oModuleNode)
 	{
 		mChilds.add(oModuleNode);
 	}
 
-	public List<SettingsNodeBase> getChildModules()
+	public List<TreeNodeBase> getChildModules()
 	{
 		return mChilds;
 	}
@@ -114,7 +114,7 @@ public abstract class SettingsNodeBase
 	 * @param oDefault
 	 * @return
 	 */
-	public SettingsNodeBase createItem(Window oParent, SettingsNodeBase oDefault)
+	public TreeNodeBase createItem(Window oParent, TreeNodeBase oDefault)
 	{
 		return null;
 	}

@@ -22,7 +22,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import crossdev64.gui.ButtonPanel;
 import crossdev64.gui.DialogBasePanel;
-import crossdev64.settings.nodes.SettingsNodeBase;
+import crossdev64.gui.TreeNodeBase;
 
 public class GlobalSettingsPanel
 	extends DialogBasePanel
@@ -168,7 +168,7 @@ public class GlobalSettingsPanel
 				boolean returnValue = super.isCellEditable(event);
 				if (returnValue)
 				{
-					SettingsNodeBase node = (SettingsNodeBase)tree.getLastSelectedPathComponent();
+					TreeNodeBase node = (TreeNodeBase)tree.getLastSelectedPathComponent();
 					if (node != null)
 						return node.canRename();
 				}
@@ -205,16 +205,16 @@ public class GlobalSettingsPanel
 		return mButtonPanel;
 	}
 
-	protected void createNode(SettingsNodeBase oDefault)
+	protected void createNode(TreeNodeBase oDefault)
 	{
 		TreePath path = mSettingsTree.getSelectionPath();
-		SettingsNodeBase node = (SettingsNodeBase)path.getLastPathComponent();
-		SettingsNodeBase newNode;
+		TreeNodeBase node = (TreeNodeBase)path.getLastPathComponent();
+		TreeNodeBase newNode;
 
 		if(node.addByParent())
 		{
 			path = path.getParentPath();
-			node = (SettingsNodeBase)path.getLastPathComponent();
+			node = (TreeNodeBase)path.getLastPathComponent();
 		}
 
 		newNode = node.createItem(mParent, oDefault);
@@ -236,26 +236,26 @@ public class GlobalSettingsPanel
 	protected void onRemoveItem()
 	{
 		TreePath path = mSettingsTree.getSelectionPath();
-		SettingsNodeBase node = (SettingsNodeBase)path.getLastPathComponent();
+		TreeNodeBase node = (TreeNodeBase)path.getLastPathComponent();
 		if(node != null && node.canRemove())
 		{
 			mSettingsModel.removeNodeFromParent(node);
 
 			path = path.getParentPath();
-			node = (SettingsNodeBase)path.getLastPathComponent();
+			node = (TreeNodeBase)path.getLastPathComponent();
 			mSettingsModel.nodeStructureChanged(node);
 		}
 	}
 
 	protected void onCopyItem()
 	{
-		SettingsNodeBase node = (SettingsNodeBase)mSettingsTree.getLastSelectedPathComponent();
+		TreeNodeBase node = (TreeNodeBase)mSettingsTree.getLastSelectedPathComponent();
 		createNode(node);
 	}
 
 	protected void onTreenodeSelected(TreeSelectionEvent oEvent)
 	{
-		SettingsNodeBase node = (SettingsNodeBase)mSettingsTree.getLastSelectedPathComponent();
+		TreeNodeBase node = (TreeNodeBase)mSettingsTree.getLastSelectedPathComponent();
 
 		// Treenode was collapsed
 		if(node == null)
@@ -279,7 +279,7 @@ public class GlobalSettingsPanel
 
 	protected void onNodeClicked(TreePath oPath)
 	{
-		SettingsNodeBase node = (SettingsNodeBase)oPath.getLastPathComponent();
+		TreeNodeBase node = (TreeNodeBase)oPath.getLastPathComponent();
 
 		if(!node.canRename())
 			return;

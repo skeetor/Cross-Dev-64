@@ -1,5 +1,6 @@
 package crossdev64.settings.nodes;
 
+import crossdev64.gui.TreeNodeBase;
 import crossdev64.settings.GlobalSettings;
 
 /**
@@ -8,7 +9,7 @@ import crossdev64.settings.GlobalSettings;
  *
  */
 public class SettingsGeneralNode
-	extends SettingsNodeBase
+	extends TreeNodeBase
 {
 	public static final String MODULE_ID = "070B3D0E-5CEC-4EA5-9501-46ACD3210CF5";
 

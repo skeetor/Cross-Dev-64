@@ -1,5 +1,6 @@
 package crossdev64.settings.nodes;
 
+import crossdev64.gui.TreeNodeBase;
 import crossdev64.settings.GlobalSettings;
 
 /**
@@ -8,7 +9,7 @@ import crossdev64.settings.GlobalSettings;
  *
  */
 public class SettingsColorThemeNode
-	extends SettingsNodeBase
+	extends TreeNodeBase
 {
 	public static final String MODULE_ID = "C3E68A0E-8262-463E-87B2-279B13D47722";
 

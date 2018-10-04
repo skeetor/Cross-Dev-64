@@ -6,7 +6,7 @@ import java.util.UUID;
 import javax.swing.JPanel;
 
 import crossdev64.emulator.EmulatorModuleNode;
-import crossdev64.settings.nodes.SettingsNodeBase;
+import crossdev64.gui.TreeNodeBase;
 
 public class VICESettingsNode
 	extends EmulatorModuleNode
@@ -40,7 +40,7 @@ public class VICESettingsNode
 	}
 
 	@Override
-	public SettingsNodeBase createItem(Window oParent, SettingsNodeBase oDefault)
+	public TreeNodeBase createItem(Window oParent, TreeNodeBase oDefault)
 	{
 		return null;
 	}

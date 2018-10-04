@@ -1,7 +1,7 @@
 package crossdev64.plugins;
 
+import crossdev64.gui.TreeNodeBase;
 import crossdev64.settings.GlobalSettings;
-import crossdev64.settings.nodes.SettingsNodeBase;
 
 /**
  * A label node is a simple a node which can have childs and is only a string.
@@ -9,7 +9,7 @@ import crossdev64.settings.nodes.SettingsNodeBase;
  *
  */
 public class PluginsNode
-	extends SettingsNodeBase
+	extends TreeNodeBase
 {
 	public static final String MODULE_ID = "720FE006-1621-4D09-A1B7-485C7A9E781F";
 

@@ -1,6 +1,6 @@
 package crossdev64.emulator;
 
-import crossdev64.settings.nodes.SettingsNodeBase;
+import crossdev64.gui.TreeNodeBase;
 
 /**
  * EmulatorModuleNode is a base class for emulators.
@@ -9,7 +9,7 @@ import crossdev64.settings.nodes.SettingsNodeBase;
  *
  */
 public abstract class EmulatorModuleNode
-	extends SettingsNodeBase
+	extends TreeNodeBase
 {
 	private static final long serialVersionUID = 1L;
 
