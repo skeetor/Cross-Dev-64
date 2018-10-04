@@ -23,6 +23,7 @@ import javax.swing.tree.TreeSelectionModel;
 import crossdev64.gui.ButtonPanel;
 import crossdev64.gui.DialogBasePanel;
 import crossdev64.gui.TreeNodeBase;
+import crossdev64.gui.TreeNodeModel;
 
 public class GlobalSettingsPanel
 	extends DialogBasePanel
@@ -38,7 +39,7 @@ public class GlobalSettingsPanel
 	private ButtonPanel mButtonPanel;
 	private JPanel mConfigPanel;
 	private GridBagLayout mConfigPanelLayout;
-	private SettingsTreeModel mSettingsModel;
+	private TreeNodeModel mSettingsModel;
 	private GlobalSettingsDlg mParent;
 
 	public GlobalSettingsPanel()
@@ -102,7 +103,7 @@ public class GlobalSettingsPanel
 					panel.add(mButtonPanel, gbc_mButtonPanel);
 				}
 				{
-					mSettingsModel = new SettingsTreeModel();
+					mSettingsModel = new TreeNodeModel(GlobalSettings.getInstance().getRootNode());
 					mSettingsTree = new JTree(mSettingsModel);
 					mSettingsTree.setEditable(true);
 					mSettingsTree.setCellEditor(getEditor());

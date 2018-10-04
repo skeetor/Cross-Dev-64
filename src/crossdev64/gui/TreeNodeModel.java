@@ -1,21 +1,16 @@
-package crossdev64.settings;
+package crossdev64.gui;
 
 import javax.swing.tree.DefaultTreeModel;
 
-import crossdev64.gui.TreeNodeBase;
-
-public class SettingsTreeModel
+public class TreeNodeModel
 	extends DefaultTreeModel
 {
 	private static final long serialVersionUID = 1L;
 
-	private TreeNodeBase mRoot;
-	
-	public SettingsTreeModel()
+	public TreeNodeModel(TreeNodeBase oRootNode)
 	{
-		super(GlobalSettings.getInstance().getRootNode());
-		mRoot = (TreeNodeBase)super.getRoot();
-		initModules(mRoot);
+		super(oRootNode);
+		initModules(oRootNode);
 	}
 
 	private void initModules(TreeNodeBase oRoot)
