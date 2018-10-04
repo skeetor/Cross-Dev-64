@@ -1,14 +1,15 @@
 package crossdev64.emulator.vice;
 
-import crossdev64.gui.DialogBasePanel;
-import crossdev64.settings.GlobalSettings;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.JButton;
-import java.awt.GridBagLayout;
 import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
-import java.awt.Insets;
+
+import crossdev64.gui.DialogBasePanel;
+import crossdev64.settings.GlobalSettings;
 
 public class VICESettingsPanel
 	extends DialogBasePanel
@@ -62,7 +63,7 @@ public class VICESettingsPanel
 		gbc_lblNewLabel_1.gridx = 0;
 		gbc_lblNewLabel_1.gridy = 1;
 		add(lblNewLabel_1, gbc_lblNewLabel_1);
-		
+
 		mPort = new JTextField();
 		GridBagConstraints gbc_mPort = new GridBagConstraints();
 		gbc_mPort.anchor = GridBagConstraints.WEST;
@@ -70,16 +71,39 @@ public class VICESettingsPanel
 		gbc_mPort.gridx = 1;
 		gbc_mPort.gridy = 1;
 		add(mPort, gbc_mPort);
-		mPort.setColumns(10);
+		mPort.setColumns(5);
+	}
+
+	public String getInstallationPath()
+	{
+		return mInstallationPath.getText();
+	}
+
+	public void setInstallationPath(String oPath)
+	{
+		mInstallationPath.setText(oPath);
 	}
 	
-	public JTextField getInstallationPath()
+	public int getPort()
 	{
-		return mInstallationPath;
+		int port = 6510;
+		String s = mPort.getText();
+		if(s.isEmpty())
+			return port;
+
+		try
+		{
+			port = Integer.parseInt(s);
+		}
+		catch(Exception e)
+		{
+		}
+		
+		return port;
 	}
 	
-	public JTextField getPort()
+	public void setPort(int nPort)
 	{
-		return mPort;
+		mPort.setText(""+nPort);
 	}
 }
