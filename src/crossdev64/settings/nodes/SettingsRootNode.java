@@ -19,7 +19,7 @@ public class SettingsRootNode
 
 	public SettingsRootNode()
 	{
-		super(GlobalSettings.getInstance().getResourceString("string.settings"), MODULE_ID);
+		super(GlobalSettings.getResourceString("string.settings"), MODULE_ID);
 
 		registerChild(new SettingsGeneralNode());
 		registerChild(new EmulatorModuleNodes());

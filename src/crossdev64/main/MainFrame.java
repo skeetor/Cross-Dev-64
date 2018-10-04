@@ -34,7 +34,6 @@ public class MainFrame
 {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private GlobalSettings mSettings = GlobalSettings.getInstance();
 
 	/**
 	 * Create the frame.
@@ -108,29 +107,29 @@ public class MainFrame
 
 	private void createFileMenu(JMenuBar oMenuBar, CControl oControl)
 	{
-		JMenu root = new JMenu(mSettings.getResourceString("string.file"));
+		JMenu root = new JMenu(GlobalSettings.getResourceString("string.file"));
 		JMenuItem item;
 
-		item = new JMenuItem(mSettings.getResourceString("string.new"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.new"));
 		root.add(item);
 
-		item = new JMenuItem(mSettings.getResourceString("string.open_file")+"...");
+		item = new JMenuItem(GlobalSettings.getResourceString("string.open_file")+"...");
 		root.add(item);
 
-		item = new JMenuItem(mSettings.getResourceString("string.open_project")+"...");
-		root.add(item);
-
-		root.addSeparator();
-
-		item = new JMenuItem(mSettings.getResourceString("string.close"));
-		root.add(item);
-
-		item = new JMenuItem(mSettings.getResourceString("string.close_project"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.open_project")+"...");
 		root.add(item);
 
 		root.addSeparator();
 
-		item = new JMenuItem(mSettings.getResourceString("string.exit"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.close"));
+		root.add(item);
+
+		item = new JMenuItem(GlobalSettings.getResourceString("string.close_project"));
+		root.add(item);
+
+		root.addSeparator();
+
+		item = new JMenuItem(GlobalSettings.getResourceString("string.exit"));
 		item.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent e)
@@ -146,29 +145,29 @@ public class MainFrame
 
 	private void createEditMenu(JMenuBar oMenuBar, CControl oControl)
 	{
-		JMenu root = new JMenu(mSettings.getResourceString("string.edit"));
+		JMenu root = new JMenu(GlobalSettings.getResourceString("string.edit"));
 		JMenuItem item;
 
-		item = new JMenuItem(mSettings.getResourceString("string.undo"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.undo"));
 		root.add(item);
 
-		item = new JMenuItem(mSettings.getResourceString("string.redo"));
-		root.add(item);
-
-		root.addSeparator();
-
-		item = new JMenuItem(mSettings.getResourceString("string.cut"));
-		root.add(item);
-
-		item = new JMenuItem(mSettings.getResourceString("string.copy"));
-		root.add(item);
-
-		item = new JMenuItem(mSettings.getResourceString("string.paste"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.redo"));
 		root.add(item);
 
 		root.addSeparator();
 
-		item = new JMenuItem(mSettings.getResourceString("string.select_all"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.cut"));
+		root.add(item);
+
+		item = new JMenuItem(GlobalSettings.getResourceString("string.copy"));
+		root.add(item);
+
+		item = new JMenuItem(GlobalSettings.getResourceString("string.paste"));
+		root.add(item);
+
+		root.addSeparator();
+
+		item = new JMenuItem(GlobalSettings.getResourceString("string.select_all"));
 		root.add(item);
 
 		oMenuBar.add(root);
@@ -176,16 +175,16 @@ public class MainFrame
 
 	private void createProjectMenu(JMenuBar oMenuBar, CControl oControl)
 	{
-		JMenu root = new JMenu(mSettings.getResourceString("string.project"));
+		JMenu root = new JMenu(GlobalSettings.getResourceString("string.project"));
 		JMenuItem item;
 
-		item = new JMenuItem(mSettings.getResourceString("string.add_new_item")+"...");
+		item = new JMenuItem(GlobalSettings.getResourceString("string.add_new_item")+"...");
 		root.add(item);
 
-		item = new JMenuItem(mSettings.getResourceString("string.add_existing_item")+"...");
+		item = new JMenuItem(GlobalSettings.getResourceString("string.add_existing_item")+"...");
 		root.add(item);
 
-		item = new JMenuItem(mSettings.getResourceString("string.project_settings")+"...");
+		item = new JMenuItem(GlobalSettings.getResourceString("string.project_settings")+"...");
 		root.add(item);
 
 		oMenuBar.add(root);
@@ -193,16 +192,16 @@ public class MainFrame
 
 	private void createBuildMenu(JMenuBar oMenuBar, CControl oControl)
 	{
-		JMenu root = new JMenu(mSettings.getResourceString("string.build"));
+		JMenu root = new JMenu(GlobalSettings.getResourceString("string.build"));
 		JMenuItem item;
 
-		item = new JMenuItem(mSettings.getResourceString("string.build_project"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.build_project"));
 		root.add(item);
 
-		item = new JMenuItem(mSettings.getResourceString("string.rebuild"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.rebuild"));
 		root.add(item);
 
-		item = new JMenuItem(mSettings.getResourceString("string.clean"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.clean"));
 		root.add(item);
 
 		oMenuBar.add(root);
@@ -210,37 +209,37 @@ public class MainFrame
 
 	private void createDebugMenu(JMenuBar oMenuBar, CControl oControl)
 	{
-		JMenu root = new JMenu(mSettings.getResourceString("string.debug"));
+		JMenu root = new JMenu(GlobalSettings.getResourceString("string.debug"));
 		JMenuItem item;
 		JMenu menu;
 		
-		menu = new JMenu(mSettings.getResourceString("string.windows"));
+		menu = new JMenu(GlobalSettings.getResourceString("string.windows"));
 
-		item = new JMenuItem(mSettings.getResourceString("string.memory"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.memory"));
 		menu.add(item);
-		item = new JMenuItem(mSettings.getResourceString("string.registers"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.registers"));
 		menu.add(item);
-		item = new JMenuItem(mSettings.getResourceString("string.breakpoints"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.breakpoints"));
 		menu.add(item);
 		root.add(menu);
 
-		item = new JMenuItem(mSettings.getResourceString("string.console"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.console"));
 		root.add(item);
 		root.addSeparator();
 		
-		item = new JMenuItem(mSettings.getResourceString("string.run"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.run"));
 		root.add(item);
-		item = new JMenuItem(mSettings.getResourceString("string.start_debugging"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.start_debugging"));
 		root.add(item);
-		item = new JMenuItem(mSettings.getResourceString("string.stop_debugging"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.stop_debugging"));
 		root.add(item);
 
 		root.addSeparator();
 
-		item = new JMenuItem(mSettings.getResourceString("string.single_step"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.single_step"));
 		root.add(item);
 
-		item = new JMenuItem(mSettings.getResourceString("string.continue"));
+		item = new JMenuItem(GlobalSettings.getResourceString("string.continue"));
 		root.add(item);
 
 		oMenuBar.add(root);
@@ -248,13 +247,13 @@ public class MainFrame
 
 	private void createToolsMenu(JMenuBar oMenuBar, CControl oControl)
 	{
-		JMenu root = new JMenu(mSettings.getResourceString("string.tools"));
+		JMenu root = new JMenu(GlobalSettings.getResourceString("string.tools"));
 		JMenu menu;
 		JMenuItem item;
 
-		item = new JMenuItem(mSettings.getResourceString("string.sprite_editor")+"...");
+		item = new JMenuItem(GlobalSettings.getResourceString("string.sprite_editor")+"...");
 		root.add(item);
-		item = new JMenuItem(mSettings.getResourceString("string.character_editor")+"...");
+		item = new JMenuItem(GlobalSettings.getResourceString("string.character_editor")+"...");
 		root.add(item);
 
 		menu = new JMenu("Layout");
@@ -264,7 +263,7 @@ public class MainFrame
 
 		root.addSeparator();
 
-		item = new JMenuItem(mSettings.getResourceString("string.settings")+"...");
+		item = new JMenuItem(GlobalSettings.getResourceString("string.settings")+"...");
 		item.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent e)
@@ -289,7 +288,7 @@ public class MainFrame
 		createDebugMenu(menuBar, oControl);
 		createToolsMenu(menuBar, oControl);
 
-		RootMenuPiece menu = new RootMenuPiece(mSettings.getResourceString("string.windows"), false);
+		RootMenuPiece menu = new RootMenuPiece(GlobalSettings.getResourceString("string.windows"), false);
 		menu.add(new SingleCDockableListMenuPiece(oControl));
 		menuBar.add(menu.getMenu());
 

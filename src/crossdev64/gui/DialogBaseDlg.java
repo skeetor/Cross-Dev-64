@@ -38,7 +38,7 @@ public class DialogBaseDlg<T extends DialogBasePanel>
 		setTitle(oPanel.getTitle());
 		JPanel buttonPanel = createButtonPanel();
 		{
-			JButton button = new JButton(GlobalSettings.getInstance().getResourceString("string.ok"));
+			JButton button = new JButton(GlobalSettings.getResourceString("string.ok"));
 			button.addActionListener(new ActionListener()
 			{
 				@Override
@@ -50,7 +50,9 @@ public class DialogBaseDlg<T extends DialogBasePanel>
 			buttonPanel.add(button);
 			getRootPane().setDefaultButton(button);
 		}
-		{
+
+		// TODO: Need a concept how to implement the apply button.
+/*		{
 			JButton button = new JButton(GlobalSettings.getInstance().getResourceString("string.apply"));
 			button.addActionListener(new ActionListener()
 			{
@@ -62,8 +64,10 @@ public class DialogBaseDlg<T extends DialogBasePanel>
 			});
 			buttonPanel.add(button);
 		}
+*/
+
 		{
-			JButton button = new JButton(GlobalSettings.getInstance().getResourceString("string.cancel"));
+			JButton button = new JButton(GlobalSettings.getResourceString("string.cancel"));
 			button.addActionListener(new ActionListener()
 			{
 				@Override

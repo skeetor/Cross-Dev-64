@@ -17,7 +17,7 @@ public class SettingsGeneralNode
 
 	public SettingsGeneralNode()
 	{
-		super(GlobalSettings.getInstance().getResourceString("string.general"), MODULE_ID);
+		super(GlobalSettings.getResourceString("string.general"), MODULE_ID);
 
 		registerChild(new SettingsColorThemeNode());
 	}

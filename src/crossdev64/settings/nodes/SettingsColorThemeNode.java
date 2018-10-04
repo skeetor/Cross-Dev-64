@@ -17,6 +17,6 @@ public class SettingsColorThemeNode
 
 	public SettingsColorThemeNode()
 	{
-		super(GlobalSettings.getInstance().getResourceString("string.theme"), MODULE_ID);
+		super(GlobalSettings.getResourceString("string.theme"), MODULE_ID);
 	}
 }

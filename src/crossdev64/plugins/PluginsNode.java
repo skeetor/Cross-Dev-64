@@ -17,7 +17,7 @@ public class PluginsNode
 
 	public PluginsNode()
 	{
-		super(GlobalSettings.getInstance().getResourceString("string.plugins"), MODULE_ID);
+		super(GlobalSettings.getResourceString("string.plugins"), MODULE_ID);
 	}
 
 	@Override

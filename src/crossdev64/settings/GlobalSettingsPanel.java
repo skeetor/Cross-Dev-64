@@ -29,15 +29,17 @@ public class GlobalSettingsPanel
 {
 	private static final long serialVersionUID = 1L;
 
+
+	// This variable is needed because the node selection comes before the mouse click event.
+	// So we need to differentiate these events.
+	private boolean mNodeSelected;
+
 	private JTree mSettingsTree;
 	private ButtonPanel mButtonPanel;
 	private JPanel mConfigPanel;
+	private GridBagLayout mConfigPanelLayout;
 	private SettingsTreeModel mSettingsModel;
 	private GlobalSettingsDlg mParent;
-
-	// This is needed because the node selection comes before the mouse click event.
-	// So we need to differentiate these events.
-	private boolean mNodeSelected;
 
 	public GlobalSettingsPanel()
 	{
@@ -147,7 +149,14 @@ public class GlobalSettingsPanel
 			}
 			{
 				mConfigPanel = new JPanel();
+				mConfigPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 				splitPane.setRightComponent(mConfigPanel);
+				mConfigPanelLayout = new GridBagLayout();
+				mConfigPanelLayout.columnWidths = new int[] {0};
+				mConfigPanelLayout.rowHeights = new int[] {0};
+				mConfigPanelLayout.columnWeights = new double[]{1.0};
+				mConfigPanelLayout.rowWeights = new double[]{1.0};
+				mConfigPanel.setLayout(mConfigPanelLayout);
 			}
 		}
 	}
@@ -187,7 +196,7 @@ public class GlobalSettingsPanel
 	@Override
 	public String getTitle()
 	{
-		return GlobalSettings.getInstance().getResourceString("settings.global_preferences");
+		return GlobalSettings.getResourceString("settings.global_preferences");
 	}
 
 	protected JPanel getConfigPanel()
@@ -272,7 +281,11 @@ public class GlobalSettingsPanel
 			return;
 
 		mConfigPanel.removeAll();
-		mConfigPanel.add(panel);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		mConfigPanel.add(panel, gbc);
 		mConfigPanel.revalidate();
 		mConfigPanel.repaint();
 	}

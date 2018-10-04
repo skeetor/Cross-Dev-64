@@ -209,13 +209,13 @@ public class GlobalSettings
 	 * @param oParams
 	 * @return
 	 */
-	public String getResourceString(String oKey, String...oParams)
+	public static String getResourceString(String oKey, String...oParams)
 	{
 		String s;
 		
 		try
 		{
-			s = mStrings.getString(oKey);
+			s = GlobalSettings.mSettings.mStrings.getString(oKey);
 		}
 		catch(Exception e)
 		{

@@ -15,7 +15,7 @@ public class EmulatorModuleNodes
 
 	public EmulatorModuleNodes()
 	{
-		super(GlobalSettings.getInstance().getResourceString("string.emulator"), MODULE_ID);
+		super(GlobalSettings.getResourceString("string.emulator"), MODULE_ID);
 	}
 
 	@Override
