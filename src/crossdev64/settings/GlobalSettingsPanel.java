@@ -252,7 +252,7 @@ public class GlobalSettingsPanel
 	protected void onCopyItem()
 	{
 		TreeNodeBase node = (TreeNodeBase)mSettingsTree.getLastSelectedPathComponent();
-		TreeNodeBase newNode = createNode(node);
+		createNode(node);
 	}
 
 	protected void onRemoveItem()
@@ -271,6 +271,10 @@ public class GlobalSettingsPanel
 
 	protected void onTreenodeSelected(TreeSelectionEvent oEvent)
 	{
+		mConfigPanel.removeAll();
+		mConfigPanel.revalidate();
+		mConfigPanel.repaint();
+
 		TreeNodeBase node = (TreeNodeBase)mSettingsTree.getLastSelectedPathComponent();
 
 		// Treenode was collapsed
@@ -287,7 +291,6 @@ public class GlobalSettingsPanel
 		if(panel == null)
 			return;
 
-		mConfigPanel.removeAll();
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;

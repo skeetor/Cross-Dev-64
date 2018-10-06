@@ -1,6 +1,4 @@
-package crossdev64.emulator;
-
-import crossdev64.gui.TreeNodeBase;
+package crossdev64.gui;
 
 /**
  * EmulatorModuleNode is a base class for emulators.
@@ -8,12 +6,12 @@ import crossdev64.gui.TreeNodeBase;
  * @author sparhawk
  *
  */
-public abstract class EmulatorModuleNode
+public abstract class CopyableModuleNode
 	extends TreeNodeBase
 {
 	private static final long serialVersionUID = 1L;
 
-	public EmulatorModuleNode(String oTitle, String oUUID)
+	public CopyableModuleNode(String oTitle, String oUUID)
 	{
 		super(oTitle, oUUID);
 	}

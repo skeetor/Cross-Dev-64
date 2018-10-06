@@ -5,11 +5,11 @@ import java.util.UUID;
 
 import javax.swing.JPanel;
 
-import crossdev64.emulator.EmulatorModuleNode;
+import crossdev64.gui.CopyableModuleNode;
 import crossdev64.gui.TreeNodeBase;
 
 public class VICESettingsNode
-	extends EmulatorModuleNode
+	extends CopyableModuleNode
 {
 	private static final long serialVersionUID = 1L;
 

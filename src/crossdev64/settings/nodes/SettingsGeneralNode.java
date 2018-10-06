@@ -1,6 +1,7 @@
 package crossdev64.settings.nodes;
 
 import crossdev64.gui.TreeNodeBase;
+import crossdev64.project.ProjectNode;
 import crossdev64.settings.GlobalSettings;
 
 /**
@@ -19,6 +20,7 @@ public class SettingsGeneralNode
 	{
 		super(GlobalSettings.getResourceString("string.general"), MODULE_ID);
 
+		registerChild(new ProjectNode());
 		registerChild(new SettingsColorThemeNode());
 	}
 }
