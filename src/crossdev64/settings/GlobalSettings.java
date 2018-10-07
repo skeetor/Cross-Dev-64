@@ -8,9 +8,13 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+
 import crossdev64.main.Application;
 import crossdev64.settings.nodes.SettingsRootNode;
 import crossdev64.utils.CommandlineParser;
+import crossdev64.utils.Stack;
 
 public class GlobalSettings
 {
@@ -301,5 +305,32 @@ public class GlobalSettings
 			mRootNode = new SettingsRootNode();
 
 		return mRootNode;
+	}
+
+	public void load()
+	{
+	}
+
+	public void save()
+	{
+		try
+		{
+			SettingsRootNode treeRoot = getRootNode();
+			XmlMapper mapper = new XmlMapper();
+			XMLTest t = new XMLTest();
+			String s = mapper.writeValueAsString(treeRoot);
+			ObjectNode root = mapper.createObjectNode();
+
+			//root.put("module_id", treeRoot.getModuleId());
+
+			//String s = mapper.writeValueAsString(root);
+//			ObjectNode data = treeRoot.save(root);
+			System.out.println(Stack.getSourcePosition()+"XML\n"+s);
+		}
+		catch(Throwable e)
+		{
+			System.out.println(Stack.getSourcePosition()+"Exception in saving:"+e.getMessage());
+			e.printStackTrace();
+		}
 	}
 }

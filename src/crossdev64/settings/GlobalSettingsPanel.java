@@ -276,9 +276,7 @@ public class GlobalSettingsPanel
 		mConfigPanel.repaint();
 
 		TreeNodeBase node = (TreeNodeBase)mSettingsTree.getLastSelectedPathComponent();
-
-		// Treenode was collapsed
-		if(node == null)
+		if(node == null)		// Treenode was collapsed
 			return;
 
 		mNodeSelected = true;

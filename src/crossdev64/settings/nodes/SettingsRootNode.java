@@ -1,5 +1,7 @@
 package crossdev64.settings.nodes;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import crossdev64.emulator.EmulatorModuleNodes;
 import crossdev64.gui.TreeNodeBase;
 import crossdev64.plugins.PluginsNode;
@@ -10,6 +12,7 @@ import crossdev64.settings.GlobalSettings;
  * @author sparhawk
  *
  */
+@XmlRootElement(name="Settings")
 public class SettingsRootNode
 	extends TreeNodeBase
 {

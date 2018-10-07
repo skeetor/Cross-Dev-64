@@ -47,5 +47,12 @@ untested. Those are the ones used for development, so they should work for sure.
 
 # Required external JARs
 
+The project was bild tusing these jar files. Newer versions may work as well.
+
 * [docking-frames-common.jar](http://www.docking-frames.org/)
 * [docking-frames-core.jar](http://www.docking-frames.org/)
+* [jackson-annotations-2.9.5.jar](http://repo1.maven.org/maven2/org/codehaus/woodstox/stax2-api/4.1/jackson-annotations-2.9.5.jar)
+* [jackson-core-2.9.5.jar](http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.9.5/jackson-core-2.9.5.jar)
+* [jackson-annotations-2.9.5.jar](http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.9.5//jackson-annotations-2.9.5.jar)
+* [jackson-databind-2.9.5.jar](http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.9.5/jackson-databind-2.9.5.jar)
+* [jackson-dataformat-xml-2.9.5.jar](http://central.maven.org/maven2/com/fasterxml/jackson/dataformat/jackson-dataformat-xml/2.9.5/jackson-dataformat-xml-2.9.5.jar)
