@@ -8,11 +8,10 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
+import crossdev64.gui.TreeNode;
 import crossdev64.main.Application;
-import crossdev64.settings.nodes.SettingsRootNode;
 import crossdev64.utils.CommandlineParser;
 import crossdev64.utils.Stack;
 
@@ -46,7 +45,7 @@ public class GlobalSettings
 	private SettingsParser mParser;
 	private File mHome;
 	private ResourceBundle mStrings;
-	private SettingsRootNode mRootNode;
+	private TreeNode mRootNode;
 
 	public static void create(String[] args)
 	{
@@ -299,10 +298,10 @@ public class GlobalSettings
 		return str;
 	}
 
-	public SettingsRootNode getRootNode()
+	public TreeNode getRootNode()
 	{
 		if(mRootNode == null)
-			mRootNode = new SettingsRootNode();
+			mRootNode = new TreeNode(new GlobalSettingsModule());
 
 		return mRootNode;
 	}
@@ -310,16 +309,13 @@ public class GlobalSettings
 	public void load()
 	{
 	}
-
 	public void save()
 	{
 		try
 		{
-			SettingsRootNode treeRoot = getRootNode();
+			TreeNode treeRoot = getRootNode();
 			XmlMapper mapper = new XmlMapper();
-			XMLTest t = new XMLTest();
-			String s = mapper.writeValueAsString(treeRoot);
-			ObjectNode root = mapper.createObjectNode();
+			String s = mapper.writeValueAsString(treeRoot.getModule());
 
 			//root.put("module_id", treeRoot.getModuleId());
 

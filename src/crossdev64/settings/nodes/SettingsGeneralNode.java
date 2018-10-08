@@ -1,26 +1,19 @@
 package crossdev64.settings.nodes;
 
-import crossdev64.gui.TreeNodeBase;
 import crossdev64.project.ProjectTreeNode;
 import crossdev64.settings.GlobalSettings;
+import crossdev64.settings.ModuleSettings;
 
-/**
- * A label node is a simple a node which can have childs and is only a string.
- * @author sparhawk
- *
- */
 public class SettingsGeneralNode
-	extends TreeNodeBase
+	extends ModuleSettings
 {
 	public static final String MODULE_ID = "070B3D0E-5CEC-4EA5-9501-46ACD3210CF5";
 
-	private static final long serialVersionUID = 1L;
-
 	public SettingsGeneralNode()
 	{
-		super(GlobalSettings.getResourceString("string.general"), MODULE_ID);
+		super(MODULE_ID, GlobalSettings.getResourceString("string.general"));
 
-		registerChild(new ProjectTreeNode());
-		registerChild(new SettingsColorThemeNode());
+		addChild(new ProjectTreeNode());
+		addChild(new SettingsColorThemeNode());
 	}
 }

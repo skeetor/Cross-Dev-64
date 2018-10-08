@@ -22,7 +22,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import crossdev64.gui.ButtonPanel;
 import crossdev64.gui.DialogBasePanel;
-import crossdev64.gui.TreeNodeBase;
+import crossdev64.gui.TreeNode;
 import crossdev64.gui.TreeNodeModel;
 
 public class GlobalSettingsPanel
@@ -178,9 +178,9 @@ public class GlobalSettingsPanel
 				boolean returnValue = super.isCellEditable(event);
 				if (returnValue)
 				{
-					TreeNodeBase node = (TreeNodeBase)tree.getLastSelectedPathComponent();
+					TreeNode node = (TreeNode)tree.getLastSelectedPathComponent();
 					if (node != null)
-						return node.canRename();
+						return node.getModule().canRename();
 				}
 
 				return false;
@@ -215,27 +215,31 @@ public class GlobalSettingsPanel
 		return mButtonPanel;
 	}
 
-	protected TreeNodeBase createNode(TreeNodeBase oDefault)
+	protected TreeNode createNode(TreeNode oDefault)
 	{
 		TreePath path = mSettingsTree.getSelectionPath();
-		TreeNodeBase node = (TreeNodeBase)path.getLastPathComponent();
-		TreeNodeBase newNode;
-		TreeNodeBase parent = null;
+		TreeNode treeNode = (TreeNode)path.getLastPathComponent();
+		TreeNode parent = null;
+		TreeNode newNode = null;
+		ModuleSettings module = treeNode.getModule();
+		TreeNode node = null;
 
-		if(node.addToParent())
+		if(module.addToParent())
 		{
 			path = path.getParentPath();
-			parent = (TreeNodeBase)path.getLastPathComponent();
+			parent = (TreeNode)path.getLastPathComponent();
 		}
 
-		newNode = node.createItem(mParent, oDefault);
-		if(newNode != null)
+		ModuleSettings newModule = module.createItem(mParent, oDefault.getModule());
+		if(newModule != null)
 		{
+			newNode = new TreeNode(newModule);
+
 			if(parent != null)
 				node = parent;
 
 			node.add(newNode);
-			mSettingsModel.nodeStructureChanged(node);
+			mSettingsModel.nodeStructureChanged(treeNode);
 			mSettingsTree.expandPath(path);
 			path = path.pathByAddingChild(newNode);
 			mSettingsTree.setSelectionPath(path);
@@ -251,20 +255,20 @@ public class GlobalSettingsPanel
 
 	protected void onCopyItem()
 	{
-		TreeNodeBase node = (TreeNodeBase)mSettingsTree.getLastSelectedPathComponent();
+		TreeNode node = (TreeNode)mSettingsTree.getLastSelectedPathComponent();
 		createNode(node);
 	}
 
 	protected void onRemoveItem()
 	{
 		TreePath path = mSettingsTree.getSelectionPath();
-		TreeNodeBase node = (TreeNodeBase)path.getLastPathComponent();
-		if(node != null && node.canRemove())
+		TreeNode node = (TreeNode)path.getLastPathComponent();
+		if(node != null && node.getModule().canRemove())
 		{
 			mSettingsModel.removeNodeFromParent(node);
 
 			path = path.getParentPath();
-			node = (TreeNodeBase)path.getLastPathComponent();
+			node = (TreeNode)path.getLastPathComponent();
 			mSettingsModel.nodeStructureChanged(node);
 		}
 	}
@@ -275,17 +279,19 @@ public class GlobalSettingsPanel
 		mConfigPanel.revalidate();
 		mConfigPanel.repaint();
 
-		TreeNodeBase node = (TreeNodeBase)mSettingsTree.getLastSelectedPathComponent();
+		TreeNode node = (TreeNode)mSettingsTree.getLastSelectedPathComponent();
 		if(node == null)		// Treenode was collapsed
 			return;
 
+		ModuleSettings module = node.getModule();
+
 		mNodeSelected = true;
 
-		mButtonPanel.enableNew(node.canAdd());
-		mButtonPanel.enableDelete(node.canDelete());
-		mButtonPanel.enableCopy(node.canCopy());
+		mButtonPanel.enableNew(module.canAdd());
+		mButtonPanel.enableDelete(module.canDelete());
+		mButtonPanel.enableCopy(module.canCopy());
 
-		JPanel panel = node.getConfigPanel();
+		JPanel panel = module.getConfigPanel();
 		if(panel == null)
 			return;
 
@@ -300,9 +306,9 @@ public class GlobalSettingsPanel
 
 	protected void onNodeClicked(TreePath oPath)
 	{
-		TreeNodeBase node = (TreeNodeBase)oPath.getLastPathComponent();
+		TreeNode node = (TreeNode)oPath.getLastPathComponent();
 
-		if(!node.canRename())
+		if(!node.getModule().canRename())
 			return;
 
 		mSettingsTree.startEditingAtPath(oPath);

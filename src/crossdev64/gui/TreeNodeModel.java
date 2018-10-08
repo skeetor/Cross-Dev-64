@@ -7,18 +7,18 @@ public class TreeNodeModel
 {
 	private static final long serialVersionUID = 1L;
 
-	public TreeNodeModel(TreeNodeBase oRootNode)
+	public TreeNodeModel(TreeNode oRootNode)
 	{
 		super(oRootNode);
 		initModules(oRootNode);
 	}
 
-	private void initModules(TreeNodeBase oRoot)
+	private void initModules(TreeNode oRoot)
 	{
-		for(TreeNodeBase node : oRoot.getChildModules())
+		for(TreeNode node : oRoot.getChildModules())
 		{
 			oRoot.add(node);
-			if(oRoot.getChildModules().size() > 0)
+			if(node.getChildModules().size() > 0)
 				initModules(node);
 		}
 	}

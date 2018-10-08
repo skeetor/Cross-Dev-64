@@ -1,71 +1,65 @@
-package crossdev64.gui;
+package crossdev64.settings;
 
 import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
-import javax.swing.tree.DefaultMutableTreeNode;
+import javax.xml.bind.annotation.XmlElement;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
-/**
- * A label node is a simple a node which can have childs and is only a string.
- * @author sparhawk
- *
- */
 @JsonInclude(Include.NON_NULL)
-public abstract class TreeNodeBase
-	extends DefaultMutableTreeNode
+public class ModuleSettings
 {
-	private static final long serialVersionUID = 1L;
+	private List<ModuleSettings> mChilds = new ArrayList<>();
 
-	private List<TreeNodeBase> mChilds = new ArrayList<>();
-
-	private String mName;
 	private String mModuleId;
-	private boolean mDirty;
+	private String mModuleName;
 
-	public TreeNodeBase(String oName, String oModuleId)
+	@JsonIgnore
+	private boolean mDirty;
+	
+	public ModuleSettings(String oModuleId, String oModuleName)
 	{
-		super(oName);
-		setModuleName(oName);
 		setModuleId(oModuleId);
-		setDirty(false);
+		setModuleName(oModuleName);
 	}
 
 	@JsonIgnore
-	public void registerChild(TreeNodeBase oModuleNode)
+	public void addChild(ModuleSettings oModuleNode)
 	{
 		mChilds.add(oModuleNode);
 	}
 
-	public List<TreeNodeBase> getChildModules()
+	@JsonIgnore
+	public List<ModuleSettings> getChildModules()
 	{
 		return mChilds;
 	}
-	
+
+	@XmlElement(name="ModuleId")
 	public String getModuleId()
 	{
 		return mModuleId;
 	}
-	
-	protected void setModuleId(String oModuleId)
+
+	public void setModuleId(String oModuleId)
 	{
 		mModuleId = oModuleId;
 	}
 
+	@XmlElement(name="ModuleName")
 	public String getModuleName()
 	{
-		return mName;
+		return mModuleName;
 	}
 
-	public void setModuleName(String oName)
+	public void setModuleName(String oModuleName)
 	{
-		mName = oName;
+		mModuleName = oModuleName;
 	}
 
 	@JsonIgnore
@@ -137,13 +131,7 @@ public abstract class TreeNodeBase
 	 * @return
 	 */
 	@JsonIgnore
-	public TreeNodeBase createItem(Window oParent, TreeNodeBase oDefault)
-	{
-		return null;
-	}
-
-	@JsonIgnore
-	public ObjectNode save(ObjectNode root)
+	public ModuleSettings createItem(Window oParent, ModuleSettings oDefault)
 	{
 		return null;
 	}

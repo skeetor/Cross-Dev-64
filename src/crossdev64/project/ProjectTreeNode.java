@@ -4,31 +4,34 @@ import javax.swing.JPanel;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import crossdev64.gui.TreeNodeBase;
-import crossdev64.settings.GlobalSettings;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@XmlRootElement(name="Project")
+import crossdev64.settings.GlobalSettings;
+import crossdev64.settings.ModuleSettings;
+
+@XmlRootElement(name="ProjectSettings")
 public class ProjectTreeNode
-	extends TreeNodeBase
+	extends ModuleSettings
 {
 	public static final String MODULE_ID = "D4FCC276-04EC-4CE4-9847-070F6C23AD46";
 
-	private static final long serialVersionUID = 1L;
-
+	@JsonIgnore
 	private ProjectNodePanel mPanel;
 
 	public ProjectTreeNode()
 	{
-		super(GlobalSettings.getResourceString("string.project"), MODULE_ID);
+		super(MODULE_ID, GlobalSettings.getResourceString("string.project"));
 		mPanel = new ProjectNodePanel();
 	}
 
+	@JsonIgnore
 	@Override
 	public JPanel getConfigPanel()
 	{
 		return getPanel();
 	}
 
+	@JsonIgnore
 	private ProjectNodePanel getPanel()
 	{
 		return mPanel;

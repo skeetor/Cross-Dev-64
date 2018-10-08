@@ -5,14 +5,12 @@ import java.util.UUID;
 
 import javax.swing.JPanel;
 
-import crossdev64.gui.CopyableModuleNode;
-import crossdev64.gui.TreeNodeBase;
+import crossdev64.gui.CopyableModule;
+import crossdev64.settings.ModuleSettings;
 
 public class VICESettingsNode
-	extends CopyableModuleNode
+	extends CopyableModule
 {
-	private static final long serialVersionUID = 1L;
-
 	private VICESettingsPanel mPanel;
 
 	public VICESettingsNode()
@@ -56,7 +54,7 @@ public class VICESettingsNode
 	}
 
 	@Override
-	public TreeNodeBase createItem(Window oParent, TreeNodeBase oDefault)
+	public ModuleSettings createItem(Window oParent, ModuleSettings oDefault)
 	{
 		return new VICESettingsNode((VICESettingsNode)oDefault);
 	}
