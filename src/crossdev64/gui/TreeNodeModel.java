@@ -10,16 +10,5 @@ public class TreeNodeModel
 	public TreeNodeModel(TreeNode oRootNode)
 	{
 		super(oRootNode);
-		initModules(oRootNode);
-	}
-
-	private void initModules(TreeNode oRoot)
-	{
-		for(TreeNode node : oRoot.getChildModules())
-		{
-			oRoot.add(node);
-			if(node.getChildModules().size() > 0)
-				initModules(node);
-		}
 	}
 }

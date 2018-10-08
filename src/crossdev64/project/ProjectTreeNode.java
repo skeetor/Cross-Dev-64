@@ -1,50 +1,14 @@
 package crossdev64.project;
 
-import javax.swing.JPanel;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import crossdev64.gui.TreeNode;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import crossdev64.settings.GlobalSettings;
-import crossdev64.settings.ModuleSettings;
-
-@XmlRootElement(name="ProjectSettings")
 public class ProjectTreeNode
-	extends ModuleSettings
+	extends TreeNode
 {
-	public static final String MODULE_ID = "D4FCC276-04EC-4CE4-9847-070F6C23AD46";
-
-	@JsonIgnore
-	private ProjectNodePanel mPanel;
+	private static final long serialVersionUID = 1L;
 
 	public ProjectTreeNode()
 	{
-		super(MODULE_ID, GlobalSettings.getResourceString("string.project"));
-		mPanel = new ProjectNodePanel();
-	}
-
-	@JsonIgnore
-	@Override
-	public JPanel getConfigPanel()
-	{
-		return getPanel();
-	}
-
-	@JsonIgnore
-	private ProjectNodePanel getPanel()
-	{
-		return mPanel;
-	}
-
-	@XmlElement(name="ProjectRootPath")
-	public String getProjectRootPath()
-	{
-		return mPanel.getProjectRootPath();
-	}
-
-	public void setProjectRootPath(String oPath)
-	{
-		mPanel.setProjectRootPath(oPath);
+		super(new ProjectSettings());
 	}
 }

@@ -8,25 +8,25 @@ import javax.swing.JPanel;
 import crossdev64.gui.CopyableModule;
 import crossdev64.settings.ModuleSettings;
 
-public class VICESettingsNode
+public class VICEModule
 	extends CopyableModule
 {
 	private VICESettingsPanel mPanel;
 
-	public VICESettingsNode()
+	public VICEModule()
 	{
-		super("VICE", UUID.randomUUID().toString().toUpperCase());
+		super(UUID.randomUUID().toString().toUpperCase(), "VICE");
 		mPanel = new VICESettingsPanel();
 		mPanel.setPort(6510);
 	}
 
-	public VICESettingsNode(VICESettingsNode oSource)
+	public VICEModule(VICEModule oSource)
 	{
 		this();
 		copy(oSource);
 	}
 
-	public void copy(VICESettingsNode oSource)
+	public void copy(VICEModule oSource)
 	{
 		if(oSource == null)
 			return;
@@ -41,7 +41,7 @@ public class VICESettingsNode
 	 * 
 	 * @param oUUID
 	 */
-	public VICESettingsNode(String oUUID)
+	public VICEModule(String oUUID)
 	{
 		super("VICE", oUUID);
 		mPanel = new VICESettingsPanel();
@@ -56,7 +56,7 @@ public class VICESettingsNode
 	@Override
 	public ModuleSettings createItem(Window oParent, ModuleSettings oDefault)
 	{
-		return new VICESettingsNode((VICESettingsNode)oDefault);
+		return new VICEModule((VICEModule)oDefault);
 	}
 
 	private VICESettingsPanel getPanel()

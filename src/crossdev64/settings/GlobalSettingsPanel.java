@@ -218,11 +218,10 @@ public class GlobalSettingsPanel
 	protected TreeNode createNode(TreeNode oDefault)
 	{
 		TreePath path = mSettingsTree.getSelectionPath();
-		TreeNode treeNode = (TreeNode)path.getLastPathComponent();
+		TreeNode node = (TreeNode)path.getLastPathComponent();
+		ModuleSettings module = node.getModule();
 		TreeNode parent = null;
 		TreeNode newNode = null;
-		ModuleSettings module = treeNode.getModule();
-		TreeNode node = null;
 
 		if(module.addToParent())
 		{
@@ -230,7 +229,11 @@ public class GlobalSettingsPanel
 			parent = (TreeNode)path.getLastPathComponent();
 		}
 
-		ModuleSettings newModule = module.createItem(mParent, oDefault.getModule());
+		ModuleSettings defaultModule = null;
+		if(oDefault != null)
+			defaultModule = oDefault.getModule();
+
+		ModuleSettings newModule = module.createItem(mParent, defaultModule);
 		if(newModule != null)
 		{
 			newNode = new TreeNode(newModule);
@@ -239,7 +242,7 @@ public class GlobalSettingsPanel
 				node = parent;
 
 			node.add(newNode);
-			mSettingsModel.nodeStructureChanged(treeNode);
+			mSettingsModel.nodeStructureChanged(node);
 			mSettingsTree.expandPath(path);
 			path = path.pathByAddingChild(newNode);
 			mSettingsTree.setSelectionPath(path);

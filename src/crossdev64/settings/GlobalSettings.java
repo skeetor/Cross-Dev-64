@@ -45,7 +45,7 @@ public class GlobalSettings
 	private SettingsParser mParser;
 	private File mHome;
 	private ResourceBundle mStrings;
-	private TreeNode mRootNode;
+	private GlobalSettingsNode mRootNode;
 
 	public static void create(String[] args)
 	{
@@ -298,10 +298,10 @@ public class GlobalSettings
 		return str;
 	}
 
-	public TreeNode getRootNode()
+	public GlobalSettingsNode getRootNode()
 	{
 		if(mRootNode == null)
-			mRootNode = new TreeNode(new GlobalSettingsModule());
+			mRootNode = new GlobalSettingsNode();
 
 		return mRootNode;
 	}
