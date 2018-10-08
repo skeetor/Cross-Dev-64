@@ -1,7 +1,6 @@
 package crossdev64.emulator.vice;
 
 import crossdev64.gui.TreeNode;
-import crossdev64.settings.ModuleSettings;
 
 public class VICENodes
 	extends TreeNode<VICEModules>

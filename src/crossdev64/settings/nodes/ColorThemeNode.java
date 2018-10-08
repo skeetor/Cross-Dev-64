@@ -3,7 +3,7 @@ package crossdev64.settings.nodes;
 import crossdev64.gui.TreeNode;
 
 public class ColorThemeNode
-	extends TreeNode
+	extends TreeNode<ColorThemeModule>
 {
 	private static final long serialVersionUID = 1L;
 

@@ -2,13 +2,13 @@ package crossdev64.plugins;
 
 import crossdev64.gui.TreeNode;
 
-public class PluginsNode
-	extends TreeNode
+public class PluginNodes
+	extends TreeNode<PluginModules>
 {
 	private static final long serialVersionUID = 1L;
 
-	public PluginsNode()
+	public PluginNodes()
 	{
-		super(new PluginsModule());
+		super(new PluginModules());
 	}
 }

@@ -178,7 +178,8 @@ public class GlobalSettingsPanel
 				boolean returnValue = super.isCellEditable(event);
 				if (returnValue)
 				{
-					TreeNode node = (TreeNode)tree.getLastSelectedPathComponent();
+					@SuppressWarnings("unchecked")
+					TreeNode<? extends ModuleSettings> node = (TreeNode<? extends ModuleSettings>)tree.getLastSelectedPathComponent();
 					if (node != null)
 						return node.getModule().canRename();
 				}
@@ -215,18 +216,19 @@ public class GlobalSettingsPanel
 		return mButtonPanel;
 	}
 
-	protected TreeNode createNode(TreeNode oDefault)
+	@SuppressWarnings("unchecked")
+	protected TreeNode<? extends ModuleSettings> createNode(TreeNode<? extends ModuleSettings> oDefault)
 	{
 		TreePath path = mSettingsTree.getSelectionPath();
-		TreeNode node = (TreeNode)path.getLastPathComponent();
+		TreeNode<? extends ModuleSettings> node = (TreeNode<? extends ModuleSettings>)path.getLastPathComponent();
 		ModuleSettings module = node.getModule();
-		TreeNode parent = null;
-		TreeNode newNode = null;
+		TreeNode<? extends ModuleSettings> parent = null;
+		TreeNode<? extends ModuleSettings> newNode = null;
 
 		if(module.addToParent())
 		{
 			path = path.getParentPath();
-			parent = (TreeNode)path.getLastPathComponent();
+			parent = (TreeNode<? extends ModuleSettings>)path.getLastPathComponent();
 		}
 
 		ModuleSettings defaultModule = null;
@@ -236,7 +238,7 @@ public class GlobalSettingsPanel
 		ModuleSettings newModule = module.createItem(mParent, defaultModule);
 		if(newModule != null)
 		{
-			newNode = new TreeNode(newModule);
+			newNode = new TreeNode<ModuleSettings>(newModule);
 
 			if(parent != null)
 				node = parent;
@@ -258,20 +260,22 @@ public class GlobalSettingsPanel
 
 	protected void onCopyItem()
 	{
-		TreeNode node = (TreeNode)mSettingsTree.getLastSelectedPathComponent();
+		@SuppressWarnings("unchecked")
+		TreeNode<? extends ModuleSettings> node = (TreeNode<? extends ModuleSettings>)mSettingsTree.getLastSelectedPathComponent();
 		createNode(node);
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void onRemoveItem()
 	{
 		TreePath path = mSettingsTree.getSelectionPath();
-		TreeNode node = (TreeNode)path.getLastPathComponent();
+		TreeNode<? extends ModuleSettings> node = (TreeNode<? extends ModuleSettings>)path.getLastPathComponent();
 		if(node != null && node.getModule().canRemove())
 		{
 			mSettingsModel.removeNodeFromParent(node);
 
 			path = path.getParentPath();
-			node = (TreeNode)path.getLastPathComponent();
+			node = (TreeNode<? extends ModuleSettings>)path.getLastPathComponent();
 			mSettingsModel.nodeStructureChanged(node);
 		}
 	}
@@ -282,7 +286,8 @@ public class GlobalSettingsPanel
 		mConfigPanel.revalidate();
 		mConfigPanel.repaint();
 
-		TreeNode node = (TreeNode)mSettingsTree.getLastSelectedPathComponent();
+		@SuppressWarnings("unchecked")
+		TreeNode<? extends ModuleSettings> node = (TreeNode<? extends ModuleSettings>)mSettingsTree.getLastSelectedPathComponent();
 		if(node == null)		// Treenode was collapsed
 			return;
 
@@ -309,7 +314,8 @@ public class GlobalSettingsPanel
 
 	protected void onNodeClicked(TreePath oPath)
 	{
-		TreeNode node = (TreeNode)oPath.getLastPathComponent();
+		@SuppressWarnings("unchecked")
+		TreeNode<? extends ModuleSettings> node = (TreeNode<? extends ModuleSettings>)oPath.getLastPathComponent();
 
 		if(!node.getModule().canRename())
 			return;

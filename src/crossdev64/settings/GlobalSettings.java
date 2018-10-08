@@ -313,7 +313,7 @@ public class GlobalSettings
 	{
 		try
 		{
-			GlobalSettingsModule module = (GlobalSettingsModule)getRootNode().getModule();
+			GlobalSettingsModule module = getRootNode().getModule();
 			XmlMapper mapper = new XmlMapper();
 			String s = mapper.writeValueAsString(module);
 
