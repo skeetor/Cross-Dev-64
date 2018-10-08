@@ -34,7 +34,7 @@ public class ModuleSettings
 		mChilds.add(oModuleNode);
 	}
 
-	@JsonIgnore
+	@XmlElement(name="Modules")
 	public List<ModuleSettings> getChildModules()
 	{
 		return mChilds;

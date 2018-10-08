@@ -10,7 +10,6 @@ import java.util.ResourceBundle;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-import crossdev64.gui.TreeNode;
 import crossdev64.main.Application;
 import crossdev64.utils.CommandlineParser;
 import crossdev64.utils.Stack;
@@ -309,13 +308,14 @@ public class GlobalSettings
 	public void load()
 	{
 	}
+
 	public void save()
 	{
 		try
 		{
-			TreeNode treeRoot = getRootNode();
+			GlobalSettingsModule module = (GlobalSettingsModule)getRootNode().getModule();
 			XmlMapper mapper = new XmlMapper();
-			String s = mapper.writeValueAsString(treeRoot.getModule());
+			String s = mapper.writeValueAsString(module);
 
 			//root.put("module_id", treeRoot.getModuleId());
 
