@@ -4,10 +4,13 @@ import java.awt.Window;
 import java.util.UUID;
 
 import javax.swing.JPanel;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import crossdev64.gui.CopyableModule;
 import crossdev64.settings.ModuleSettings;
 
+@XmlRootElement(name = "VICEModule")
 public class VICEModule
 	extends CopyableModule
 {
@@ -43,8 +46,14 @@ public class VICEModule
 	 */
 	public VICEModule(String oUUID)
 	{
-		super("VICE", oUUID);
+		super("VICE Module", oUUID);
 		mPanel = new VICESettingsPanel();
+	}
+
+	@Override
+	public boolean isNode()
+	{
+		return false;
 	}
 
 	@Override
@@ -63,7 +72,8 @@ public class VICEModule
 	{
 		return mPanel;
 	}
-	
+
+	@XmlElement(name="InstallationPath")
 	public String getInstallationPath()
 	{
 		return mPanel.getInstallationPath();
@@ -74,11 +84,12 @@ public class VICEModule
 		mPanel.setInstallationPath(oPath);
 	}
 
+	@XmlElement(name="Port")
 	public int getPort()
 	{
 		return mPanel.getPort();
 	}
-	
+
 	public void setPort(int nPort)
 	{
 		mPanel.setPort(nPort);

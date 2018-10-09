@@ -1,6 +1,8 @@
 package crossdev64.settings;
 
 import java.io.File;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +10,8 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 
 import crossdev64.main.Application;
 import crossdev64.utils.CommandlineParser;
@@ -304,6 +307,30 @@ public class GlobalSettings
 
 		return mRootNode;
 	}
+	
+	private List<Class<?>> createClassList(ModuleSettings oModule)
+	{
+		List<Class<?>> classes = new ArrayList<>();
+		classes.add(oModule.getClass());
+
+		for(ModuleSettings module : oModule.getChildModules())
+		{
+			List<Class<?>> cls = createClassList(module);
+			classes.addAll(cls);
+		}
+
+		return classes;
+	}
+
+	private Class<?>[] getClasses(ModuleSettings oModule)
+	{
+		List<Class<?>> classes = createClassList(oModule);
+		Class<?>[] cls = new Class<?>[classes.size()];
+		for(int i = 0; i < classes.size(); i++)
+			cls[i] = classes.get(i);
+
+		return cls;
+	}
 
 	public void load()
 	{
@@ -314,13 +341,13 @@ public class GlobalSettings
 		try
 		{
 			GlobalSettingsModule module = getRootNode().getModule();
-			XmlMapper mapper = new XmlMapper();
-			String s = mapper.writeValueAsString(module);
+			StringWriter sw = new StringWriter();
+			JAXBContext jaxbContext = JAXBContext.newInstance(getClasses(module));
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);	// Pretty print
+			jaxbMarshaller.marshal(module, sw);
+			String s = sw.toString();
 
-			//root.put("module_id", treeRoot.getModuleId());
-
-			//String s = mapper.writeValueAsString(root);
-//			ObjectNode data = treeRoot.save(root);
 			System.out.println(Stack.getSourcePosition()+"XML\n"+s);
 		}
 		catch(Throwable e)

@@ -1,8 +1,11 @@
 package crossdev64.plugins;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import crossdev64.settings.GlobalSettings;
 import crossdev64.settings.ModuleSettings;
 
+@XmlRootElement(name="Plugins")
 public class PluginModules
 	extends ModuleSettings
 {

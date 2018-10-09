@@ -1,8 +1,11 @@
 package crossdev64.settings.nodes;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import crossdev64.settings.GlobalSettings;
 import crossdev64.settings.ModuleSettings;
 
+@XmlRootElement(name="ColorTheme")
 public class ColorThemeModule
 	extends ModuleSettings
 {

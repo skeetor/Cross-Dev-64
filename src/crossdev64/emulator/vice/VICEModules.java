@@ -2,8 +2,11 @@ package crossdev64.emulator.vice;
 
 import java.awt.Window;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import crossdev64.settings.ModuleSettings;
 
+@XmlRootElement(name="VICEModules")
 public class VICEModules
 	extends ModuleSettings
 {

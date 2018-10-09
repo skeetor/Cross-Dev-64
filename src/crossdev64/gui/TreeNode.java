@@ -51,13 +51,7 @@ public class TreeNode<T extends ModuleSettings>
 		if(!leaf)
 			return leaf;
 
-		if(getChildModules().size() > 0)
-			return false;
-
 		ModuleSettings module = getModule();
-		if(module.canAdd())
-			return false;
-
-		return true;
+		return !module.isNode();
 	}
 }

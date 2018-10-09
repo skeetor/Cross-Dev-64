@@ -5,13 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlAttribute;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-@JsonInclude(Include.NON_NULL)
 public class ModuleSettings
 {
 	private List<ModuleSettings> mChilds = new ArrayList<>();
@@ -34,13 +32,13 @@ public class ModuleSettings
 		mChilds.add(oModuleNode);
 	}
 
-	@XmlElement(name="Modules")
+	@XmlAnyElement(lax=true)
 	public List<ModuleSettings> getChildModules()
 	{
 		return mChilds;
 	}
 
-	@XmlElement(name="ModuleId")
+	@XmlAttribute(name="ModuleId")
 	public String getModuleId()
 	{
 		return mModuleId;
@@ -51,7 +49,7 @@ public class ModuleSettings
 		mModuleId = oModuleId;
 	}
 
-	@XmlElement(name="ModuleName")
+	@XmlAttribute(name="ModuleName")
 	public String getModuleName()
 	{
 		return mModuleName;
@@ -120,6 +118,12 @@ public class ModuleSettings
 	public boolean canRemove()
 	{
 		return false;
+	}
+
+	@JsonIgnore
+	public boolean isNode()
+	{
+		return true;
 	}
 
 	/**
