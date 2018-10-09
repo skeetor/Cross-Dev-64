@@ -10,6 +10,7 @@ public class ColorThemeModule
 	extends ModuleSettings
 {
 	public static final String MODULE_ID = "C3E68A0E-8262-463E-87B2-279B13D47722";
+	protected static final boolean REGISTERED = ModuleSettings.registerModule(ColorThemeModule.class);
 
 	public ColorThemeModule()
 	{

@@ -50,9 +50,4 @@ The project was built, using these jar files. Newer versions may work as well.
 
 * [docking-frames-common.jar](http://www.docking-frames.org/)
 * [docking-frames-core.jar](http://www.docking-frames.org/)
-* [stax2-api-4.1.jar](http://repo1.maven.org/maven2/org/codehaus/woodstox/stax2-api/4.1/stax2-api-4.1.jar)
-* [jackson-core-2.9.5.jar](http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.9.5/jackson-core-2.9.5.jar)
-* [jackson-databind-2.9.5.jar](http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.9.5/jackson-databind-2.9.5.jar)
 * [jackson-annotations-2.9.5.jar](http://central.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.9.5/jackson-annotations-2.9.5.jar)
-* [jackson-module-jaxb-annotations-2.9.5.jar](http://central.maven.org/maven2/com/fasterxml/jackson/module/jackson-module-jaxb-annotations/2.9.5/jackson-module-jaxb-annotations-2.9.5.jar)
-* [jackson-dataformat-xml-2.9.5.jar](http://central.maven.org/maven2/com/fasterxml/jackson/dataformat/jackson-dataformat-xml/2.9.5/jackson-dataformat-xml-2.9.5.jar)

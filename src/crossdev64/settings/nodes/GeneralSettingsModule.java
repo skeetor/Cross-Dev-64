@@ -10,6 +10,7 @@ public class GeneralSettingsModule
 	extends ModuleSettings
 {
 	public static final String MODULE_ID = "070B3D0E-5CEC-4EA5-9501-46ACD3210CF5";
+	protected static final boolean REGISTERED = ModuleSettings.registerModule(GeneralSettingsModule.class);
 
 	public GeneralSettingsModule()
 	{

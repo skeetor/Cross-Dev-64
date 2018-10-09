@@ -11,6 +11,7 @@ public class VICEModules
 	extends ModuleSettings
 {
 	public static final String MODULE_ID = "B886B496-A518-4FEF-B668-684FBADDD498";
+	protected static final boolean REGISTERED = ModuleSettings.registerModule(VICEModules.class);
 
 	public VICEModules()
 	{

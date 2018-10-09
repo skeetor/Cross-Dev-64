@@ -1,17 +1,25 @@
 package crossdev64.settings;
 
 import java.awt.Window;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import crossdev64.utils.Stack;
+
 public class ModuleSettings
 {
+	private static List<Class<?>> ModuleClassList = new ArrayList<>();
+	private static Class<?> ModuleClasses[] = null;
+
 	private List<ModuleSettings> mChilds = new ArrayList<>();
 
 	private String mModuleId;
@@ -19,11 +27,33 @@ public class ModuleSettings
 
 	@JsonIgnore
 	private boolean mDirty;
-	
+
 	public ModuleSettings(String oModuleId, String oModuleName)
 	{
 		setModuleId(oModuleId);
 		setModuleName(oModuleName);
+	}
+
+	@JsonIgnore
+	public static boolean registerModule(Class<? extends ModuleSettings> oModuleClass)
+	{
+		ModuleClassList.add(oModuleClass);
+		ModuleClasses = null;
+
+		return true;
+	}
+
+	@JsonIgnore
+	private static Class<?>[] getRegisteredModules()
+	{
+		if(ModuleClasses == null)
+		{
+			ModuleClasses = new Class<?>[ModuleClassList.size()];
+			for(int i = 0; i < ModuleClassList.size(); i++)
+				ModuleClasses[i] = ModuleClassList.get(i);
+		}
+
+		return ModuleClasses;
 	}
 
 	@JsonIgnore
@@ -137,6 +167,26 @@ public class ModuleSettings
 	@JsonIgnore
 	public ModuleSettings createItem(Window oParent, ModuleSettings oDefault)
 	{
+		return null;
+	}
+
+	public String save()
+	{
+		try
+		{
+			StringWriter sw = new StringWriter();
+			JAXBContext jaxbContext = JAXBContext.newInstance(ModuleSettings.getRegisteredModules());
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);	// Pretty print
+			jaxbMarshaller.marshal(this, sw);
+			return sw.toString();
+		}
+		catch(Throwable e)
+		{
+			System.out.println(Stack.getSourcePosition()+"Exception in saving:"+e.getMessage());
+			e.printStackTrace();
+		}
+
 		return null;
 	}
 }

@@ -10,6 +10,7 @@ public class PluginModules
 	extends ModuleSettings
 {
 	public static final String MODULE_ID = "720FE006-1621-4D09-A1B7-485C7A9E781F";
+	protected static final boolean REGISTERED = ModuleSettings.registerModule(PluginModules.class);
 
 	public PluginModules()
 	{

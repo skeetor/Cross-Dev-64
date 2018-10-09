@@ -10,6 +10,7 @@ public class EmulatorModule
 	extends ModuleSettings
 {
 	public static final String MODULE_ID = "21453DC0-866F-433B-95D4-E25C984D9824";
+	protected static final boolean REGISTERED = ModuleSettings.registerModule(EmulatorModule.class);
 
 	public EmulatorModule()
 	{

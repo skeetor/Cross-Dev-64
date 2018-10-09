@@ -14,6 +14,8 @@ import crossdev64.settings.ModuleSettings;
 public class VICEModule
 	extends CopyableModule
 {
+	protected static final boolean REGISTERED = ModuleSettings.registerModule(VICEModule.class);
+
 	private VICESettingsPanel mPanel;
 
 	public VICEModule()

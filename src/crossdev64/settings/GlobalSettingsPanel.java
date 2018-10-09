@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeCellEditor;
@@ -164,7 +166,7 @@ public class GlobalSettingsPanel
 
 	private TreeCellEditor getEditor()
 	{
-		return new DefaultTreeCellEditor(mSettingsTree, (DefaultTreeCellRenderer)mSettingsTree.getCellRenderer())
+		DefaultTreeCellEditor editor = new DefaultTreeCellEditor(mSettingsTree, (DefaultTreeCellRenderer)mSettingsTree.getCellRenderer())
 		{
 			@Override
 			public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row)
@@ -187,8 +189,23 @@ public class GlobalSettingsPanel
 				return false;
 			}
 		};
+	
+		editor.addCellEditorListener(new CellEditorListener()
+		{
+			@Override
+			public void editingStopped(ChangeEvent e)
+			{
+				onEditingStopped();
+			}
+			
+			@Override
+			public void editingCanceled(ChangeEvent e)
+			{
+				onEditingCanceled();
+			}
+		});
+		return editor;
 	}
-
 
 	public void setDialogParent(GlobalSettingsDlg oParent)
 	{
@@ -321,5 +338,20 @@ public class GlobalSettingsPanel
 			return;
 
 		mSettingsTree.startEditingAtPath(oPath);
+	}
+
+	protected void onEditingStopped()
+	{
+		TreePath path = mSettingsTree.getSelectionPath();
+		@SuppressWarnings("unchecked")
+		TreeNode<? extends ModuleSettings> node = (TreeNode<? extends ModuleSettings>)path.getLastPathComponent();
+		ModuleSettings module = node.getModule();
+
+		if(module.canRename())
+			module.setModuleName(node.toString());
+	}
+
+	protected void onEditingCanceled()
+	{
 	}
 }

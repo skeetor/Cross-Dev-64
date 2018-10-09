@@ -14,6 +14,7 @@ public class ProjectSettings
 	extends ModuleSettings
 {
 	public static final String MODULE_ID = "D4FCC276-04EC-4CE4-9847-070F6C23AD46";
+	protected static final boolean REGISTERED = ModuleSettings.registerModule(ProjectSettings.class);
 
 	@JsonIgnore
 	private ProjectNodePanel mPanel;
