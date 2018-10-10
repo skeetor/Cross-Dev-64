@@ -1,19 +1,13 @@
 package crossdev64.gui;
 
-/**
- * EmulatorModuleNode is a base class for emulators.
- * 
- * @author sparhawk
- *
- */
-public abstract class CopyableModuleNode
-	extends TreeNodeBase
-{
-	private static final long serialVersionUID = 1L;
+import crossdev64.settings.ModuleSettings;
 
-	public CopyableModuleNode(String oTitle, String oUUID)
+public abstract class CopyableModule
+	extends ModuleSettings
+{
+	public CopyableModule(String oModuleId, String oModuleName)
 	{
-		super(oTitle, oUUID);
+		super(oModuleId, oModuleName);
 	}
 
 	@Override

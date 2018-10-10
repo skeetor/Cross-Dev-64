@@ -4,31 +4,34 @@ import java.awt.Window;
 import java.util.UUID;
 
 import javax.swing.JPanel;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-import crossdev64.gui.CopyableModuleNode;
-import crossdev64.gui.TreeNodeBase;
+import crossdev64.gui.CopyableModule;
+import crossdev64.settings.ModuleSettings;
 
-public class VICESettingsNode
-	extends CopyableModuleNode
+@XmlRootElement(name = "VICEModule")
+public class VICEModule
+	extends CopyableModule
 {
-	private static final long serialVersionUID = 1L;
+	protected static final boolean REGISTERED = ModuleSettings.registerModule(VICEModule.class);
 
 	private VICESettingsPanel mPanel;
 
-	public VICESettingsNode()
+	public VICEModule()
 	{
-		super("VICE", UUID.randomUUID().toString().toUpperCase());
+		super(UUID.randomUUID().toString().toUpperCase(), "VICE");
 		mPanel = new VICESettingsPanel();
 		mPanel.setPort(6510);
 	}
 
-	public VICESettingsNode(VICESettingsNode oSource)
+	public VICEModule(VICEModule oSource)
 	{
 		this();
 		copy(oSource);
 	}
 
-	public void copy(VICESettingsNode oSource)
+	public void copy(VICEModule oSource)
 	{
 		if(oSource == null)
 			return;
@@ -43,10 +46,16 @@ public class VICESettingsNode
 	 * 
 	 * @param oUUID
 	 */
-	public VICESettingsNode(String oUUID)
+	public VICEModule(String oUUID)
 	{
-		super("VICE", oUUID);
+		super("VICE Module", oUUID);
 		mPanel = new VICESettingsPanel();
+	}
+
+	@Override
+	public boolean isNode()
+	{
+		return false;
 	}
 
 	@Override
@@ -56,16 +65,17 @@ public class VICESettingsNode
 	}
 
 	@Override
-	public TreeNodeBase createItem(Window oParent, TreeNodeBase oDefault)
+	public ModuleSettings createItem(Window oParent, ModuleSettings oDefault)
 	{
-		return new VICESettingsNode((VICESettingsNode)oDefault);
+		return new VICEModule((VICEModule)oDefault);
 	}
 
 	private VICESettingsPanel getPanel()
 	{
 		return mPanel;
 	}
-	
+
+	@XmlElement(name="InstallationPath")
 	public String getInstallationPath()
 	{
 		return mPanel.getInstallationPath();
@@ -76,11 +86,12 @@ public class VICESettingsNode
 		mPanel.setInstallationPath(oPath);
 	}
 
+	@XmlElement(name="Port")
 	public int getPort()
 	{
 		return mPanel.getPort();
 	}
-	
+
 	public void setPort(int nPort)
 	{
 		mPanel.setPort(nPort);

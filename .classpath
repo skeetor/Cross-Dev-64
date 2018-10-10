@@ -4,11 +4,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="D:/src/java/C64-Dev/lib/docking-frames-common.jar"/>
 	<classpathentry kind="lib" path="D:/src/java/C64-Dev/lib/docking-frames-core.jar"/>
-	<classpathentry kind="lib" path="D:/src/java/C64-Dev/lib/jackson-core-2.9.5.jar"/>
-	<classpathentry kind="lib" path="D:/src/java/C64-Dev/lib/jackson-dataformat-xml-2.9.5.jar"/>
-	<classpathentry kind="lib" path="D:/src/java/C64-Dev/lib/jackson-databind-2.9.5.jar"/>
 	<classpathentry kind="lib" path="D:/src/java/C64-Dev/lib/jackson-annotations-2.9.5.jar"/>
-	<classpathentry kind="lib" path="D:/src/java/C64-Dev/lib/stax2-api-4.1.jar"/>
-	<classpathentry kind="lib" path="D:/src/java/C64-Dev/lib/jackson-module-jaxb-annotations-2.9.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

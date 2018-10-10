@@ -1,6 +1,10 @@
 package crossdev64.settings;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -8,11 +12,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-
 import crossdev64.main.Application;
-import crossdev64.settings.nodes.SettingsRootNode;
 import crossdev64.utils.CommandlineParser;
 import crossdev64.utils.Stack;
 
@@ -46,7 +46,7 @@ public class GlobalSettings
 	private SettingsParser mParser;
 	private File mHome;
 	private ResourceBundle mStrings;
-	private SettingsRootNode mRootNode;
+	private GlobalSettingsNode mRootNode;
 
 	public static void create(String[] args)
 	{
@@ -161,6 +161,24 @@ public class GlobalSettings
 		;
 	}
 
+	/**
+	 * Create a file object for the specified filename in the home directory.
+	 * The filename should always be relativ and the users home path will be 
+	 * put in front.
+	 * 
+	 * @param oFilename
+	 * @return
+	 */
+	public File getHome(String oFilename)
+	{
+		return new File(mHome.getPath()+ File.separatorChar + oFilename);
+	}
+
+	/**
+	 * Returns a copy of the users home directory, where all settings are stored.
+	 * 
+	 * @return
+	 */
 	public File getHome()
 	{
 		if(mHome == null)
@@ -196,7 +214,7 @@ public class GlobalSettings
 			mHome = sFile;
 		}
 
-		return mHome;
+		return new File(mHome.getPath());
 	}
 
 	/**
@@ -299,37 +317,34 @@ public class GlobalSettings
 		return str;
 	}
 
-	public SettingsRootNode getRootNode()
+	public GlobalSettingsNode getRootNode()
 	{
 		if(mRootNode == null)
-			mRootNode = new SettingsRootNode();
+			mRootNode = new GlobalSettingsNode();
 
 		return mRootNode;
 	}
 
 	public void load()
 	{
+		File home = getHome("crossdev64.settings");
 	}
 
 	public void save()
 	{
-		try
+		GlobalSettingsModule module = getRootNode().getModule();
+		String s = module.save();
+
+		File home = getHome("crossdev64.settings");
+		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(home.getPath()), "utf-8")))
 		{
-			SettingsRootNode treeRoot = getRootNode();
-			XmlMapper mapper = new XmlMapper();
-			XMLTest t = new XMLTest();
-			String s = mapper.writeValueAsString(treeRoot);
-			ObjectNode root = mapper.createObjectNode();
-
-			//root.put("module_id", treeRoot.getModuleId());
-
-			//String s = mapper.writeValueAsString(root);
-//			ObjectNode data = treeRoot.save(root);
-			System.out.println(Stack.getSourcePosition()+"XML\n"+s);
+			writer.write(s);
+			writer.close();
 		}
-		catch(Throwable e)
+		catch(Exception e)
 		{
-			System.out.println(Stack.getSourcePosition()+"Exception in saving:"+e.getMessage());
+			// TODO: Show exception in Dialog
+			System.err.println(Stack.getSourcePosition()+"Exception writing "+home.getPath());
 			e.printStackTrace();
 		}
 	}
