@@ -2,7 +2,8 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="../lib/docking-frames-common.jar"/>
-	<classpathentry kind="lib" path="../lib/docking-frames-core.jar"/>
+	<classpathentry kind="lib" path="D:/src/java/C64-Dev/lib/docking-frames-common.jar"/>
+	<classpathentry kind="lib" path="D:/src/java/C64-Dev/lib/docking-frames-core.jar"/>
+	<classpathentry kind="lib" path="D:/src/java/C64-Dev/lib/jackson-annotations-2.9.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
