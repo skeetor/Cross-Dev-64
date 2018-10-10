@@ -1,6 +1,10 @@
 package crossdev64.settings;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -157,6 +161,24 @@ public class GlobalSettings
 		;
 	}
 
+	/**
+	 * Create a file object for the specified filename in the home directory.
+	 * The filename should always be relativ and the users home path will be 
+	 * put in front.
+	 * 
+	 * @param oFilename
+	 * @return
+	 */
+	public File getHome(String oFilename)
+	{
+		return new File(mHome.getPath()+ File.separatorChar + oFilename);
+	}
+
+	/**
+	 * Returns a copy of the users home directory, where all settings are stored.
+	 * 
+	 * @return
+	 */
 	public File getHome()
 	{
 		if(mHome == null)
@@ -192,7 +214,7 @@ public class GlobalSettings
 			mHome = sFile;
 		}
 
-		return mHome;
+		return new File(mHome.getPath());
 	}
 
 	/**
@@ -305,6 +327,7 @@ public class GlobalSettings
 
 	public void load()
 	{
+		File home = getHome("crossdev64.settings");
 	}
 
 	public void save()
@@ -312,6 +335,17 @@ public class GlobalSettings
 		GlobalSettingsModule module = getRootNode().getModule();
 		String s = module.save();
 
-		System.out.println(Stack.getSourcePosition()+"XML\n"+s);
+		File home = getHome("crossdev64.settings");
+		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(home.getPath()), "utf-8")))
+		{
+			writer.write(s);
+			writer.close();
+		}
+		catch(Exception e)
+		{
+			// TODO: Show exception in Dialog
+			System.err.println(Stack.getSourcePosition()+"Exception writing "+home.getPath());
+			e.printStackTrace();
+		}
 	}
 }
