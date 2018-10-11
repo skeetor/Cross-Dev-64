@@ -1,19 +1,20 @@
 package crossdev64.settings;
 
 import java.awt.Window;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import crossdev64.utils.Stack;
 
 public class ModuleSettings
 {
@@ -170,23 +171,22 @@ public class ModuleSettings
 		return null;
 	}
 
-	public String save()
+	public static ModuleSettings load(String oSettings) throws JAXBException
 	{
-		try
-		{
-			StringWriter sw = new StringWriter();
-			JAXBContext jaxbContext = JAXBContext.newInstance(ModuleSettings.getRegisteredModules());
-			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);	// Pretty print
-			jaxbMarshaller.marshal(this, sw);
-			return sw.toString();
-		}
-		catch(Throwable e)
-		{
-			System.out.println(Stack.getSourcePosition()+"Exception in saving:"+e.getMessage());
-			e.printStackTrace();
-		}
-
-		return null;
+		StringReader sr = new StringReader(oSettings);
+		JAXBContext jaxbContext = JAXBContext.newInstance(ModuleSettings.getRegisteredModules());
+		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		ModuleSettings settings = (ModuleSettings)jaxbUnmarshaller.unmarshal(sr);
+		return settings;
+	}
+	
+	public String save() throws JAXBException
+	{
+		StringWriter sw = new StringWriter();
+		JAXBContext jaxbContext = JAXBContext.newInstance(ModuleSettings.getRegisteredModules());
+		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);	// Pretty print
+		jaxbMarshaller.marshal(this, sw);
+		return sw.toString();
 	}
 }

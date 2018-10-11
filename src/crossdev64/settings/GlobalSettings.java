@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -51,7 +53,10 @@ public class GlobalSettings
 	public static void create(String[] args)
 	{
 		if(mSettings == null)
+		{
 			mSettings = new GlobalSettings(args);
+			mSettings.initDefaults();
+		}
 	}
 
 	public static GlobalSettings getInstance()
@@ -317,27 +322,51 @@ public class GlobalSettings
 		return str;
 	}
 
+	public void initDefaults()
+	{
+		mRootNode = new GlobalSettingsNode();
+		load();
+	}
+
 	public GlobalSettingsNode getRootNode()
 	{
-		if(mRootNode == null)
-			mRootNode = new GlobalSettingsNode();
-
 		return mRootNode;
 	}
 
 	public void load()
 	{
 		File home = getHome("crossdev64.settings");
+		if(!home.exists())	// First time use defaults.
+			return;
+
+		ModuleSettings settings = null;
+
+		try
+		{
+			String xml = new String(Files.readAllBytes(Paths.get(home.getPath())));
+			System.out.println(Stack.getSourcePosition()+"Loading "+home.getPath()+"\n"+xml);
+			settings = ModuleSettings.load(xml);
+			if(settings == null)
+				return;
+		}
+		catch(Exception e)
+		{
+			// TODO: Show exception in Dialog
+			System.err.println(Stack.getSourcePosition()+"Exception reading "+home.getPath());
+			e.printStackTrace();
+			return;
+		}
 	}
 
 	public void save()
 	{
 		GlobalSettingsModule module = getRootNode().getModule();
-		String s = module.save();
-
 		File home = getHome("crossdev64.settings");
-		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(home.getPath()), "utf-8")))
+
+		try
 		{
+			String s = module.save();
+			Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(home.getPath()), "utf-8"));
 			writer.write(s);
 			writer.close();
 		}
