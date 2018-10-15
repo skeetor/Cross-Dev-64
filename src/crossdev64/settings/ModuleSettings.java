@@ -158,6 +158,28 @@ public class ModuleSettings
 	}
 
 	/**
+	 * Find a node with the specified ID or returns null.
+	 * 
+	 * @param oId
+	 * @return
+	 */
+	@JsonIgnore
+	public ModuleSettings find(String oId)
+	{
+		if(getModuleId().equals(oId))
+			return this;
+
+		for(ModuleSettings m : getChildModules())
+		{
+			ModuleSettings result = m.find(oId);
+			if(result != null)
+				return result;
+		}
+
+		return null;
+	}
+
+	/**
 	 * Create a new node. If oDefault is not null, then it should be used to create a copy
 	 * with the same settings.
 	 * 

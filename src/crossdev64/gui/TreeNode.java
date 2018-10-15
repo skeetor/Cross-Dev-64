@@ -54,4 +54,20 @@ public class TreeNode<T extends ModuleSettings>
 		ModuleSettings module = getModule();
 		return !module.isNode();
 	}
+
+	public TreeNode<? extends ModuleSettings> find(String oId)
+	{
+		if(getModule().getModuleId().equals(oId))
+			return this;
+
+		for(int i = 0; i < getChildCount(); i++)
+		{
+			@SuppressWarnings("unchecked")
+			TreeNode<? extends ModuleSettings> c = (TreeNode<? extends ModuleSettings>)getChildAt(i);
+			TreeNode<? extends ModuleSettings>result = c.find(oId);
+			if(result != null)
+				return result;
+		}
+		return null;
+	}
 }

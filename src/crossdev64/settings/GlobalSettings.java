@@ -333,11 +333,11 @@ public class GlobalSettings
 		return mRootNode;
 	}
 
-	public void load()
+	public boolean load()
 	{
 		File home = getHome("crossdev64.settings");
 		if(!home.exists())	// First time use defaults.
-			return;
+			return true;
 
 		ModuleSettings settings = null;
 
@@ -347,18 +347,20 @@ public class GlobalSettings
 			System.out.println(Stack.getSourcePosition()+"Loading "+home.getPath()+"\n"+xml);
 			settings = ModuleSettings.load(xml);
 			if(settings == null)
-				return;
+				return false;
 		}
 		catch(Exception e)
 		{
 			// TODO: Show exception in Dialog
 			System.err.println(Stack.getSourcePosition()+"Exception reading "+home.getPath());
 			e.printStackTrace();
-			return;
+			return false;
 		}
+		
+		return true;
 	}
 
-	public void save()
+	public boolean save()
 	{
 		GlobalSettingsModule module = getRootNode().getModule();
 		File home = getHome("crossdev64.settings");
@@ -375,6 +377,9 @@ public class GlobalSettings
 			// TODO: Show exception in Dialog
 			System.err.println(Stack.getSourcePosition()+"Exception writing "+home.getPath());
 			e.printStackTrace();
+			return false;
 		}
+
+		return true;
 	}
 }
