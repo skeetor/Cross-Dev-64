@@ -4,7 +4,9 @@ import java.awt.Window;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JPanel;
 import javax.xml.bind.JAXBContext;
@@ -49,9 +51,13 @@ public class ModuleSettings
 	{
 		if(ModuleClasses == null)
 		{
-			ModuleClasses = new Class<?>[ModuleClassList.size()];
-			for(int i = 0; i < ModuleClassList.size(); i++)
-				ModuleClasses[i] = ModuleClassList.get(i);
+			// Remove duplicates.
+			Set<Class<?>> clset = new HashSet<>();
+			for(Class<?> cl : ModuleClassList)
+				clset.add(cl);
+
+			ModuleClasses = new Class<?>[clset.size()];
+			clset.toArray(ModuleClasses);
 		}
 
 		return ModuleClasses;
@@ -193,6 +199,7 @@ public class ModuleSettings
 		return null;
 	}
 
+	@JsonIgnore
 	public static ModuleSettings load(String oSettings) throws JAXBException
 	{
 		StringReader sr = new StringReader(oSettings);
@@ -202,6 +209,7 @@ public class ModuleSettings
 		return settings;
 	}
 	
+	@JsonIgnore
 	public String save() throws JAXBException
 	{
 		StringWriter sw = new StringWriter();

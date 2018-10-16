@@ -70,4 +70,17 @@ public class TreeNode<T extends ModuleSettings>
 		}
 		return null;
 	}
+
+	/**
+	 * Create the tree structure from the provided settings.
+	 * This method does not remove nodes, it only adds nodes which are 
+	 * available in the provided settings structure.
+	 *   
+	 * @param oSettings
+	 * @return
+	 */
+	public boolean createTree(ModuleSettings oSettings)
+	{
+		return false;
+	}
 }

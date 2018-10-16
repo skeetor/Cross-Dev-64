@@ -340,11 +340,12 @@ public class GlobalSettings
 			return true;
 
 		ModuleSettings settings = null;
+		String xml = null;
 
 		try
 		{
-			String xml = new String(Files.readAllBytes(Paths.get(home.getPath())));
-			System.out.println(Stack.getSourcePosition()+"Loading "+home.getPath()+"\n"+xml);
+			xml = new String(Files.readAllBytes(Paths.get(home.getPath())));
+			//System.out.println(Stack.getSourcePosition()+"Loading "+home.getPath()+"\n"+xml);
 			settings = ModuleSettings.load(xml);
 			if(settings == null)
 				return false;
@@ -352,12 +353,22 @@ public class GlobalSettings
 		catch(Exception e)
 		{
 			// TODO: Show exception in Dialog
+			System.out.println(Stack.getSourcePosition()+"Loading "+home.getPath()+"\n"+xml);
 			System.err.println(Stack.getSourcePosition()+"Exception reading "+home.getPath());
 			e.printStackTrace();
 			return false;
 		}
-		
-		return true;
+
+		GlobalSettingsNode root = new GlobalSettingsNode();
+		boolean loaded = root.createTree(settings);
+
+		// If the nodes couldn't be reconstructed, we fall back on defaults.
+		if(!loaded)
+			root = new GlobalSettingsNode();
+
+		mRootNode = root;
+
+		return loaded;
 	}
 
 	public boolean save()
