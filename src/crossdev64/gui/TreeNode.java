@@ -17,10 +17,15 @@ public class TreeNode<T extends ModuleSettings>
 
 	public TreeNode(T oSetting)
 	{
-		super(oSetting.getModuleName());
+		super();
 		mModule = oSetting;
 	}
 
+	public String toString()
+	{
+		return mModule.getName();
+	}
+	
 	public T getModule()
 	{
 		return mModule;
@@ -57,7 +62,7 @@ public class TreeNode<T extends ModuleSettings>
 
 	public TreeNode<? extends ModuleSettings> find(String oId)
 	{
-		if(getModule().getModuleId().equals(oId))
+		if(getModule().getId().equals(oId))
 			return this;
 
 		for(int i = 0; i < getChildCount(); i++)
@@ -71,6 +76,16 @@ public class TreeNode<T extends ModuleSettings>
 		return null;
 	}
 
+	protected boolean createTree(TreeNode<? extends ModuleSettings> oParent, ModuleSettings oSettings)
+	{
+		ModuleSettings module = getModule();
+		String id = oSettings.getId();
+		if(id.equals(module.getId()))
+			module.copy(oSettings);
+
+		return false;
+	}
+
 	/**
 	 * Create the tree structure from the provided settings.
 	 * This method does not remove nodes, it only adds nodes which are 
@@ -81,6 +96,6 @@ public class TreeNode<T extends ModuleSettings>
 	 */
 	public boolean createTree(ModuleSettings oSettings)
 	{
-		return false;
+		return createTree(this, oSettings);
 	}
 }

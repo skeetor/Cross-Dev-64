@@ -38,6 +38,18 @@ public class ProjectSettings
 		return mPanel;
 	}
 
+	@JsonIgnore
+	@Override
+	public void copy(ModuleSettings oSource)
+	{
+		if(oSource == null || !(oSource instanceof ProjectSettings))
+			return;
+
+		ProjectSettings project = (ProjectSettings)oSource;
+
+		setProjectRootPath(project.getProjectRootPath());
+	}
+
 	@XmlElement(name="ProjectRootPath")
 	public String getProjectRootPath()
 	{

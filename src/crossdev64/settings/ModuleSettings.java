@@ -33,8 +33,8 @@ public class ModuleSettings
 
 	public ModuleSettings(String oModuleId, String oModuleName)
 	{
-		setModuleId(oModuleId);
-		setModuleName(oModuleName);
+		setId(oModuleId);
+		setName(oModuleName);
 	}
 
 	@JsonIgnore
@@ -76,23 +76,23 @@ public class ModuleSettings
 	}
 
 	@XmlAttribute(name="ModuleId")
-	public String getModuleId()
+	public String getId()
 	{
 		return mModuleId;
 	}
 
-	public void setModuleId(String oModuleId)
+	public void setId(String oModuleId)
 	{
 		mModuleId = oModuleId;
 	}
 
 	@XmlAttribute(name="ModuleName")
-	public String getModuleName()
+	public String getName()
 	{
 		return mModuleName;
 	}
 
-	public void setModuleName(String oModuleName)
+	public void setName(String oModuleName)
 	{
 		mModuleName = oModuleName;
 	}
@@ -157,6 +157,17 @@ public class ModuleSettings
 		return false;
 	}
 
+	/**
+	 * Update the module with the settings from the source. Needs to be overridden
+	 * by classes which are actually changeable.
+	 * 
+	 * @param oSource
+	 */
+	@JsonIgnore
+	public void copy(ModuleSettings oSource)
+	{
+	}
+
 	@JsonIgnore
 	public boolean isNode()
 	{
@@ -172,7 +183,7 @@ public class ModuleSettings
 	@JsonIgnore
 	public ModuleSettings find(String oId)
 	{
-		if(getModuleId().equals(oId))
+		if(getId().equals(oId))
 			return this;
 
 		for(ModuleSettings m : getChildModules())

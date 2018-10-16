@@ -11,6 +11,13 @@ public abstract class CopyableModule
 	}
 
 	@Override
+	public void copy(ModuleSettings oSource)
+	{
+		setId(oSource.getId());
+		setName(oSource.getName());
+	}
+
+	@Override
 	public boolean canAdd()
 	{
 		return true;

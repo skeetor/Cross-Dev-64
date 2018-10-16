@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import crossdev64.gui.CopyableModule;
 import crossdev64.settings.ModuleSettings;
 
@@ -31,13 +33,18 @@ public class VICEModule
 		copy(oSource);
 	}
 
-	public void copy(VICEModule oSource)
+	@JsonIgnore
+	@Override
+	public void copy(ModuleSettings oSource)
 	{
-		if(oSource == null)
+		if(oSource == null || !(oSource instanceof VICEModule))
 			return;
 
-		setInstallationPath(oSource.getInstallationPath());
-		setPort(oSource.getPort());
+		VICEModule module = (VICEModule)oSource;
+
+		super.copy(module);
+		setInstallationPath(module.getInstallationPath());
+		setPort(module.getPort());
 	}
 
 	/**
