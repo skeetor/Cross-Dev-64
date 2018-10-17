@@ -22,14 +22,24 @@ public class VICEModule
 	public VICEModule()
 	{
 		super(UUID.randomUUID().toString().toUpperCase(), "VICE");
-		mPanel = new VICESettingsPanel();
-		mPanel.setPort(6510);
+		setPort(6510);
 	}
 
 	public VICEModule(VICEModule oSource)
 	{
 		this();
 		copy(oSource);
+	}
+
+	/**
+	 * Constructor to be used for loading from settings, where the UUID is already known and
+	 * stored in the settings/project file.
+	 * 
+	 * @param oUUID
+	 */
+	public VICEModule(String oUUID)
+	{
+		super("VICE Module", oUUID);
 	}
 
 	@JsonIgnore
@@ -44,18 +54,6 @@ public class VICEModule
 		super.copy(module);
 		setInstallationPath(module.getInstallationPath());
 		setPort(module.getPort());
-	}
-
-	/**
-	 * Constructor to be used for loading from settings, where the UUID is already known and
-	 * stored in the settings/project file.
-	 * 
-	 * @param oUUID
-	 */
-	public VICEModule(String oUUID)
-	{
-		super("VICE Module", oUUID);
-		mPanel = new VICESettingsPanel();
 	}
 
 	@Override
@@ -78,6 +76,9 @@ public class VICEModule
 
 	private VICESettingsPanel getPanel()
 	{
+		if(mPanel == null)
+			mPanel = new VICESettingsPanel();
+
 		return mPanel;
 	}
 
@@ -89,17 +90,17 @@ public class VICEModule
 
 	public void setInstallationPath(String oPath)
 	{
-		mPanel.setInstallationPath(oPath);
+		getPanel().setInstallationPath(oPath);
 	}
 
 	@XmlElement(name="Port")
 	public int getPort()
 	{
-		return mPanel.getPort();
+		return getPanel().getPort();
 	}
 
 	public void setPort(int nPort)
 	{
-		mPanel.setPort(nPort);
+		getPanel().setPort(nPort);
 	}
 }

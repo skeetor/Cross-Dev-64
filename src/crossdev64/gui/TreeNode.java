@@ -76,28 +76,6 @@ public class TreeNode<T extends ModuleSettings>
 		return null;
 	}
 
-	protected boolean createTree(TreeNode<? extends ModuleSettings> oParent, ModuleSettings oSettings)
-	{
-		if(oSettings.getId().equals(getModule().getId()))
-			getModule().copy(oSettings);
-
-		for(ModuleSettings module : oSettings.getChildModules())
-		{
-			String moduleid = module.getId();
-			TreeNode<? extends ModuleSettings> node = find(moduleid);
-
-			if(node != null)
-			{
-				if(node.createTree(this, module) == false)
-					return false;
-			}
-			else
-				return false;
-		}
-
-		return true;
-	}
-
 	/**
 	 * Create the tree structure from the provided settings.
 	 * This method does not remove nodes, it only adds nodes which are 
@@ -108,6 +86,37 @@ public class TreeNode<T extends ModuleSettings>
 	 */
 	public boolean createTree(ModuleSettings oSettings)
 	{
-		return createTree(null, oSettings);
+		if(oSettings.getId().equals(getModule().getId()))
+			getModule().copy(oSettings);
+
+		Object o = oSettings.getChildModules();
+		for(ModuleSettings module : oSettings.getChildModules())
+		{
+			String moduleid = module.getId();
+			TreeNode<? extends ModuleSettings> node = find(moduleid);
+
+			if(node != null)
+			{
+				if(node.createTree(module) == false)
+					return false;
+			}
+			else
+			{
+				if(module.addToParent())
+				{
+					TreeNode<? extends ModuleSettings> parent = find(oSettings.getId());
+					// Parent node doesn't exist, should never happen.
+					if(parent == null)
+						return false;
+
+					TreeNode<ModuleSettings> child = new TreeNode<ModuleSettings>(parent.getModule().createItem(module));
+					parent.add(child);
+				}
+				else	// Invalid module id in the settings.
+					return false;
+			}
+		}
+
+		return true;
 	}
 }

@@ -14,6 +14,7 @@ public class VICEModules
 	public VICEModules()
 	{
 		super(MODULE_ID, "VICE");
+		ModuleSettings.registerModule(VICEModule.class);
 	}
 
 	@Override
@@ -25,6 +26,8 @@ public class VICEModules
 	@Override
 	public ModuleSettings createItem(ModuleSettings oDefault)
 	{
-		return new VICEModule();
+		VICEModule m = new VICEModule();
+		m.copy(oDefault);
+		return m;
 	}
 }
