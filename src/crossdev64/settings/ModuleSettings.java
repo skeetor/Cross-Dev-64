@@ -36,6 +36,11 @@ public class ModuleSettings
 		setName(oModuleName);
 	}
 
+	public String toString()
+	{
+		return mModuleName;
+	}
+
 	@JsonIgnore
 	public static boolean registerModule(Class<? extends ModuleSettings> oModuleClass)
 	{
