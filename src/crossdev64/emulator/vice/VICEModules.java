@@ -1,7 +1,5 @@
 package crossdev64.emulator.vice;
 
-import java.awt.Window;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 import crossdev64.settings.ModuleSettings;
@@ -25,7 +23,7 @@ public class VICEModules
 	}
 
 	@Override
-	public ModuleSettings createItem(Window oParent, ModuleSettings oDefault)
+	public ModuleSettings createItem(ModuleSettings oDefault)
 	{
 		return new VICEModule();
 	}

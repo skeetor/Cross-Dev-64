@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import crossdev64.settings.ModuleSettings;
+import crossdev64.utils.Stack;
 
 public class TreeNode<T extends ModuleSettings>
 	extends DefaultMutableTreeNode
@@ -78,12 +79,31 @@ public class TreeNode<T extends ModuleSettings>
 
 	protected boolean createTree(TreeNode<? extends ModuleSettings> oParent, ModuleSettings oSettings)
 	{
+		if(oParent == null)
+			oParent = this;
+
+		TreeNode<? extends ModuleSettings> node = oParent;
 		ModuleSettings module = getModule();
 		String id = oSettings.getId();
 		if(id.equals(module.getId()))
 			module.copy(oSettings);
+		else
+		{
+			node = find(id);
+			if(node == null)
+			{
+				if(oSettings.addToParent())
+					oParent.getModule().addChild(oParent.getModule().createItem(oSettings));
+				else
+				{
+					// TODO: Invalid id in the settings file?
+					System.out.println(Stack.getSourcePosition()+"Unable to find settings node. node == null");
+					return false;
+				}
+			}
+		}
 
-		return false;
+		return true;
 	}
 
 	/**
@@ -96,6 +116,6 @@ public class TreeNode<T extends ModuleSettings>
 	 */
 	public boolean createTree(ModuleSettings oSettings)
 	{
-		return createTree(this, oSettings);
+		return createTree(null, oSettings);
 	}
 }

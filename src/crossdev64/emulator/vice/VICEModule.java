@@ -1,6 +1,5 @@
 package crossdev64.emulator.vice;
 
-import java.awt.Window;
 import java.util.UUID;
 
 import javax.swing.JPanel;
@@ -72,7 +71,7 @@ public class VICEModule
 	}
 
 	@Override
-	public ModuleSettings createItem(Window oParent, ModuleSettings oDefault)
+	public ModuleSettings createItem(ModuleSettings oDefault)
 	{
 		return new VICEModule((VICEModule)oDefault);
 	}

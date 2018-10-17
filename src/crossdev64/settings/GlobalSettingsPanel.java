@@ -249,7 +249,7 @@ public class GlobalSettingsPanel
 		if(oDefault != null)
 			defaultModule = oDefault.getModule();
 
-		ModuleSettings newModule = module.createItem(mParent, defaultModule);
+		ModuleSettings newModule = module.createItem(defaultModule);
 		if(newModule != null)
 		{
 			newNode = new TreeNode<ModuleSettings>(newModule);

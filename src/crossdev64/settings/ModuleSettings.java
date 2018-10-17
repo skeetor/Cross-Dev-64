@@ -1,6 +1,5 @@
 package crossdev64.settings;
 
-import java.awt.Window;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -205,7 +204,7 @@ public class ModuleSettings
 	 * @return
 	 */
 	@JsonIgnore
-	public ModuleSettings createItem(Window oParent, ModuleSettings oDefault)
+	public ModuleSettings createItem(ModuleSettings oDefault)
 	{
 		return null;
 	}
