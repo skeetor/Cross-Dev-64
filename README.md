@@ -26,9 +26,11 @@ These major features are planned for future releases. The order reflects the int
 * Sprite editor
 * Character editor
 * Sound editor(?)
+* Apply mechanics for settings 
 
 # Completed features
 
+* Global preferences mechanics.
 * Allow running multiple instances with their own individual home directories.
 * Add support for dockable windows, so users can move around the windows as they want.
 * Support for localisation
