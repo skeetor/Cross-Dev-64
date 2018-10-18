@@ -1,6 +1,5 @@
 package crossdev64.settings;
 
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -42,7 +41,7 @@ public class GlobalSettingsPanel
 	private JPanel mConfigPanel;
 	private GridBagLayout mConfigPanelLayout;
 	private TreeNodeModel mSettingsModel;
-	private GlobalSettingsDlg mParent;
+	private DefaultTreeCellEditor mCellEditor;
 
 	public GlobalSettingsPanel()
 	{
@@ -166,14 +165,11 @@ public class GlobalSettingsPanel
 
 	private TreeCellEditor getEditor()
 	{
-		DefaultTreeCellEditor editor = new DefaultTreeCellEditor(mSettingsTree, (DefaultTreeCellRenderer)mSettingsTree.getCellRenderer())
-		{
-			@Override
-			public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row)
-			{
-				return super.getTreeCellEditorComponent(tree, value, isSelected, expanded,leaf, row);
-			}
+		if(mCellEditor != null)
+			return mCellEditor;
 
+		mCellEditor = new DefaultTreeCellEditor(mSettingsTree, (DefaultTreeCellRenderer)mSettingsTree.getCellRenderer())
+		{
 			@Override
 			public boolean isCellEditable(EventObject event)
 			{
@@ -189,8 +185,8 @@ public class GlobalSettingsPanel
 				return false;
 			}
 		};
-	
-		editor.addCellEditorListener(new CellEditorListener()
+
+		mCellEditor.addCellEditorListener(new CellEditorListener()
 		{
 			@Override
 			public void editingStopped(ChangeEvent e)
@@ -204,12 +200,7 @@ public class GlobalSettingsPanel
 				onEditingCanceled();
 			}
 		});
-		return editor;
-	}
-
-	public void setDialogParent(GlobalSettingsDlg oParent)
-	{
-		mParent = oParent;
+		return mCellEditor;
 	}
 
 	@Override
@@ -252,7 +243,7 @@ public class GlobalSettingsPanel
 		if(oDefault != null)
 			defaultModule = oDefault.getModule();
 
-		ModuleSettings newModule = module.createItem(mParent, defaultModule);
+		ModuleSettings newModule = module.createItem(defaultModule);
 		if(newModule != null)
 		{
 			newNode = new TreeNode<ModuleSettings>(newModule);
@@ -348,7 +339,7 @@ public class GlobalSettingsPanel
 		ModuleSettings module = node.getModule();
 
 		if(module.canRename())
-			module.setModuleName(node.toString());
+			module.setName(mCellEditor.getCellEditorValue().toString());
 	}
 
 	protected void onEditingCanceled()

@@ -17,10 +17,15 @@ public class TreeNode<T extends ModuleSettings>
 
 	public TreeNode(T oSetting)
 	{
-		super(oSetting.getModuleName());
+		super();
 		mModule = oSetting;
 	}
 
+	public String toString()
+	{
+		return mModule.getName();
+	}
+	
 	public T getModule()
 	{
 		return mModule;
@@ -52,6 +57,65 @@ public class TreeNode<T extends ModuleSettings>
 			return leaf;
 
 		ModuleSettings module = getModule();
-		return !module.isNode();
+		return !module.allowChilds();
+	}
+
+	public TreeNode<? extends ModuleSettings> find(String oId)
+	{
+		if(getModule().getId().equals(oId))
+			return this;
+
+		for(int i = 0; i < getChildCount(); i++)
+		{
+			@SuppressWarnings("unchecked")
+			TreeNode<? extends ModuleSettings> c = (TreeNode<? extends ModuleSettings>)getChildAt(i);
+			TreeNode<? extends ModuleSettings>result = c.find(oId);
+			if(result != null)
+				return result;
+		}
+		return null;
+	}
+
+	/**
+	 * Create the tree structure from the provided settings.
+	 * This method does not remove nodes, it only adds nodes which are 
+	 * available in the provided settings structure.
+	 *   
+	 * @param oSettings
+	 * @return
+	 */
+	public boolean createTree(ModuleSettings oSettings)
+	{
+		if(oSettings.getId().equals(getModule().getId()))
+			getModule().copy(oSettings);
+
+		for(ModuleSettings module : oSettings.getChildModules())
+		{
+			String moduleid = module.getId();
+			TreeNode<? extends ModuleSettings> node = find(moduleid);
+
+			if(node != null)
+			{
+				if(node.createTree(module) == false)
+					return false;
+			}
+			else
+			{
+				if(module.addToParent())
+				{
+					TreeNode<? extends ModuleSettings> parent = find(oSettings.getId());
+					// Parent node doesn't exist, should never happen.
+					if(parent == null)
+						return false;
+
+					TreeNode<ModuleSettings> child = new TreeNode<ModuleSettings>(parent.getModule().createItem(module));
+					parent.add(child);
+				}
+				else	// Invalid module id in the settings.
+					return false;
+			}
+		}
+
+		return true;
 	}
 }

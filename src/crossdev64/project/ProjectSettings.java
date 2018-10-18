@@ -25,6 +25,13 @@ public class ProjectSettings
 		mPanel = new ProjectNodePanel();
 	}
 
+	@Override
+	@JsonIgnore
+	public boolean allowChilds()
+	{
+		return false;
+	}
+
 	@JsonIgnore
 	@Override
 	public JPanel getConfigPanel()
@@ -36,6 +43,18 @@ public class ProjectSettings
 	private ProjectNodePanel getPanel()
 	{
 		return mPanel;
+	}
+
+	@JsonIgnore
+	@Override
+	public void copy(ModuleSettings oSource)
+	{
+		if(oSource == null || !(oSource instanceof ProjectSettings))
+			return;
+
+		ProjectSettings project = (ProjectSettings)oSource;
+
+		setProjectRootPath(project.getProjectRootPath());
 	}
 
 	@XmlElement(name="ProjectRootPath")

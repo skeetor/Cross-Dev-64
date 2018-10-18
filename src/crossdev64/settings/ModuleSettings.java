@@ -1,19 +1,21 @@
 package crossdev64.settings;
 
-import java.awt.Window;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JPanel;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import crossdev64.utils.Stack;
 
 public class ModuleSettings
 {
@@ -30,8 +32,13 @@ public class ModuleSettings
 
 	public ModuleSettings(String oModuleId, String oModuleName)
 	{
-		setModuleId(oModuleId);
-		setModuleName(oModuleName);
+		setId(oModuleId);
+		setName(oModuleName);
+	}
+
+	public String toString()
+	{
+		return mModuleName;
 	}
 
 	@JsonIgnore
@@ -48,9 +55,13 @@ public class ModuleSettings
 	{
 		if(ModuleClasses == null)
 		{
-			ModuleClasses = new Class<?>[ModuleClassList.size()];
-			for(int i = 0; i < ModuleClassList.size(); i++)
-				ModuleClasses[i] = ModuleClassList.get(i);
+			// Remove duplicates.
+			Set<Class<?>> clset = new HashSet<>();
+			for(Class<?> cl : ModuleClassList)
+				clset.add(cl);
+
+			ModuleClasses = new Class<?>[clset.size()];
+			clset.toArray(ModuleClasses);
 		}
 
 		return ModuleClasses;
@@ -69,23 +80,23 @@ public class ModuleSettings
 	}
 
 	@XmlAttribute(name="ModuleId")
-	public String getModuleId()
+	public String getId()
 	{
 		return mModuleId;
 	}
 
-	public void setModuleId(String oModuleId)
+	public void setId(String oModuleId)
 	{
 		mModuleId = oModuleId;
 	}
 
 	@XmlAttribute(name="ModuleName")
-	public String getModuleName()
+	public String getName()
 	{
 		return mModuleName;
 	}
 
-	public void setModuleName(String oModuleName)
+	public void setName(String oModuleName)
 	{
 		mModuleName = oModuleName;
 	}
@@ -150,10 +161,43 @@ public class ModuleSettings
 		return false;
 	}
 
+	/**
+	 * Update the module with the settings from the source. Needs to be overridden
+	 * by classes which are actually changeable.
+	 * 
+	 * @param oSource
+	 */
 	@JsonIgnore
-	public boolean isNode()
+	public void copy(ModuleSettings oSource)
+	{
+	}
+
+	@JsonIgnore
+	public boolean allowChilds()
 	{
 		return true;
+	}
+
+	/**
+	 * Find a node with the specified ID or returns null.
+	 * 
+	 * @param oId
+	 * @return
+	 */
+	@JsonIgnore
+	public ModuleSettings find(String oId)
+	{
+		if(getId().equals(oId))
+			return this;
+
+		for(ModuleSettings m : getChildModules())
+		{
+			ModuleSettings result = m.find(oId);
+			if(result != null)
+				return result;
+		}
+
+		return null;
 	}
 
 	/**
@@ -165,28 +209,29 @@ public class ModuleSettings
 	 * @return
 	 */
 	@JsonIgnore
-	public ModuleSettings createItem(Window oParent, ModuleSettings oDefault)
+	public ModuleSettings createItem(ModuleSettings oDefault)
 	{
 		return null;
 	}
 
-	public String save()
+	@JsonIgnore
+	public static ModuleSettings load(String oSettings) throws JAXBException
 	{
-		try
-		{
-			StringWriter sw = new StringWriter();
-			JAXBContext jaxbContext = JAXBContext.newInstance(ModuleSettings.getRegisteredModules());
-			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);	// Pretty print
-			jaxbMarshaller.marshal(this, sw);
-			return sw.toString();
-		}
-		catch(Throwable e)
-		{
-			System.out.println(Stack.getSourcePosition()+"Exception in saving:"+e.getMessage());
-			e.printStackTrace();
-		}
-
-		return null;
+		StringReader sr = new StringReader(oSettings);
+		JAXBContext jaxbContext = JAXBContext.newInstance(ModuleSettings.getRegisteredModules());
+		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		ModuleSettings settings = (ModuleSettings)jaxbUnmarshaller.unmarshal(sr);
+		return settings;
+	}
+	
+	@JsonIgnore
+	public String save() throws JAXBException
+	{
+		StringWriter sw = new StringWriter();
+		JAXBContext jaxbContext = JAXBContext.newInstance(ModuleSettings.getRegisteredModules());
+		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);	// Pretty print
+		jaxbMarshaller.marshal(this, sw);
+		return sw.toString();
 	}
 }

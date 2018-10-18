@@ -1,11 +1,12 @@
 package crossdev64.emulator.vice;
 
-import java.awt.Window;
 import java.util.UUID;
 
 import javax.swing.JPanel;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import crossdev64.gui.CopyableModule;
 import crossdev64.settings.ModuleSettings;
@@ -16,28 +17,18 @@ public class VICEModule
 {
 	protected static final boolean REGISTERED = ModuleSettings.registerModule(VICEModule.class);
 
-	private VICESettingsPanel mPanel;
+	private VICESettingsPanel mPanel = new VICESettingsPanel();
 
 	public VICEModule()
 	{
 		super(UUID.randomUUID().toString().toUpperCase(), "VICE");
-		mPanel = new VICESettingsPanel();
-		mPanel.setPort(6510);
+		setPort(6510);
 	}
 
 	public VICEModule(VICEModule oSource)
 	{
 		this();
 		copy(oSource);
-	}
-
-	public void copy(VICEModule oSource)
-	{
-		if(oSource == null)
-			return;
-
-		setInstallationPath(oSource.getInstallationPath());
-		setPort(oSource.getPort());
 	}
 
 	/**
@@ -49,11 +40,24 @@ public class VICEModule
 	public VICEModule(String oUUID)
 	{
 		super("VICE Module", oUUID);
-		mPanel = new VICESettingsPanel();
+	}
+
+	@JsonIgnore
+	@Override
+	public void copy(ModuleSettings oSource)
+	{
+		if(oSource == null || !(oSource instanceof VICEModule))
+			return;
+
+		VICEModule module = (VICEModule)oSource;
+
+		super.copy(module);
+		setInstallationPath(module.getInstallationPath());
+		setPort(module.getPort());
 	}
 
 	@Override
-	public boolean isNode()
+	public boolean allowChilds()
 	{
 		return false;
 	}
@@ -65,7 +69,7 @@ public class VICEModule
 	}
 
 	@Override
-	public ModuleSettings createItem(Window oParent, ModuleSettings oDefault)
+	public ModuleSettings createItem(ModuleSettings oDefault)
 	{
 		return new VICEModule((VICEModule)oDefault);
 	}
@@ -78,22 +82,22 @@ public class VICEModule
 	@XmlElement(name="InstallationPath")
 	public String getInstallationPath()
 	{
-		return mPanel.getInstallationPath();
+		return getPanel().getInstallationPath();
 	}
 
 	public void setInstallationPath(String oPath)
 	{
-		mPanel.setInstallationPath(oPath);
+		getPanel().setInstallationPath(oPath);
 	}
 
 	@XmlElement(name="Port")
 	public int getPort()
 	{
-		return mPanel.getPort();
+		return getPanel().getPort();
 	}
 
 	public void setPort(int nPort)
 	{
-		mPanel.setPort(nPort);
+		getPanel().setPort(nPort);
 	}
 }

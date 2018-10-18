@@ -3,21 +3,22 @@ package crossdev64.emulator.vice;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import crossdev64.gui.DialogBasePanel;
+import crossdev64.gui.controls.BrowseButton;
 import crossdev64.settings.GlobalSettings;
+import crossdev64.utils.Stack;
 
 public class VICESettingsPanel
 	extends DialogBasePanel
 {
 	private static final long serialVersionUID = 1L;
-
-	private JTextField mInstallationPath;
-	private JTextField mPort;
+	private JTextField mInstallationPathTxt;
+	private JTextField mPortTxt;
 
 	public VICESettingsPanel()
 	{
@@ -25,69 +26,83 @@ public class VICESettingsPanel
 
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
+		
+		JLabel lblStringinstallationpath = new JLabel(GlobalSettings.getResourceString("string.installation_path"));
+		GridBagConstraints gbc_lblStringinstallationpath = new GridBagConstraints();
+		gbc_lblStringinstallationpath.anchor = GridBagConstraints.WEST;
+		gbc_lblStringinstallationpath.insets = new Insets(0, 0, 5, 5);
+		gbc_lblStringinstallationpath.gridx = 0;
+		gbc_lblStringinstallationpath.gridy = 0;
+		add(lblStringinstallationpath, gbc_lblStringinstallationpath);
+		
+		mInstallationPathTxt = new JTextField();
+		GridBagConstraints gbc_mInstallationPathTxt = new GridBagConstraints();
+		gbc_mInstallationPathTxt.gridwidth = 2;
+		gbc_mInstallationPathTxt.insets = new Insets(0, 0, 5, 5);
+		gbc_mInstallationPathTxt.fill = GridBagConstraints.HORIZONTAL;
+		gbc_mInstallationPathTxt.gridx = 1;
+		gbc_mInstallationPathTxt.gridy = 0;
+		add(mInstallationPathTxt, gbc_mInstallationPathTxt);
+		mInstallationPathTxt.setColumns(10);
 
-		JLabel lblNewLabel = new JLabel(GlobalSettings.getResourceString("string.installation_path"));
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel.anchor = GridBagConstraints.WEST;
-		gbc_lblNewLabel.gridx = 0;
-		gbc_lblNewLabel.gridy = 0;
-		add(lblNewLabel, gbc_lblNewLabel);
+		BrowseButton btnNewButton = new BrowseButton(GlobalSettings.getResourceString("string.browse"))
+		{
+			private static final long serialVersionUID = 1L;
 
-		mInstallationPath = new JTextField();
-		GridBagConstraints gbc_mInstallationPath = new GridBagConstraints();
-		gbc_mInstallationPath.fill = GridBagConstraints.HORIZONTAL;
-		gbc_mInstallationPath.gridwidth = 2;
-		gbc_mInstallationPath.insets = new Insets(0, 0, 5, 5);
-		gbc_mInstallationPath.gridx = 1;
-		gbc_mInstallationPath.gridy = 0;
-		add(mInstallationPath, gbc_mInstallationPath);
-		mInstallationPath.setColumns(10);
+			@Override
+			protected boolean onBrowse(ActionEvent oEvent)
+			{
+				super.setPath(getInstallationPath());
+				boolean rc = super.onBrowse(oEvent);
+				if(rc)	
+					setInstallationPath(super.getPath());
 
-		JButton btnNewButton = new JButton(GlobalSettings.getResourceString("string.browse"));
+				return rc;
+			}
+		};
+
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
-		gbc_btnNewButton.anchor = GridBagConstraints.EAST;
 		gbc_btnNewButton.gridx = 3;
 		gbc_btnNewButton.gridy = 0;
 		add(btnNewButton, gbc_btnNewButton);
 		
-		JLabel lblNewLabel_1 = new JLabel(GlobalSettings.getResourceString("string.port"));
-		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-		gbc_lblNewLabel_1.anchor = GridBagConstraints.WEST;
-		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_1.gridx = 0;
-		gbc_lblNewLabel_1.gridy = 1;
-		add(lblNewLabel_1, gbc_lblNewLabel_1);
-
-		mPort = new JTextField();
-		GridBagConstraints gbc_mPort = new GridBagConstraints();
-		gbc_mPort.anchor = GridBagConstraints.WEST;
-		gbc_mPort.insets = new Insets(0, 0, 5, 5);
-		gbc_mPort.gridx = 1;
-		gbc_mPort.gridy = 1;
-		add(mPort, gbc_mPort);
-		mPort.setColumns(5);
+		JLabel lblNewLabel = new JLabel(GlobalSettings.getResourceString("string.port"));
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.anchor = GridBagConstraints.WEST;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_lblNewLabel.gridx = 0;
+		gbc_lblNewLabel.gridy = 1;
+		add(lblNewLabel, gbc_lblNewLabel);
+		
+		mPortTxt = new JTextField();
+		GridBagConstraints gbc_mPortTxt = new GridBagConstraints();
+		gbc_mPortTxt.anchor = GridBagConstraints.WEST;
+		gbc_mPortTxt.insets = new Insets(0, 0, 0, 5);
+		gbc_mPortTxt.gridx = 1;
+		gbc_mPortTxt.gridy = 1;
+		add(mPortTxt, gbc_mPortTxt);
+		mPortTxt.setColumns(5);
 	}
 
 	public String getInstallationPath()
 	{
-		return mInstallationPath.getText();
+		return mInstallationPathTxt.getText();
 	}
 
 	public void setInstallationPath(String oPath)
 	{
-		mInstallationPath.setText(oPath);
+		mInstallationPathTxt.setText(oPath);
 	}
 	
 	public int getPort()
 	{
 		int port = 6510;
-		String s = mPort.getText();
+		String s = mPortTxt.getText();
 		if(s.isEmpty())
 			return port;
 
@@ -104,6 +119,11 @@ public class VICESettingsPanel
 	
 	public void setPort(int nPort)
 	{
-		mPort.setText(""+nPort);
+		mPortTxt.setText(""+nPort);
+	}
+
+	protected void onBrowse()
+	{
+		System.out.println(Stack.getSourcePosition()+"Browse");
 	}
 }

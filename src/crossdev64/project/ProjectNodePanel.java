@@ -3,12 +3,13 @@ package crossdev64.project;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import crossdev64.gui.DialogBasePanel;
+import crossdev64.gui.controls.BrowseButton;
 import crossdev64.settings.GlobalSettings;
 
 public class ProjectNodePanel
@@ -47,7 +48,23 @@ public class ProjectNodePanel
 		add(mProjectRootPath, gbc_mInstallationPath);
 		mProjectRootPath.setColumns(10);
 
-		JButton btnNewButton = new JButton(GlobalSettings.getResourceString("string.browse"));
+		BrowseButton btnNewButton = new BrowseButton(GlobalSettings.getResourceString("string.browse"))
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected boolean onBrowse(ActionEvent oEvent)
+			{
+				super.setPath(getProjectRootPath());
+				super.setFileBrowsing(false);
+				boolean rc = super.onBrowse(oEvent);
+				if(rc)	
+					setProjectRootPath(super.getPath());
+
+				return rc;
+			}
+		};
+
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
 		gbc_btnNewButton.anchor = GridBagConstraints.EAST;
