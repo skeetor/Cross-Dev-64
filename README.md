@@ -20,7 +20,8 @@ Various free icons taken from [http://www.small-icons.com](http://www.small-icon
 
 These major features are planned for future releases. The order reflects the intended priority.
 
-* Global and project specific settings
+* Mechanics for shortcuts to menus and features.
+* Project specific settings
 * Debugger for stepping through code with an emulator
 * Support for projects
 * Sprite editor
