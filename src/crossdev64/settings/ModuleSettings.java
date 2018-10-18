@@ -173,7 +173,7 @@ public class ModuleSettings
 	}
 
 	@JsonIgnore
-	public boolean isNode()
+	public boolean allowChilds()
 	{
 		return true;
 	}

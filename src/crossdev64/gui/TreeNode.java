@@ -57,7 +57,7 @@ public class TreeNode<T extends ModuleSettings>
 			return leaf;
 
 		ModuleSettings module = getModule();
-		return !module.isNode();
+		return !module.allowChilds();
 	}
 
 	public TreeNode<? extends ModuleSettings> find(String oId)
@@ -89,7 +89,6 @@ public class TreeNode<T extends ModuleSettings>
 		if(oSettings.getId().equals(getModule().getId()))
 			getModule().copy(oSettings);
 
-		Object o = oSettings.getChildModules();
 		for(ModuleSettings module : oSettings.getChildModules())
 		{
 			String moduleid = module.getId();

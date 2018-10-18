@@ -17,7 +17,7 @@ public class VICEModule
 {
 	protected static final boolean REGISTERED = ModuleSettings.registerModule(VICEModule.class);
 
-	private VICESettingsPanel mPanel;
+	private VICESettingsPanel mPanel = new VICESettingsPanel();
 
 	public VICEModule()
 	{
@@ -57,7 +57,7 @@ public class VICEModule
 	}
 
 	@Override
-	public boolean isNode()
+	public boolean allowChilds()
 	{
 		return false;
 	}
@@ -76,16 +76,13 @@ public class VICEModule
 
 	private VICESettingsPanel getPanel()
 	{
-		if(mPanel == null)
-			mPanel = new VICESettingsPanel();
-
 		return mPanel;
 	}
 
 	@XmlElement(name="InstallationPath")
 	public String getInstallationPath()
 	{
-		return mPanel.getInstallationPath();
+		return getPanel().getInstallationPath();
 	}
 
 	public void setInstallationPath(String oPath)

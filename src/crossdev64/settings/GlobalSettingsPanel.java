@@ -41,7 +41,6 @@ public class GlobalSettingsPanel
 	private JPanel mConfigPanel;
 	private GridBagLayout mConfigPanelLayout;
 	private TreeNodeModel mSettingsModel;
-	private GlobalSettingsDlg mParent;
 	private DefaultTreeCellEditor mCellEditor;
 
 	public GlobalSettingsPanel()
@@ -202,11 +201,6 @@ public class GlobalSettingsPanel
 			}
 		});
 		return mCellEditor;
-	}
-
-	public void setDialogParent(GlobalSettingsDlg oParent)
-	{
-		mParent = oParent;
 	}
 
 	@Override

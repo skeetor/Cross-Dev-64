@@ -25,6 +25,13 @@ public class ProjectSettings
 		mPanel = new ProjectNodePanel();
 	}
 
+	@Override
+	@JsonIgnore
+	public boolean allowChilds()
+	{
+		return false;
+	}
+
 	@JsonIgnore
 	@Override
 	public JPanel getConfigPanel()
