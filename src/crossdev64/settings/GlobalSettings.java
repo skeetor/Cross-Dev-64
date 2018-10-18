@@ -1,6 +1,12 @@
 package crossdev64.settings;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +16,7 @@ import java.util.ResourceBundle;
 
 import crossdev64.main.Application;
 import crossdev64.utils.CommandlineParser;
+import crossdev64.utils.Stack;
 
 public class GlobalSettings
 {
@@ -41,15 +48,22 @@ public class GlobalSettings
 	private SettingsParser mParser;
 	private File mHome;
 	private ResourceBundle mStrings;
+	private GlobalSettingsNode mRootNode;
 
 	public static void create(String[] args)
 	{
 		if(mSettings == null)
+		{
 			mSettings = new GlobalSettings(args);
+			mSettings.initDefaults();
+		}
 	}
 
 	public static GlobalSettings getInstance()
 	{
+		if(mSettings == null)
+			mSettings = new GlobalSettings(null);
+
 		return mSettings;
 	}
 
@@ -58,7 +72,7 @@ public class GlobalSettings
 		initLanguage(null, null);
 		createOptions(args);
 
-		if(!mParser.parse(args))
+		if(args != null && !mParser.parse(args))
 		{
 			// This will not return and terminate the application.
 			mParser.help();
@@ -152,6 +166,24 @@ public class GlobalSettings
 		;
 	}
 
+	/**
+	 * Create a file object for the specified filename in the home directory.
+	 * The filename should always be relativ and the users home path will be 
+	 * put in front.
+	 * 
+	 * @param oFilename
+	 * @return
+	 */
+	public File getHome(String oFilename)
+	{
+		return new File(mHome.getPath()+ File.separatorChar + oFilename);
+	}
+
+	/**
+	 * Returns a copy of the users home directory, where all settings are stored.
+	 * 
+	 * @return
+	 */
 	public File getHome()
 	{
 		if(mHome == null)
@@ -187,7 +219,7 @@ public class GlobalSettings
 			mHome = sFile;
 		}
 
-		return mHome;
+		return new File(mHome.getPath());
 	}
 
 	/**
@@ -204,9 +236,18 @@ public class GlobalSettings
 	 * @param oParams
 	 * @return
 	 */
-	public String getResourceString(String oKey, String...oParams)
+	public static String getResourceString(String oKey, String...oParams)
 	{
-		String s = mStrings.getString(oKey);
+		String s;
+		
+		try
+		{
+			s = GlobalSettings.mSettings.mStrings.getString(oKey);
+		}
+		catch(Exception e)
+		{
+			return oKey;
+		}
 
 		if(oParams == null || oParams.length == 0)
 			return s;
@@ -279,5 +320,77 @@ public class GlobalSettings
 		}
 
 		return str;
+	}
+
+	public void initDefaults()
+	{
+		mRootNode = new GlobalSettingsNode();
+		load();
+	}
+
+	public GlobalSettingsNode getRootNode()
+	{
+		return mRootNode;
+	}
+
+	public boolean load()
+	{
+		File home = getHome("crossdev64.settings");
+		if(!home.exists())	// First time use defaults.
+			return true;
+
+		ModuleSettings settings = null;
+		String xml = null;
+
+		try
+		{
+			xml = new String(Files.readAllBytes(Paths.get(home.getPath())));
+			//System.out.println(Stack.getSourcePosition()+"Loading "+home.getPath()+"\n"+xml);
+			settings = ModuleSettings.load(xml);
+			if(settings == null)
+				return false;
+		}
+		catch(Exception e)
+		{
+			// TODO: Show exception in Dialog
+			System.out.println(Stack.getSourcePosition()+"Loading "+home.getPath()+"\n"+xml);
+			System.err.println(Stack.getSourcePosition()+"Exception reading "+home.getPath());
+			e.printStackTrace();
+			return false;
+		}
+
+		GlobalSettingsNode root = new GlobalSettingsNode();
+		boolean loaded = root.createTree(settings);
+
+		// If the nodes couldn't be reconstructed, we fall back on defaults.
+		if(!loaded)
+			root = new GlobalSettingsNode();
+
+		mRootNode = root;
+
+		return loaded;
+	}
+
+	public boolean save()
+	{
+		GlobalSettingsModule module = getRootNode().getModule();
+		File home = getHome("crossdev64.settings");
+
+		try
+		{
+			String s = module.save();
+			Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(home.getPath()), "utf-8"));
+			writer.write(s);
+			writer.close();
+		}
+		catch(Exception e)
+		{
+			// TODO: Show exception in Dialog
+			System.err.println(Stack.getSourcePosition()+"Exception writing "+home.getPath());
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
 	}
 }
