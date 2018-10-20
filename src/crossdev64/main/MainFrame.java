@@ -246,6 +246,12 @@ public class MainFrame
 		root.add(item);
 		item = new JMenuItem(GlobalSettings.getResourceString("string.stop_debugging"));
 		root.add(item);
+		root.addSeparator();
+
+		item = new JMenuItem(GlobalSettings.getResourceString("string.toggle_breakpoint"));
+		root.add(item);
+		item = new JMenuItem(GlobalSettings.getResourceString("string.toggle_enable_breakpoint"));
+		root.add(item);
 
 		root.addSeparator();
 
@@ -320,11 +326,31 @@ public class MainFrame
 	 */
 	public void onGlobalSettings()
 	{
-		GlobalSettingsDlg dlg = new GlobalSettingsDlg(this);
-		if(!dlg.showModal())
-			return;
+		GlobalSettingsDlg dlg = new GlobalSettingsDlg(this)
+		{
+			private static final long serialVersionUID = 1L;
 
-		GlobalSettings.getInstance().save();
+			@Override
+			public void onOK()
+			{
+				super.onOK();
+				GlobalSettings.getInstance().save();
+			}
+
+			@Override
+			public void onApply()
+			{
+				super.onApply();
+			}
+
+			@Override
+			public void onCancel()
+			{
+				super.onCancel();
+				GlobalSettings.getInstance().getRootNode().notifyOnCancel();
+			}
+		};
+		dlg.showModal();
 	}
 
 	/**

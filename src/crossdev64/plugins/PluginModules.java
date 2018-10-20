@@ -14,7 +14,7 @@ public class PluginModules
 
 	public PluginModules()
 	{
-		super(MODULE_ID, GlobalSettings.getResourceString("string.plugins"));
+		super(MODULE_ID, GlobalSettings.getResourceString("string.plugins"), null);
 	}
 
 	@Override

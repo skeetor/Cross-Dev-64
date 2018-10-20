@@ -1,4 +1,4 @@
-package crossdev64.gui.controls;
+package crossdev64.keybinding;
 
 import java.awt.event.ActionEvent;
 

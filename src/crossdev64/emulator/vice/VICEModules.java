@@ -13,7 +13,9 @@ public class VICEModules
 
 	public VICEModules()
 	{
-		super(MODULE_ID, "VICE");
+		super(MODULE_ID, "VICE", null);
+
+		// Since the node is initially empty, we need to register this here, so it can be unmarshalled.
 		ModuleSettings.registerModule(VICEModule.class);
 	}
 

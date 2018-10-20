@@ -28,12 +28,16 @@ public class ModuleSettings
 	private String mModuleName;
 
 	@JsonIgnore
+	private JPanel mConfigPanel;
+
+	@JsonIgnore
 	private boolean mDirty;
 
-	public ModuleSettings(String oModuleId, String oModuleName)
+	public ModuleSettings(String oModuleId, String oModuleName, JPanel oConfigPanel)
 	{
 		setId(oModuleId);
 		setName(oModuleName);
+		setConfigPanel(oConfigPanel);
 	}
 
 	public String toString()
@@ -104,7 +108,13 @@ public class ModuleSettings
 	@JsonIgnore
 	public JPanel getConfigPanel()
 	{
-		return null;
+		return mConfigPanel;
+	}
+
+	@JsonIgnore
+	protected void setConfigPanel(JPanel oPanel)
+	{
+		mConfigPanel = oPanel;
 	}
 
 	@JsonIgnore
@@ -178,6 +188,38 @@ public class ModuleSettings
 		return true;
 	}
 
+	@JsonIgnore
+	public void onApply()
+	{
+	}
+
+	@JsonIgnore
+	public void onCancel()
+	{
+	}
+
+	/**
+	 * Call onApply() for this and all childnodes.
+	 */
+	@JsonIgnore
+	public void notifyOnApply()
+	{
+		onApply();
+		for(ModuleSettings module : getChildModules())
+			module.notifyOnApply();
+	}
+
+	/**
+	 * Call onCancel() for this and all childnodes.
+	 */
+	@JsonIgnore
+	public void notifyOnCancel()
+	{
+		onCancel();
+		for(ModuleSettings module : getChildModules())
+			module.notifyOnCancel();
+	}
+
 	/**
 	 * Find a node with the specified ID or returns null.
 	 * 
@@ -223,10 +265,12 @@ public class ModuleSettings
 		ModuleSettings settings = (ModuleSettings)jaxbUnmarshaller.unmarshal(sr);
 		return settings;
 	}
-	
+
 	@JsonIgnore
 	public String save() throws JAXBException
 	{
+		notifyOnApply();
+
 		StringWriter sw = new StringWriter();
 		JAXBContext jaxbContext = JAXBContext.newInstance(ModuleSettings.getRegisteredModules());
 		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();

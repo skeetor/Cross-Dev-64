@@ -14,6 +14,6 @@ public class EmulatorModule
 
 	public EmulatorModule()
 	{
-		super(MODULE_ID, GlobalSettings.getResourceString("string.emulator"));
+		super(MODULE_ID, GlobalSettings.getResourceString("string.emulator"), null);
 	}
 }

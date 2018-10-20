@@ -31,7 +31,6 @@ public class GlobalSettingsPanel
 {
 	private static final long serialVersionUID = 1L;
 
-
 	// This variable is needed because the node selection comes before the mouse click event.
 	// So we need to differentiate these events.
 	private boolean mNodeSelected;
@@ -177,7 +176,7 @@ public class GlobalSettingsPanel
 				if (returnValue)
 				{
 					@SuppressWarnings("unchecked")
-					TreeNode<? extends ModuleSettings> node = (TreeNode<? extends ModuleSettings>)tree.getLastSelectedPathComponent();
+					TreeNode<ModuleSettings> node = (TreeNode<ModuleSettings>)tree.getLastSelectedPathComponent();
 					if (node != null)
 						return node.getModule().canRename();
 				}
@@ -225,18 +224,18 @@ public class GlobalSettingsPanel
 	}
 
 	@SuppressWarnings("unchecked")
-	protected TreeNode<? extends ModuleSettings> createNode(TreeNode<? extends ModuleSettings> oDefault)
+	protected TreeNode<ModuleSettings> createNode(TreeNode<ModuleSettings> oDefault)
 	{
 		TreePath path = mSettingsTree.getSelectionPath();
-		TreeNode<? extends ModuleSettings> node = (TreeNode<? extends ModuleSettings>)path.getLastPathComponent();
+		TreeNode<ModuleSettings> node = (TreeNode<ModuleSettings>)path.getLastPathComponent();
 		ModuleSettings module = node.getModule();
-		TreeNode<? extends ModuleSettings> parent = null;
-		TreeNode<? extends ModuleSettings> newNode = null;
+		TreeNode<ModuleSettings> parent = null;
+		TreeNode<ModuleSettings> newNode = null;
 
 		if(module.addToParent())
 		{
 			path = path.getParentPath();
-			parent = (TreeNode<? extends ModuleSettings>)path.getLastPathComponent();
+			parent = (TreeNode<ModuleSettings>)path.getLastPathComponent();
 		}
 
 		ModuleSettings defaultModule = null;
@@ -269,7 +268,7 @@ public class GlobalSettingsPanel
 	protected void onCopyItem()
 	{
 		@SuppressWarnings("unchecked")
-		TreeNode<? extends ModuleSettings> node = (TreeNode<? extends ModuleSettings>)mSettingsTree.getLastSelectedPathComponent();
+		TreeNode<ModuleSettings> node = (TreeNode<ModuleSettings>)mSettingsTree.getLastSelectedPathComponent();
 		createNode(node);
 	}
 
@@ -277,13 +276,13 @@ public class GlobalSettingsPanel
 	protected void onRemoveItem()
 	{
 		TreePath path = mSettingsTree.getSelectionPath();
-		TreeNode<? extends ModuleSettings> node = (TreeNode<? extends ModuleSettings>)path.getLastPathComponent();
+		TreeNode<ModuleSettings> node = (TreeNode<ModuleSettings>)path.getLastPathComponent();
 		if(node != null && node.getModule().canRemove())
 		{
 			mSettingsModel.removeNodeFromParent(node);
 
 			path = path.getParentPath();
-			node = (TreeNode<? extends ModuleSettings>)path.getLastPathComponent();
+			node = (TreeNode<ModuleSettings>)path.getLastPathComponent();
 			mSettingsModel.nodeStructureChanged(node);
 		}
 	}
@@ -295,7 +294,7 @@ public class GlobalSettingsPanel
 		mConfigPanel.repaint();
 
 		@SuppressWarnings("unchecked")
-		TreeNode<? extends ModuleSettings> node = (TreeNode<? extends ModuleSettings>)mSettingsTree.getLastSelectedPathComponent();
+		TreeNode<ModuleSettings> node = (TreeNode<ModuleSettings>)mSettingsTree.getLastSelectedPathComponent();
 		if(node == null)		// Treenode was collapsed
 			return;
 
@@ -323,7 +322,7 @@ public class GlobalSettingsPanel
 	protected void onNodeClicked(TreePath oPath)
 	{
 		@SuppressWarnings("unchecked")
-		TreeNode<? extends ModuleSettings> node = (TreeNode<? extends ModuleSettings>)oPath.getLastPathComponent();
+		TreeNode<ModuleSettings> node = (TreeNode<ModuleSettings>)oPath.getLastPathComponent();
 
 		if(!node.getModule().canRename())
 			return;
@@ -335,7 +334,7 @@ public class GlobalSettingsPanel
 	{
 		TreePath path = mSettingsTree.getSelectionPath();
 		@SuppressWarnings("unchecked")
-		TreeNode<? extends ModuleSettings> node = (TreeNode<? extends ModuleSettings>)path.getLastPathComponent();
+		TreeNode<ModuleSettings> node = (TreeNode<ModuleSettings>)path.getLastPathComponent();
 		ModuleSettings module = node.getModule();
 
 		if(module.canRename())
@@ -344,5 +343,18 @@ public class GlobalSettingsPanel
 
 	protected void onEditingCanceled()
 	{
+	}
+
+	@Override
+	public void onApply()
+	{
+		TreePath path = mSettingsTree.getSelectionPath();
+		if(path == null)
+			return;
+
+		@SuppressWarnings("unchecked")
+		TreeNode<ModuleSettings> node = (TreeNode<ModuleSettings>)path.getLastPathComponent();
+		ModuleSettings module = node.getModule();
+		module.onApply();
 	}
 }

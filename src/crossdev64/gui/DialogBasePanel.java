@@ -15,4 +15,16 @@ public class DialogBasePanel
 	{
 		return "";
 	}
+
+	public void onApply()
+	{
+	}
+
+	public void onOK()
+	{
+	}
+
+	public void onCancel()
+	{
+	}
 }

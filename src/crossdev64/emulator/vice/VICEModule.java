@@ -2,7 +2,6 @@ package crossdev64.emulator.vice;
 
 import java.util.UUID;
 
-import javax.swing.JPanel;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -17,11 +16,12 @@ public class VICEModule
 {
 	protected static final boolean REGISTERED = ModuleSettings.registerModule(VICEModule.class);
 
-	private VICESettingsPanel mPanel = new VICESettingsPanel();
-
+	private String mInstallationPath = "";
+	private int mPort = 6510;
+	
 	public VICEModule()
 	{
-		super(UUID.randomUUID().toString().toUpperCase(), "VICE");
+		super(UUID.randomUUID().toString().toUpperCase(), "VICE", new VICESettingsPanel());
 		setPort(6510);
 	}
 
@@ -39,7 +39,7 @@ public class VICEModule
 	 */
 	public VICEModule(String oUUID)
 	{
-		super("VICE Module", oUUID);
+		super("VICE Module", oUUID, new VICESettingsPanel());
 	}
 
 	@JsonIgnore
@@ -63,9 +63,22 @@ public class VICEModule
 	}
 
 	@Override
-	public JPanel getConfigPanel()
+	public VICESettingsPanel getConfigPanel()
 	{
-		return getPanel();
+		VICESettingsPanel panel = (VICESettingsPanel)super.getConfigPanel();
+
+		panel.setInstallationPath(getInstallationPath());
+		panel.setPort(getPort());
+		
+		return panel;
+	}
+
+	@Override
+	public void onApply()
+	{
+		VICESettingsPanel panel = (VICESettingsPanel)super.getConfigPanel();
+		setInstallationPath(panel.getInstallationPath());
+		setPort(panel.getPort());
 	}
 
 	@Override
@@ -74,30 +87,25 @@ public class VICEModule
 		return new VICEModule((VICEModule)oDefault);
 	}
 
-	private VICESettingsPanel getPanel()
-	{
-		return mPanel;
-	}
-
 	@XmlElement(name="InstallationPath")
 	public String getInstallationPath()
 	{
-		return getPanel().getInstallationPath();
+		return mInstallationPath;
 	}
 
 	public void setInstallationPath(String oPath)
 	{
-		getPanel().setInstallationPath(oPath);
+		mInstallationPath = oPath;
 	}
 
 	@XmlElement(name="Port")
 	public int getPort()
 	{
-		return getPanel().getPort();
+		return mPort;
 	}
 
 	public void setPort(int nPort)
 	{
-		getPanel().setPort(nPort);
+		mPort = nPort;
 	}
 }

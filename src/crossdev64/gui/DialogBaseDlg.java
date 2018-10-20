@@ -11,7 +11,6 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import crossdev64.settings.GlobalSettings;
-import crossdev64.utils.Stack;
 
 public class DialogBaseDlg<T extends DialogBasePanel>
 	extends JDialog
@@ -20,7 +19,7 @@ public class DialogBaseDlg<T extends DialogBasePanel>
 
 	private boolean mOK;
 	private T mPanel;
-	private JPanel buttonPanel_1;
+	private JPanel mButtonPanel;
 
 	/**
 	 * @wbp.parser.constructor
@@ -51,9 +50,8 @@ public class DialogBaseDlg<T extends DialogBasePanel>
 			getRootPane().setDefaultButton(button);
 		}
 
-		// TODO: Need a concept how to implement the apply button.
-/*		{
-			JButton button = new JButton(GlobalSettings.getInstance().getResourceString("string.apply"));
+		{
+			JButton button = new JButton(GlobalSettings.getResourceString("string.apply"));
 			button.addActionListener(new ActionListener()
 			{
 				@Override
@@ -64,7 +62,6 @@ public class DialogBaseDlg<T extends DialogBasePanel>
 			});
 			buttonPanel.add(button);
 		}
-*/
 
 		{
 			JButton button = new JButton(GlobalSettings.getResourceString("string.cancel"));
@@ -83,11 +80,11 @@ public class DialogBaseDlg<T extends DialogBasePanel>
 
 	protected JPanel createButtonPanel()
 	{
-		buttonPanel_1 = new JPanel();
-		buttonPanel_1.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		getContentPane().add(buttonPanel_1, BorderLayout.SOUTH);
+		mButtonPanel = new JPanel();
+		mButtonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		getContentPane().add(mButtonPanel, BorderLayout.SOUTH);
 
-		return buttonPanel_1;
+		return mButtonPanel;
 	}
 
 	protected T getPanel()
@@ -121,7 +118,6 @@ public class DialogBaseDlg<T extends DialogBasePanel>
 
 	protected void onApply()
 	{
-		System.out.println(Stack.getSourcePosition()+"Apply");
 	}
 
 	protected void onCancel()

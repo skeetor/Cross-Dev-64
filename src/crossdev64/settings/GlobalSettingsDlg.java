@@ -15,4 +15,9 @@ public class GlobalSettingsDlg
 
 		setBounds(100, 100, 530, 421);
 	}
+
+	public void onApply()
+	{
+		getPanel().onApply();
+	}
 }

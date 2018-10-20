@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JMenuItem;
 
+import crossdev64.keybinding.KeyBinding;
+
 public abstract class KeyMenuItem
 	extends JMenuItem
 {
