@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -25,8 +26,10 @@ import bibliothek.gui.dock.common.SingleCDockable;
 import bibliothek.gui.dock.common.menu.CLayoutChoiceMenuPiece;
 import bibliothek.gui.dock.common.menu.SingleCDockableListMenuPiece;
 import bibliothek.gui.dock.facile.menu.RootMenuPiece;
+import crossdev64.gui.controls.KeyMenuItem;
 import crossdev64.settings.GlobalSettings;
 import crossdev64.settings.GlobalSettingsDlg;
+import crossdev64.utils.Stack;
 
 public class MainFrame
 	extends JFrame
@@ -228,7 +231,18 @@ public class MainFrame
 		
 		item = new JMenuItem(GlobalSettings.getResourceString("string.run"));
 		root.add(item);
-		item = new JMenuItem(GlobalSettings.getResourceString("string.start_debugging"));
+
+		item = new KeyMenuItem("debug.start")
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				onStartDebugging();
+			}
+		};
+
 		root.add(item);
 		item = new JMenuItem(GlobalSettings.getResourceString("string.stop_debugging"));
 		root.add(item);
@@ -311,5 +325,13 @@ public class MainFrame
 			return;
 
 		GlobalSettings.getInstance().save();
+	}
+
+	/**
+	 * Start a debugging session
+	 */
+	public void onStartDebugging()
+	{
+		System.out.println(Stack.getSourcePosition()+"Start Debugging");
 	}
 }
