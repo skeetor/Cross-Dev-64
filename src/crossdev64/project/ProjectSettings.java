@@ -5,7 +5,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import crossdev64.emulator.vice.VICESettingsPanel;
 import crossdev64.settings.GlobalSettings;
 import crossdev64.settings.ModuleSettings;
 
