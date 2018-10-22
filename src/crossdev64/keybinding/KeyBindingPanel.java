@@ -3,9 +3,11 @@ package crossdev64.keybinding;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
@@ -13,7 +15,6 @@ import javax.swing.table.DefaultTableModel;
 
 import crossdev64.gui.DialogBasePanel;
 import crossdev64.settings.GlobalSettings;
-import javax.swing.JScrollPane;
 
 public class KeyBindingPanel
 	extends DialogBasePanel
@@ -29,6 +30,7 @@ public class KeyBindingPanel
 	public KeyBindingPanel()
 	{
 		super();
+
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0};
@@ -65,9 +67,7 @@ public class KeyBindingPanel
 		gbc_scrollPane.gridy = 2;
 		add(scrollPane, gbc_scrollPane);
 		
-				mShortcutTable = new JTable(createTablemodel());
-				scrollPane.setViewportView(mShortcutTable);
-				mShortcutTable.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		scrollPane.setViewportView(getShortcutTable());
 		
 		JLabel lblNewLabel_1 = new JLabel(GlobalSettings.getResourceString("string.currently_assigned"));
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
@@ -125,20 +125,45 @@ public class KeyBindingPanel
 		add(mAssignBtn, gbc_mAssignBtn);
 	}
 
-	private DefaultTableModel createTablemodel()
+	private JTable getShortcutTable()
 	{
-		if(mTableModel == null)
+		if(mShortcutTable == null)
 		{
-			mTableModel = new DefaultTableModel();
-	
-			mTableModel.addColumn(GlobalSettings.getResourceString("string.keybinding_name"));
-			mTableModel.addColumn(GlobalSettings.getResourceString("string.default_binding"));
-			mTableModel.addColumn(GlobalSettings.getResourceString("string.current_binding"));
-			
-			mTableModel.addRow(new Object[3]);
-			mTableModel.addRow(new Object[3]);
+			mTableModel = new DefaultTableModel(
+				new Object[][] {},
+				new String[] {
+					GlobalSettings.getResourceString("string.keybinding_name")
+					, GlobalSettings.getResourceString("string.default_binding")
+					, GlobalSettings.getResourceString("string.current_binding")
+				}
+			);
+
+			mShortcutTable = new JTable(mTableModel);
+			mShortcutTable.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+
+			reloadBindings();
 		}
-		
-		return mTableModel;
+
+		return mShortcutTable;
+	}
+
+	/**
+	 * Reloads the current bindings from the resource and user settings file.
+	 */
+	public void reloadBindings()
+	{
+		mTableModel.setRowCount(0);
+
+		Map<String, KeyBindingConfig> defaults = KeyBindings.getInstance().getDefaults();
+
+		int columns = mTableModel.getColumnCount();
+		String[] row = new String[columns];
+		for(KeyBindingConfig binding : defaults.values())
+		{
+			row[0] = binding.getActionId();
+			row[1] = binding.getKeyStroke().toString();
+
+			mTableModel.addRow(row);
+		}
 	}
 }

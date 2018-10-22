@@ -125,12 +125,11 @@ public class GlobalSettings
 		{
 			// Force to use the default settings. This is necessary, because otherwise
 			// ResourceBundle would always load the default setting instead.
-			mStrings = ResourceBundle.getBundle("crossdev64.resources.language.MessageResources",
-			    new ResourceBundle.Control()
+			mStrings = ResourceBundle.getBundle("crossdev64.resources.language.MessageResources", new ResourceBundle.Control()
 				{
 			        @Override
-			        public List<Locale> getCandidateLocales(String name,
-			                                                Locale locale) {
+			        public List<Locale> getCandidateLocales(String name, Locale locale)
+			        {
 			            return Collections.singletonList(Locale.ROOT);
 			        }
 			    }

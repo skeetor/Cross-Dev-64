@@ -14,17 +14,22 @@ public abstract class KeyBinding
 	private KeyStroke mKeyStroke;
 	private String mActionId;
 	private AbstractButton mButton;
+	private String mLabel;		// localized text if applicable.
 
-	public KeyBinding(AbstractButton oButton, String oKeyId)
+	public KeyBinding()
 	{
-		init(oButton, oKeyId, "string.start_debugging", "F5");
 	}
 
-	protected void init(AbstractButton oButton, String oActionId, String oLabel, String oKeyBinding)
+	public KeyBinding(AbstractButton oButton, String oName)
+	{
+		init(oButton, oName, "string.start_debugging", "F5");
+	}
+
+	protected void init(AbstractButton oButton, String oName, String oLabel, String oKeyBinding)
 	{
 		mButton = oButton;
 		setKeyStroke(oKeyBinding);
-		setActionId(oActionId);
+		setActionId(oName);
 	
 		oButton.setText(GlobalSettings.getResourceString(oLabel));
 		oButton.addActionListener(new java.awt.event.ActionListener()
@@ -35,6 +40,16 @@ public abstract class KeyBinding
 				KeyBinding.this.actionPerformed(e);
 			}
 		});
+	}
+
+	public String getLabel()
+	{
+		return mLabel;
+	}
+
+	public void setLabel(String oLabel)
+	{
+		mLabel = oLabel;
 	}
 
 	public KeyStroke getKeyStroke()
