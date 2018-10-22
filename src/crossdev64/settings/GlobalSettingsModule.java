@@ -11,6 +11,6 @@ public class GlobalSettingsModule
 
 	public GlobalSettingsModule()
 	{
-		super(MODULE_ID, GlobalSettings.getResourceString("string.settings"));
+		super(MODULE_ID, GlobalSettings.getResourceString("string.settings"), null);
 	}
 }

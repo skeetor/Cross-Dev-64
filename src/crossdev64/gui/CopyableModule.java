@@ -1,13 +1,15 @@
 package crossdev64.gui;
 
+import javax.swing.JPanel;
+
 import crossdev64.settings.ModuleSettings;
 
 public abstract class CopyableModule
 	extends ModuleSettings
 {
-	public CopyableModule(String oModuleId, String oModuleName)
+	public CopyableModule(String oModuleId, String oModuleName, JPanel oConfigPanel)
 	{
-		super(oModuleId, oModuleName);
+		super(oModuleId, oModuleName, oConfigPanel);
 	}
 
 	@Override

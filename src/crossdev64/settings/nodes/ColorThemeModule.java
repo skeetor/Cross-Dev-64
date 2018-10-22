@@ -14,6 +14,6 @@ public class ColorThemeModule
 
 	public ColorThemeModule()
 	{
-		super(MODULE_ID, GlobalSettings.getResourceString("string.theme"));
+		super(MODULE_ID, GlobalSettings.getResourceString("string.theme"), null);
 	}
 }

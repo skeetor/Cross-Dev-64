@@ -1,6 +1,5 @@
 package crossdev64.project;
 
-import javax.swing.JPanel;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -16,13 +15,11 @@ public class ProjectSettings
 	public static final String MODULE_ID = "D4FCC276-04EC-4CE4-9847-070F6C23AD46";
 	protected static final boolean REGISTERED = ModuleSettings.registerModule(ProjectSettings.class);
 
-	@JsonIgnore
-	private ProjectNodePanel mPanel;
+	private String mProjectRootPath = "";
 
 	public ProjectSettings()
 	{
-		super(MODULE_ID, GlobalSettings.getResourceString("string.project"));
-		mPanel = new ProjectNodePanel();
+		super(MODULE_ID, GlobalSettings.getResourceString("string.project"), new ProjectNodePanel());
 	}
 
 	@Override
@@ -34,15 +31,21 @@ public class ProjectSettings
 
 	@JsonIgnore
 	@Override
-	public JPanel getConfigPanel()
+	public ProjectNodePanel getConfigPanel()
 	{
-		return getPanel();
+		ProjectNodePanel panel = (ProjectNodePanel)super.getConfigPanel();
+		
+		panel.setProjectRootPath(getProjectRootPath());
+		
+		return panel;
 	}
 
-	@JsonIgnore
-	private ProjectNodePanel getPanel()
+	@Override
+	public void onApply()
 	{
-		return mPanel;
+		ProjectNodePanel panel = (ProjectNodePanel)super.getConfigPanel();
+
+		setProjectRootPath(panel.getProjectRootPath());
 	}
 
 	@JsonIgnore
@@ -60,11 +63,11 @@ public class ProjectSettings
 	@XmlElement(name="ProjectRootPath")
 	public String getProjectRootPath()
 	{
-		return mPanel.getProjectRootPath();
+		return mProjectRootPath;
 	}
 
 	public void setProjectRootPath(String oPath)
 	{
-		mPanel.setProjectRootPath(oPath);
+		mProjectRootPath = oPath;
 	}
 }

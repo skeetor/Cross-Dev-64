@@ -38,6 +38,18 @@ public class ButtonPanel
 		});
 		add(mNewBtn);
 		
+		mCopyBtn = new JButton();
+		putIcon(mCopyBtn, "/crossdev64/resources/icons/small-icons-com/copy.png", "Copy");
+		mCopyBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				onCopy();
+			}
+		});
+		add(mCopyBtn);
+
 		mDeleteBtn = new JButton();
 		putIcon(mDeleteBtn, "/crossdev64/resources/icons/small-icons-com/delete.png", "Delete");
 		mDeleteBtn.addActionListener(new ActionListener()
@@ -49,19 +61,6 @@ public class ButtonPanel
 			}
 		});
 		add(mDeleteBtn);
-		
-		mCopyBtn = new JButton();
-		putIcon(mCopyBtn, "/crossdev64/resources/icons/small-icons-com/copy.png", "Delete");
-		mCopyBtn.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				onCopy();
-			}
-		});
-		add(mCopyBtn);
-
 	}
 
 	private void putIcon(JButton oButton, String oResource, String oDefault)

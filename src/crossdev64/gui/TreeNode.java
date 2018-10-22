@@ -60,6 +60,26 @@ public class TreeNode<T extends ModuleSettings>
 		return !module.allowChilds();
 	}
 
+	public void onApply()
+	{
+		getModule().onApply();
+	}
+
+	public void onCancel()
+	{
+		getModule().onCancel();
+	}
+
+	public void notifyOnApply()
+	{
+		getModule().notifyOnApply();
+	}
+
+	public void notifyOnCancel()
+	{
+		getModule().notifyOnCancel();
+	}
+
 	public TreeNode<? extends ModuleSettings> find(String oId)
 	{
 		if(getModule().getId().equals(oId))

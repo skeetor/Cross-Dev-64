@@ -13,6 +13,12 @@ public class GlobalSettingsDlg
 	{
 		super(oParent, new GlobalSettingsPanel());
 
-		setBounds(100, 100, 530, 421);
+		setBounds(100, 100, 640, 421);
+	}
+
+	@Override
+	public void onApply()
+	{
+		getPanel().onApply();
 	}
 }
