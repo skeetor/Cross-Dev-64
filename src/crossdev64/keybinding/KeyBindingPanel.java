@@ -15,6 +15,8 @@ import javax.swing.table.DefaultTableModel;
 
 import crossdev64.gui.DialogBasePanel;
 import crossdev64.settings.GlobalSettings;
+import javax.swing.JToggleButton;
+import javax.swing.JCheckBox;
 
 public class KeyBindingPanel
 	extends DialogBasePanel
@@ -61,7 +63,7 @@ public class KeyBindingPanel
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.gridwidth = 2;
-		gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
+		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane.gridx = 0;
 		gbc_scrollPane.gridy = 2;
@@ -105,6 +107,14 @@ public class KeyBindingPanel
 		gbc_lblPressKeys.gridx = 0;
 		gbc_lblPressKeys.gridy = 5;
 		add(lblPressKeys, gbc_lblPressKeys);
+		
+		JCheckBox mTogglePressedCheck = new JCheckBox(GlobalSettings.getResourceString("string.toggle_pressed"));
+		GridBagConstraints gbc_mTogglePressedCheck = new GridBagConstraints();
+		gbc_mTogglePressedCheck.anchor = GridBagConstraints.NORTHWEST;
+		gbc_mTogglePressedCheck.insets = new Insets(0, 0, 5, 0);
+		gbc_mTogglePressedCheck.gridx = 1;
+		gbc_mTogglePressedCheck.gridy = 5;
+		add(mTogglePressedCheck, gbc_mTogglePressedCheck);
 		
 		mShortcutTxt = new JTextField();
 		GridBagConstraints gbc_mShortcutTxt = new GridBagConstraints();

@@ -67,6 +67,24 @@ public class KeyBindings
 					if(!value.isEmpty())
 						binding.setLabel(GlobalSettings.getResourceString(value));
 
+					try
+					{
+						value = bindings.getString(name+".state");
+					}
+					catch(Exception e)
+					{
+						value = "";
+					}
+					if(!value.isEmpty())
+					{
+						if(value.toLowerCase().equals("released"))
+							binding.setPressed(false);
+						else
+							binding.setPressed(true);
+					}
+					else
+						binding.setPressed(true);
+
 					// The binding always have to exists, so if this doesn't exist
 					// it triggers an exception which should not caught but fixed.
 					value = bindings.getString(name+".binding");
@@ -77,7 +95,7 @@ public class KeyBindings
 						binding.setKeyStroke(value);
 				}
 
-				if(!type.equals("binding") && !type.equals("label"))
+				if(!type.equals("binding") && !type.equals("label") && !type.equals("state"))
 					throw new RuntimeException("Invalid type for "+k);
 			}
 		}

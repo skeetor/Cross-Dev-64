@@ -15,6 +15,7 @@ public abstract class KeyBinding
 	private String mActionId;
 	private AbstractButton mButton;
 	private String mLabel;		// localized text if applicable.
+	private boolean mPressed = true;
 
 	public KeyBinding()
 	{
@@ -50,6 +51,16 @@ public abstract class KeyBinding
 	public void setLabel(String oLabel)
 	{
 		mLabel = oLabel;
+	}
+
+	public boolean getPressed()
+	{
+		return mPressed;
+	}
+
+	public void setPressed(boolean bPressed)
+	{
+		mPressed = bPressed;
 	}
 
 	public KeyStroke getKeyStroke()
