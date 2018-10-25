@@ -9,19 +9,18 @@ import javax.swing.KeyStroke;
 
 import crossdev64.settings.GlobalSettings;
 
-public abstract class KeyBinding
+public abstract class AbstractKeyBinding
 {
 	private KeyStroke mKeyStroke;
 	private String mActionId;
 	private AbstractButton mButton;
 	private String mLabel;		// localized text if applicable.
-	private boolean mPressed = true;
 
-	public KeyBinding()
+	public AbstractKeyBinding()
 	{
 	}
 
-	public KeyBinding(AbstractButton oButton, String oName)
+	public AbstractKeyBinding(AbstractButton oButton, String oName)
 	{
 		init(oButton, oName, "string.start_debugging", "F5");
 	}
@@ -38,9 +37,15 @@ public abstract class KeyBinding
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent e)
 			{
-				KeyBinding.this.actionPerformed(e);
+				AbstractKeyBinding.this.actionPerformed(e);
 			}
 		});
+	}
+
+	@Override
+	public String toString()
+	{
+		return ""+mActionId;
 	}
 
 	public String getLabel()
@@ -51,16 +56,6 @@ public abstract class KeyBinding
 	public void setLabel(String oLabel)
 	{
 		mLabel = oLabel;
-	}
-
-	public boolean getPressed()
-	{
-		return mPressed;
-	}
-
-	public void setPressed(boolean bPressed)
-	{
-		mPressed = bPressed;
 	}
 
 	public KeyStroke getKeyStroke()
@@ -98,7 +93,7 @@ public abstract class KeyBinding
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				KeyBinding.this.actionPerformed(e);
+				AbstractKeyBinding.this.actionPerformed(e);
 			}
 		});
 	}

@@ -6,17 +6,21 @@ import java.awt.Insets;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import crossdev64.gui.DialogBasePanel;
 import crossdev64.settings.GlobalSettings;
-import javax.swing.JToggleButton;
-import javax.swing.JCheckBox;
+import crossdev64.utils.Stack;
 
 public class KeyBindingPanel
 	extends DialogBasePanel
@@ -28,6 +32,7 @@ public class KeyBindingPanel
 	private JTextField mCurrentTxt;
 	private JTextField mShortcutTxt;
 	private JTextField mFilterTxt;
+	private JCheckBox mTogglePressedCheck;
 
 	public KeyBindingPanel()
 	{
@@ -108,7 +113,7 @@ public class KeyBindingPanel
 		gbc_lblPressKeys.gridy = 5;
 		add(lblPressKeys, gbc_lblPressKeys);
 		
-		JCheckBox mTogglePressedCheck = new JCheckBox(GlobalSettings.getResourceString("string.toggle_pressed"));
+		mTogglePressedCheck = new JCheckBox(GlobalSettings.getResourceString("string.toggle_pressed"));
 		GridBagConstraints gbc_mTogglePressedCheck = new GridBagConstraints();
 		gbc_mTogglePressedCheck.anchor = GridBagConstraints.NORTHWEST;
 		gbc_mTogglePressedCheck.insets = new Insets(0, 0, 5, 0);
@@ -146,15 +151,68 @@ public class KeyBindingPanel
 					, GlobalSettings.getResourceString("string.default_binding")
 					, GlobalSettings.getResourceString("string.current_binding")
 				}
-			);
+			)
+			{
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean isCellEditable(int nRow, int nColumn)
+				{
+					return false;
+				}
+			};
 
 			mShortcutTable = new JTable(mTableModel);
+			mShortcutTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			mShortcutTable.getSelectionModel().addListSelectionListener(new ListSelectionListener()
+			{
+				@Override
+				public void valueChanged(ListSelectionEvent oEvent)
+				{
+					onRowSelected(oEvent);
+				}
+			});
 			mShortcutTable.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 
 			reloadBindings();
 		}
 
 		return mShortcutTable;
+	}
+
+	protected String prepareKeyStroke(KeyStroke oKeyStroke)
+	{
+		String mod = "";
+		String s  = oKeyStroke.toString().toUpperCase();
+		s = s.replaceAll("PRESSED ", "");
+		s = s.replaceAll("RELEASED ", "");
+
+		if(s.indexOf("META") != -1)
+		{
+			s = s.replaceAll("META ", "");
+			mod = "META";
+		}
+		
+		if(s.indexOf("CTRL") != -1)
+		{
+			s = s.replaceAll("CTRL ", "");
+			if(!mod.isEmpty())
+				mod += "+";
+			mod += "CTRL";
+		}
+		
+		if(s.indexOf("SHIFT") != -1)
+		{
+			s = s.replaceAll("SHIFT ", "");
+			if(!mod.isEmpty())
+				mod += "+";
+			mod += "Shift";
+		}
+
+		if(!mod.isEmpty())
+			mod += " ";
+	
+		return mod+s;
 	}
 
 	/**
@@ -171,9 +229,44 @@ public class KeyBindingPanel
 		for(KeyBindingConfig binding : defaults.values())
 		{
 			row[0] = binding.getActionId();
-			row[1] = binding.getKeyStroke().toString();
+			row[1] = prepareKeyStroke(binding.getKeyStroke());
 
 			mTableModel.addRow(row);
 		}
+	}
+
+	protected void updateShortcutInfo(AbstractKeyBinding oBinding)
+	{
+		if(oBinding == null)
+		{
+			mCurrentTxt.setText("");
+			mShortcutTxt.setText("");
+			mTogglePressedCheck.setSelected(false);
+		}
+		else
+		{
+			KeyStroke keystroke = oBinding.getKeyStroke();
+			
+			mShortcutTxt.setText("");
+			mCurrentTxt.setText(prepareKeyStroke(keystroke));
+			mTogglePressedCheck.setSelected(!keystroke.isOnKeyRelease());
+		}
+	}
+	
+	protected void onRowSelected(ListSelectionEvent oEvent)
+	{
+		if(oEvent.getValueIsAdjusting())
+			return;
+
+		int row = mShortcutTable.getSelectionModel().getMinSelectionIndex();
+		if(row == -1)
+		{
+			updateShortcutInfo(null);
+			return;
+		}
+
+		String action = mTableModel.getValueAt(row, 0).toString();
+		KeyBindingConfig binding = KeyBindings.getInstance().getBinding(action);
+		updateShortcutInfo(binding);
 	}
 }
