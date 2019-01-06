@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import crossdev64.settings.GlobalSettings;
+import crossdev64.utils.Stack;
 
 public class KeyBindings
 {
@@ -27,59 +28,82 @@ public class KeyBindings
 		reloadUserBindings();
 	}
 
+	protected void restoreBinding(Map<String, String> oKeys, Map<String, KeyBindingConfig> oMap)
+	{
+		for (Map.Entry<String, String> entry : oKeys.entrySet())
+		{
+			String k = entry.getKey();
+			int pos = k.lastIndexOf('.');
+			if(pos == -1)
+				throw new RuntimeException("Invalid keybinding label for "+k);
+
+			String type = k.substring(pos+1);
+
+			// Labels will be built when the binding is processed. A label alone doesn't make sense.
+			if(type.equals("label"))
+				continue;
+
+			if(!type.equals("binding"))
+				throw new RuntimeException(Stack.getSourcePosition()+": Invalid type ["+type+"] for "+k);
+
+			String name = k.substring(0, pos);
+			pos = name.lastIndexOf('.');
+			if(pos == -1)
+				throw new RuntimeException(Stack.getSourcePosition()+": Groupname missing for "+k);
+
+			KeyBindingConfig binding = oMap.get(name);
+			if(binding == null)
+			{
+				binding = new KeyBindingConfig(name);
+				oMap.put(name, binding);
+
+				// The label may not always make sense, so it doesn't have to exist.
+				String value = oKeys.get(name+".label");
+				if(value == null)
+					value = "";
+
+				binding.setLabelId(value);
+				if(!value.isEmpty())
+					binding.setLabel(GlobalSettings.getResourceString(value));
+
+				// The binding always have to exists, so if this doesn't exist
+				// it triggers an exception which should not caught but fixed.
+				value = oKeys.get(name+".binding");
+				if(value == null)
+					value = "";
+
+				if(!value.isEmpty())
+					binding.setKeyStroke(value);
+			}
+		}
+	}
+	
+	protected void loadBindings(String oFilename, Map<String, KeyBindingConfig> oMap)
+	{
+		ResourceBundle bindings = ResourceBundle.getBundle(oFilename);
+		Enumeration<String> keys = bindings.getKeys();
+		Map<String, String> values = new HashMap<>();
+		while(keys.hasMoreElements())
+		{
+			String k = keys.nextElement();
+			try
+			{
+				String value = bindings.getString(k);
+				values.put(k, value);
+			}
+			catch(Exception e)
+			{
+			}
+		}
+		restoreBinding(values,  mDefaultBindings);
+	}
+
 	protected void loadDefaultBindings()
 	{
 		if(mDefaultBindings == null)
 		{
 			mDefaultBindings = new HashMap<>();
-			ResourceBundle bindings = ResourceBundle.getBundle("crossdev64.resources.DefaultKeybinding");
-			Enumeration<String> keys = bindings.getKeys();
-			while(keys.hasMoreElements())
-			{
-				String k = keys.nextElement();
-				int pos = k.lastIndexOf('.');
-				if(pos == -1)
-					throw new RuntimeException("Invalid keybinding label for "+k);
-
-				String type = k.substring(pos+1);
-				String name = k.substring(0, pos);
-				pos = name.lastIndexOf('.');
-				if(pos == -1)
-					throw new RuntimeException("Groupname missing for "+k);
-
-				KeyBindingConfig binding = mDefaultBindings.get(name);
-				if(binding == null)
-				{
-					binding = new KeyBindingConfig(name);
-					mDefaultBindings.put(name, binding);
-
-					// The label may not always make sense, so it doesn't have to exist.
-					String value = null;
-					try
-					{
-						value = bindings.getString(name+".label");
-					}
-					catch(Exception e)
-					{
-						value = "";
-					}
-					binding.setLabelId(value);
-					if(!value.isEmpty())
-						binding.setLabel(GlobalSettings.getResourceString(value));
-
-					// The binding always have to exists, so if this doesn't exist
-					// it triggers an exception which should not caught but fixed.
-					value = bindings.getString(name+".binding");
-					if(value == null)
-						value = "";
-
-					if(!value.isEmpty())
-						binding.setKeyStroke(value);
-				}
-
-				if(!type.equals("binding") && !type.equals("label"))
-					throw new RuntimeException("Invalid type for "+k);
-			}
+			loadBindings("crossdev64.resources.DefaultKeybinding", mDefaultBindings);
 		}
 	}
 
