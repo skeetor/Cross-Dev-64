@@ -40,13 +40,14 @@ public class KeyBindingPanel
 	private JCheckBox mTogglePressedCheck;
 	private JTextField mCurrentTxt;
 	private JTextField mShortcutTxt;
-	private Map<String, KeyStroke> mKeyPressed;
+	private KeyStroke mKeyPressed;
+	private Map<Integer, KeyStroke> mKeyState;
 
 	public KeyBindingPanel()
 	{
 		super();
 
-		mKeyPressed = new HashMap<String, KeyStroke>();
+		mKeyState = new HashMap<Integer, KeyStroke>();
 
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -136,11 +137,14 @@ public class KeyBindingPanel
 			public void keyReleased(KeyEvent e)
 			{
 				KeyStroke ks = KeyStroke.getKeyStroke(e.getKeyCode(), e.getModifiers());
-				System.out.println(Stack.getSourcePosition()+": keyReleased: " + ks + " Code: " + e.getKeyCode() + " Mod:" + e.getModifiers());
-				if(!mKeyPressed.containsKey(ks.toString()))
-				{
-					mKeyPressed.remove(ks.toString());
-				}
+				Integer key = e.getKeyCode();
+				if(mKeyState.containsKey(key))
+					mKeyState.remove(key);
+
+				//System.out.println(Stack.getSourcePosition()+": keyReleased: " + ks + " Code: " + e.getKeyCode() + " Mod:" + e.getModifiers() + "  Count: "+mKeyState.size());
+				if(mKeyState.size() == 0)
+					mShortcutTxt.setText(prepareKeyStroke(mKeyPressed));
+
 				e.consume();
 			}
 
@@ -148,12 +152,14 @@ public class KeyBindingPanel
 			public void keyPressed(KeyEvent e)
 			{
 				KeyStroke ks = KeyStroke.getKeyStroke(e.getKeyCode(), e.getModifiers());
-				if(!mKeyPressed.containsKey(ks.toString()))
+				Integer key = e.getKeyCode();
+				if(!mKeyState.containsKey(key))
 				{
-					System.out.println(Stack.getSourcePosition()+": keyPressed: " + ks + " Code: " + e.getKeyCode() + " Mod:" + e.getModifiers());
-
 					// Store the pressed key, so we can see that it is already pressed.
-					mKeyPressed.put(ks.toString(), ks);
+					mKeyState.put(key, ks);
+					mKeyPressed = ks;
+					mShortcutTxt.setText(prepareKeyStroke(mKeyPressed));
+					//System.out.println(Stack.getSourcePosition()+": keyPressed: " + ks + " Code: " + e.getKeyCode() + " Mod:" + e.getModifiers());
 				}
 
 				e.consume();
@@ -179,35 +185,35 @@ public class KeyBindingPanel
 		add(panel, gbc_panel);
 		panel.setLayout(new GridLayout(1, 0, 5, 2));
 		
-				JButton mRemoveBtn = new JButton(GlobalSettings.getResourceString("string.remove"));
-				panel.add(mRemoveBtn);
-				
-						JButton mResetAllBtn = new JButton(GlobalSettings.getResourceString("string.reset_all"));
-						panel.add(mResetAllBtn);
-						
-								JButton mAssignBtn = new JButton(GlobalSettings.getResourceString("string.assign"));
-								panel.add(mAssignBtn);
-								mAssignBtn.addActionListener(new ActionListener()
-								{
-									public void actionPerformed(ActionEvent e)
-									{
-										onAssign();
-									}
-								});
-						mResetAllBtn.addActionListener(new ActionListener()
-						{
-							public void actionPerformed(ActionEvent e)
-							{
-								onResetAll();
-							}
-						});
-				mRemoveBtn.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-						onRemove();
-					}
-				});
+		JButton mRemoveBtn = new JButton(GlobalSettings.getResourceString("string.remove"));
+		panel.add(mRemoveBtn);
+		mRemoveBtn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				onRemove();
+			}
+		});
+		
+		JButton mResetAllBtn = new JButton(GlobalSettings.getResourceString("string.reset_all"));
+		panel.add(mResetAllBtn);
+		mResetAllBtn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				onResetAll();
+			}
+		});
+		
+		JButton mAssignBtn = new JButton(GlobalSettings.getResourceString("string.assign"));
+		panel.add(mAssignBtn);
+		mAssignBtn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				onAssign();
+			}
+		});
 		
 		JLabel label = new JLabel("");
 		GridBagConstraints gbc_label = new GridBagConstraints();
