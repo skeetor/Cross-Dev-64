@@ -33,4 +33,12 @@ public class KeyBindingModule
 	{
 		System.out.println(Stack.getSourcePosition()+"onApply");
 	}
+
+	@Override
+	@JsonIgnore
+	public void prepareVisible(boolean bVisible)
+	{
+		KeyBindingPanel panel = (KeyBindingPanel)getConfigPanel();
+		panel.prepareVisible(bVisible);
+	}
 }

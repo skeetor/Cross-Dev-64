@@ -41,6 +41,7 @@ public class GlobalSettingsPanel
 	private GridBagLayout mConfigPanelLayout;
 	private TreeNodeModel mSettingsModel;
 	private DefaultTreeCellEditor mCellEditor;
+	private ModuleSettings mLastSelectedModule;
 
 	public GlobalSettingsPanel()
 	{
@@ -289,6 +290,12 @@ public class GlobalSettingsPanel
 
 	protected void onTreenodeSelected(TreeSelectionEvent oEvent)
 	{
+		if(mLastSelectedModule != null)
+		{
+			mLastSelectedModule.prepareVisible(false);
+			mLastSelectedModule = null;
+		}
+
 		mConfigPanel.removeAll();
 		mConfigPanel.revalidate();
 		mConfigPanel.repaint();
@@ -309,6 +316,8 @@ public class GlobalSettingsPanel
 		JPanel panel = module.getConfigPanel();
 		if(panel == null)
 			return;
+
+		module.prepareVisible(true);
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.BOTH;

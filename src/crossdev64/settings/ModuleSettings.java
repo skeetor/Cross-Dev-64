@@ -106,6 +106,11 @@ public class ModuleSettings
 	}
 
 	@JsonIgnore
+	public void prepareVisible(boolean bVisible)
+	{
+	}
+
+	@JsonIgnore
 	public JPanel getConfigPanel()
 	{
 		return mConfigPanel;

@@ -298,6 +298,13 @@ public class KeyBindingPanel
 		return mod+s;
 	}
 
+	public void prepareVisible(boolean bVisible)
+	{
+		mKeyState = new HashMap<Integer, KeyStroke>();
+		mKeyPressed = null;
+		mShortcutTxt.setText("");
+	}
+
 	/**
 	 * Reloads the current bindings from the resource and user settings file.
 	 */
