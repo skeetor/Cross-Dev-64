@@ -138,12 +138,13 @@ public class KeyBindingPanel
 			@Override
 			public void keyReleased(KeyEvent e)
 			{
-				KeyStroke ks = KeyStroke.getKeyStroke(e.getKeyCode(), e.getModifiers());
+				//KeyStroke ks = KeyStroke.getKeyStroke(e.getKeyCode(), e.getModifiers());
+				//System.out.println(Stack.getSourcePosition()+": keyReleased: " + ks + " Code: " + e.getKeyCode() + " Mod:" + e.getModifiers() + "  Count: "+mKeyState.size());
+
 				Integer key = e.getKeyCode();
 				if(mKeyState.containsKey(key))
 					mKeyState.remove(key);
 
-				//System.out.println(Stack.getSourcePosition()+": keyReleased: " + ks + " Code: " + e.getKeyCode() + " Mod:" + e.getModifiers() + "  Count: "+mKeyState.size());
 				if(mKeyState.size() == 0)
 					mShortcutTxt.setText(KeyBinding.prepareToString(mKeyPressed));
 
@@ -315,9 +316,24 @@ public class KeyBindingPanel
 	{
 		System.out.println(Stack.getSourcePosition()+": OnAssign");
 
-		/*Object k = mTableModel.getValueAt(row, 0);
-		String action = mTableModel.getValueAt(row, 0).toString();
-		KeyBindingConfig binding = KeyBindings.getInstance().getBinding(action);*/
+		if(mKeyPressed == null)
+			return;
+		
+		int row = mShortcutTable.getSelectionModel().getMinSelectionIndex();
+		if(row == -1)
+			return;
+
+		// Check if the key already exists and if it should be replaced.
+		int exists = mTableModel.getRowByKey(mKeyPressed);
+		if(exists != -1)
+		{
+		}
+
+		KeyBindingConfig binding = mTableModel.getRow(row);
+		binding.setOverride(mKeyPressed);
+
+		mKeyPressed = null;
+		mKeyState.clear();
 	}
 
 	protected void onRemove()

@@ -3,6 +3,7 @@ package crossdev64.keybinding;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.KeyStroke;
 import javax.swing.table.AbstractTableModel;
 
 import crossdev64.settings.GlobalSettings;
@@ -52,10 +53,9 @@ public class KeyBindingTableModel
 	@Override
 	public Object getValueAt(int nRow, int nColumn)
 	{
-		if(nRow >= mRows.size())
+		KeyBindingConfig row = getRow(nRow);
+		if(row == null)
 			return "MISSING ROW";
-
-		KeyBindingConfig row = mRows.get(nRow);
 
 		String val = "";
 		switch(nColumn)
@@ -112,5 +112,18 @@ public class KeyBindingTableModel
 		}
 
 		refresh();
+	}
+
+	public KeyBindingConfig getRow(int nRow)
+	{
+		if(nRow >= mRows.size())
+			return null;
+
+		return mRows.get(nRow);
+	}
+
+	public int getRowByKey(KeyStroke oRow)
+	{
+		return -1;
 	}
 }
