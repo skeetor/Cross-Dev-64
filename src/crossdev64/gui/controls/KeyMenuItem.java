@@ -4,20 +4,20 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JMenuItem;
 
-import crossdev64.keybinding.AbstractKeyBinding;
+import crossdev64.keybinding.KeyBinding;
 
 public abstract class KeyMenuItem
 	extends JMenuItem
 {
 	private static final long serialVersionUID = 1L;
 
-	private AbstractKeyBinding mKeyBinder;
+	private KeyBinding mKeyBinder;
 
 	public KeyMenuItem(String oKeyId)
 	{
 		super();
 
-		mKeyBinder = new AbstractKeyBinding(this, oKeyId)
+		mKeyBinder = new KeyBinding(this, oKeyId, null)
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)

@@ -23,7 +23,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 
 import crossdev64.gui.DialogBasePanel;
 import crossdev64.settings.GlobalSettings;
@@ -35,12 +34,14 @@ public class KeyBindingPanel
 	private static final long serialVersionUID = 1L;
 
 	private JTable mShortcutTable;
-	private DefaultTableModel mTableModel;
+	private KeyBindingTableModel mTableModel;
 	private JTextField mFilterTxt;
 	private JCheckBox mTogglePressedCheck;
 	private JTextField mCurrentTxt;
 	private JTextField mShortcutTxt;
 	private KeyStroke mKeyPressed;
+	private JButton mRemoveBtn;
+	private JButton mAssignBtn;
 	private Map<Integer, KeyStroke> mKeyState;
 
 	public KeyBindingPanel()
@@ -96,7 +97,7 @@ public class KeyBindingPanel
 		add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 		mCurrentTxt = new JTextField();
-		mCurrentTxt.setEditable(false);
+		mCurrentTxt.setEnabled(false);
 		GridBagConstraints gbc_mCurrentTxt = new GridBagConstraints();
 		gbc_mCurrentTxt.fill = GridBagConstraints.HORIZONTAL;
 		gbc_mCurrentTxt.gridwidth = 2;
@@ -123,6 +124,7 @@ public class KeyBindingPanel
 		add(lblPressKeys, gbc_lblPressKeys);
 
 		mShortcutTxt = new JTextField();
+		mShortcutTxt.setEnabled(false);
 		mShortcutTxt.addKeyListener(new KeyListener()
 		{
 			@Override
@@ -143,7 +145,7 @@ public class KeyBindingPanel
 
 				//System.out.println(Stack.getSourcePosition()+": keyReleased: " + ks + " Code: " + e.getKeyCode() + " Mod:" + e.getModifiers() + "  Count: "+mKeyState.size());
 				if(mKeyState.size() == 0)
-					mShortcutTxt.setText(prepareKeyStroke(mKeyPressed));
+					mShortcutTxt.setText(KeyBinding.prepareToString(mKeyPressed));
 
 				e.consume();
 			}
@@ -158,7 +160,7 @@ public class KeyBindingPanel
 					// Store the pressed key, so we can see that it is already pressed.
 					mKeyState.put(key, ks);
 					mKeyPressed = ks;
-					mShortcutTxt.setText(prepareKeyStroke(mKeyPressed));
+					mShortcutTxt.setText(KeyBinding.prepareToString(mKeyPressed));
 					//System.out.println(Stack.getSourcePosition()+": keyPressed: " + ks + " Code: " + e.getKeyCode() + " Mod:" + e.getModifiers());
 				}
 
@@ -185,7 +187,7 @@ public class KeyBindingPanel
 		add(panel, gbc_panel);
 		panel.setLayout(new GridLayout(1, 0, 5, 2));
 		
-		JButton mRemoveBtn = new JButton(GlobalSettings.getResourceString("string.remove"));
+		mRemoveBtn = new JButton(GlobalSettings.getResourceString("string.remove"));
 		panel.add(mRemoveBtn);
 		mRemoveBtn.addActionListener(new ActionListener()
 		{
@@ -195,6 +197,16 @@ public class KeyBindingPanel
 			}
 		});
 		
+		mAssignBtn = new JButton(GlobalSettings.getResourceString("string.assign"));
+		panel.add(mAssignBtn);
+		mAssignBtn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				onAssign();
+			}
+		});
+
 		JButton mResetAllBtn = new JButton(GlobalSettings.getResourceString("string.reset_all"));
 		panel.add(mResetAllBtn);
 		mResetAllBtn.addActionListener(new ActionListener()
@@ -205,45 +217,21 @@ public class KeyBindingPanel
 			}
 		});
 		
-		JButton mAssignBtn = new JButton(GlobalSettings.getResourceString("string.assign"));
-		panel.add(mAssignBtn);
-		mAssignBtn.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				onAssign();
-			}
-		});
-		
 		JLabel label = new JLabel("");
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.fill = GridBagConstraints.HORIZONTAL;
 		gbc_label.gridx = 3;
 		gbc_label.gridy = 6;
 		add(label, gbc_label);
+
+		updateShortcutInfo(null);
 	}
 
 	private JTable getShortcutTable()
 	{
 		if(mShortcutTable == null)
 		{
-			mTableModel = new DefaultTableModel(
-				new Object[][] {},
-				new String[] {
-					GlobalSettings.getResourceString("string.keybinding_name")
-					, GlobalSettings.getResourceString("string.default_binding")
-					, GlobalSettings.getResourceString("string.current_binding")
-				}
-			)
-			{
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public boolean isCellEditable(int nRow, int nColumn)
-				{
-					return false;
-				}
-			};
+			mTableModel = new KeyBindingTableModel();
 
 			mShortcutTable = new JTable(mTableModel);
 			mShortcutTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -263,41 +251,6 @@ public class KeyBindingPanel
 		return mShortcutTable;
 	}
 
-	protected String prepareKeyStroke(KeyStroke oKeyStroke)
-	{
-		String mod = "";
-		String s  = oKeyStroke.toString().toUpperCase();
-		s = s.replaceAll("PRESSED ", "");
-		s = s.replaceAll("RELEASED ", "");
-
-		if(s.indexOf("META") != -1)
-		{
-			s = s.replaceAll("META ", "");
-			mod = "META";
-		}
-		
-		if(s.indexOf("CTRL") != -1)
-		{
-			s = s.replaceAll("CTRL ", "");
-			if(!mod.isEmpty())
-				mod += "+";
-			mod += "CTRL";
-		}
-		
-		if(s.indexOf("SHIFT") != -1)
-		{
-			s = s.replaceAll("SHIFT ", "");
-			if(!mod.isEmpty())
-				mod += "+";
-			mod += "Shift";
-		}
-
-		if(!mod.isEmpty())
-			mod += " ";
-	
-		return mod+s;
-	}
-
 	public void prepareVisible(boolean bVisible)
 	{
 		mKeyState = new HashMap<Integer, KeyStroke>();
@@ -310,36 +263,34 @@ public class KeyBindingPanel
 	 */
 	public void reloadBindings()
 	{
-		mTableModel.setRowCount(0);
+		Map<String, KeyBindingConfig> bindings = KeyBindings.getInstance().getBindings();
 
-		Map<String, KeyBindingConfig> defaults = KeyBindings.getInstance().getDefaults();
-
-		int columns = mTableModel.getColumnCount();
-		String[] row = new String[columns];
-		for(KeyBindingConfig binding : defaults.values())
-		{
-			row[0] = binding.getActionId();
-			row[1] = prepareKeyStroke(binding.getKeyStroke());
-
-			mTableModel.addRow(row);
-		}
+		for(KeyBindingConfig binding : bindings.values())
+			mTableModel.addRow(binding);
 	}
 
-	protected void updateShortcutInfo(AbstractKeyBinding oBinding)
+	protected void updateShortcutInfo(KeyBinding oBinding)
 	{
 		if(oBinding == null)
 		{
 			mCurrentTxt.setText("");
 			mShortcutTxt.setText("");
 			mTogglePressedCheck.setSelected(false);
+
+			mShortcutTxt.setEnabled(false);
+			mAssignBtn.setEnabled(false);
+			mRemoveBtn.setEnabled(false);
 		}
 		else
 		{
 			KeyStroke keystroke = oBinding.getKeyStroke();
 			
-			mShortcutTxt.setText("");
-			mCurrentTxt.setText(prepareKeyStroke(keystroke));
+			mCurrentTxt.setText(KeyBinding.prepareToString(keystroke));
 			mTogglePressedCheck.setSelected(!keystroke.isOnKeyRelease());
+
+			mShortcutTxt.setEnabled(true);
+			mAssignBtn.setEnabled(true);
+			mRemoveBtn.setEnabled(true);
 		}
 	}
 	
@@ -363,6 +314,10 @@ public class KeyBindingPanel
 	protected void onAssign()
 	{
 		System.out.println(Stack.getSourcePosition()+": OnAssign");
+
+		/*Object k = mTableModel.getValueAt(row, 0);
+		String action = mTableModel.getValueAt(row, 0).toString();
+		KeyBindingConfig binding = KeyBindings.getInstance().getBinding(action);*/
 	}
 
 	protected void onRemove()

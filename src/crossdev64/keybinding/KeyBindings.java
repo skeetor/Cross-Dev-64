@@ -5,30 +5,27 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import crossdev64.settings.GlobalSettings;
 import crossdev64.utils.Stack;
 
 public class KeyBindings
 {
-	private static KeyBindings mBindings;
-	private static Map<String, KeyBindingConfig> mDefaultBindings;
-	private static Map<String, KeyBindingConfig> mUserBindings;
+	private static KeyBindings mBindingsInstance;
+	private static Map<String, KeyBindingConfig> mBindings;
 
 	public static KeyBindings getInstance()
 	{
-		if(mBindings == null)
-			mBindings = new KeyBindings();
+		if(mBindingsInstance == null)
+			mBindingsInstance = new KeyBindings();
 
-		return mBindings;
+		return mBindingsInstance;
 	}
 
 	protected KeyBindings()
 	{
-		loadDefaultBindings();
-		reloadUserBindings();
+		loadBindings();
 	}
 
-	protected void restoreBinding(Map<String, String> oKeys, Map<String, KeyBindingConfig> oMap)
+	protected void restoreBinding(Map<String, String> oKeys, Map<String, KeyBindingConfig> oMap, boolean bDefault)
 	{
 		for (Map.Entry<String, String> entry : oKeys.entrySet())
 		{
@@ -62,9 +59,7 @@ public class KeyBindings
 				if(value == null)
 					value = "";
 
-				binding.setLabelId(value);
-				if(!value.isEmpty())
-					binding.setLabel(GlobalSettings.getResourceString(value));
+				binding.setLabel(value);
 
 				// The binding always have to exists, so if this doesn't exist
 				// it triggers an exception which should not caught but fixed.
@@ -73,12 +68,17 @@ public class KeyBindings
 					value = "";
 
 				if(!value.isEmpty())
-					binding.setKeyStroke(value);
+				{
+					if(bDefault)
+						binding.setDefault(value);
+					else
+						binding.setOverride(value);
+				}
 			}
 		}
 	}
 	
-	protected void loadBindings(String oFilename, Map<String, KeyBindingConfig> oMap)
+	protected void loadBindings(String oFilename, Map<String, KeyBindingConfig> oMap, boolean bDefault)
 	{
 		ResourceBundle bindings = ResourceBundle.getBundle(oFilename);
 		Enumeration<String> keys = bindings.getKeys();
@@ -95,39 +95,32 @@ public class KeyBindings
 			{
 			}
 		}
-		restoreBinding(values,  mDefaultBindings);
+		restoreBinding(values,  mBindings, bDefault);
 	}
 
-	protected void loadDefaultBindings()
+	protected void loadBindings()
 	{
-		if(mDefaultBindings == null)
+		if(mBindings == null)
 		{
-			mDefaultBindings = new HashMap<>();
-			loadBindings("crossdev64.resources.DefaultKeybinding", mDefaultBindings);
+			mBindings = new HashMap<>();
+			loadBindings("crossdev64.resources.DefaultKeybinding", mBindings, true);
 		}
+
+		loadUserBindings();
 	}
 
-	public void reloadUserBindings()
+	public void loadUserBindings()
 	{
-		mUserBindings = new HashMap<>();
+		System.out.println(Stack.getSourcePosition()+": Load user bindings");
 	}
 
-	public Map<String, KeyBindingConfig> getDefaults()
+	public Map<String, KeyBindingConfig> getBindings()
 	{
-		return mDefaultBindings;
-	}
-
-	public Map<String, KeyBindingConfig> getUser()
-	{
-		return mUserBindings;
+		return mBindings;
 	}
 
 	public KeyBindingConfig getBinding(String oActionId)
 	{
-		KeyBindingConfig binding = KeyBindings.mUserBindings.get(oActionId);
-		if(binding != null)
-			return binding;
-
-		return KeyBindings.mDefaultBindings.get(oActionId);
+		return mBindings.get(oActionId);
 	}
 }
