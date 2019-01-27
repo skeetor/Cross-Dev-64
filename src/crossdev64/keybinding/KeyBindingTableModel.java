@@ -122,8 +122,27 @@ public class KeyBindingTableModel
 		return mRows.get(nRow);
 	}
 
-	public int getRowByKey(KeyStroke oRow)
+	/**
+	 * Returns the index of the row which has the specified KeyStroke as the active binding.
+	 * Returns -1 if no binding is found.
+	 */
+	public int getRowByKey(KeyStroke oKey)
 	{
+		if(oKey == null)
+			return -1;
+
+		int i = -1;
+		for(KeyBindingConfig config : mTotalRows)
+		{
+			i++;
+			KeyStroke ks = config.getKeyStroke();
+			if(ks == null)
+				continue;
+
+			if(ks.equals(oKey))
+				return i;
+		}
+
 		return -1;
 	}
 }

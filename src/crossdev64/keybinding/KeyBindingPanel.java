@@ -25,6 +25,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import crossdev64.gui.DialogBasePanel;
+import crossdev64.gui.StringInputDlg;
 import crossdev64.settings.GlobalSettings;
 import crossdev64.utils.Stack;
 
@@ -255,8 +256,7 @@ public class KeyBindingPanel
 	public void prepareVisible(boolean bVisible)
 	{
 		mKeyState = new HashMap<Integer, KeyStroke>();
-		mKeyPressed = null;
-		mShortcutTxt.setText("");
+		clearKeypress();
 	}
 
 	/**
@@ -312,37 +312,63 @@ public class KeyBindingPanel
 		updateShortcutInfo(binding);
 	}
 
+	protected void clearKeypress()
+	{
+		mKeyPressed = null;
+		mKeyState.clear();
+		mShortcutTxt.setText("");
+	}
+
 	protected void onAssign()
 	{
 		System.out.println(Stack.getSourcePosition()+": OnAssign");
 
 		if(mKeyPressed == null)
 			return;
-		
+
+		// Our key capture always contains 'pressed'. Might be different for other JVMs?
+		String keystr = mKeyPressed.toString();
+		if(!mTogglePressedCheck.isSelected())
+			keystr = keystr.replace("pressed", "released");
+
+		mKeyPressed = KeyStroke.getKeyStroke(keystr);
+
 		int row = mShortcutTable.getSelectionModel().getMinSelectionIndex();
 		if(row == -1)
 			return;
 
 		// Check if the key already exists and if it should be replaced.
+		KeyBindingConfig binding = null;
 		int exists = mTableModel.getRowByKey(mKeyPressed);
 		if(exists != -1)
 		{
+			binding = mTableModel.getRow(row);
+			StringInputDlg dlg = new StringInputDlg(null, "Message", "Assign", "Wert");
+			boolean ok = dlg.showModal();
+			if(!ok)
+			{
+				binding = null;
+			}
+			else
+			{
+			}
 		}
 
-		KeyBindingConfig binding = mTableModel.getRow(row);
-		binding.setOverride(mKeyPressed);
+		if(binding != null)
+			binding.setOverride(mKeyPressed);
 
-		mKeyPressed = null;
-		mKeyState.clear();
+		clearKeypress();
 	}
 
 	protected void onRemove()
 	{
 		System.out.println(Stack.getSourcePosition()+": OnRemove");
+		clearKeypress();
 	}
 
 	protected void onResetAll()
 	{
 		System.out.println(Stack.getSourcePosition()+": OnResetAll");
+		clearKeypress();
 	}
 }
