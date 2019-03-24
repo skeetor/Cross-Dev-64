@@ -1,18 +1,28 @@
 package crossdev64.gui;
 
-import java.awt.Window;
-
 public class StringInputDlg
 	extends DialogBaseDlg<StringInputPanel>
 {
 	private static final long serialVersionUID = 1L;
 
-	public StringInputDlg(Window oParent, String oTitle, String oInfotext, String oValue)
+	public StringInputDlg()
 	{
-		super(oParent, new StringInputPanel(oTitle, oInfotext, oValue));
-		//setBounds(100, 100, 337, 122);
+		super();
+		showApply(false);
 	}
 
+	public StringInputDlg(String oTitle, String oInfotext, String oValue)
+	{
+		super();
+		showApply(false);
+		setParams(oTitle, oInfotext, oValue);
+	}
+
+	public void setParams(String oTitle, String oInfotext, String oValue)
+	{
+		initDialog(new StringInputPanel(oTitle, oInfotext, oValue));
+	}
+	
 	public String getInputString()
 	{
 		return getPanel().getInputString();

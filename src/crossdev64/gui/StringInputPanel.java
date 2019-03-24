@@ -42,14 +42,16 @@ public class StringInputPanel
 		add(dtrpnInfo, gbc_dtrpnInfo);
 		
 		mStringEdit = new JTextField();
-		GridBagConstraints gbc_mStringEdit = new GridBagConstraints();
-		gbc_mStringEdit.fill = GridBagConstraints.HORIZONTAL;
-		gbc_mStringEdit.anchor = GridBagConstraints.NORTH;
-		gbc_mStringEdit.gridx = 0;
-		gbc_mStringEdit.gridy = 1;
-		add(mStringEdit, gbc_mStringEdit);
 		if(oValue != null)
+		{
+			GridBagConstraints gbc_mStringEdit = new GridBagConstraints();
+			gbc_mStringEdit.fill = GridBagConstraints.HORIZONTAL;
+			gbc_mStringEdit.anchor = GridBagConstraints.NORTH;
+			gbc_mStringEdit.gridx = 0;
+			gbc_mStringEdit.gridy = 1;
+			add(mStringEdit, gbc_mStringEdit);
 			mStringEdit.setText(oValue);
+		}
 	}
 
 	@Override

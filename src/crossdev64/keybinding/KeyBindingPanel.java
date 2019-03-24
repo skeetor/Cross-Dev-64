@@ -267,7 +267,9 @@ public class KeyBindingPanel
 		Map<String, KeyBindingConfig> bindings = KeyBindings.getInstance().getBindings();
 
 		for(KeyBindingConfig binding : bindings.values())
-			mTableModel.addRow(binding);
+			mTableModel.addRow(binding, false);
+
+		mTableModel.refresh();
 	}
 
 	protected void updateShortcutInfo(KeyBinding oBinding)
@@ -286,8 +288,16 @@ public class KeyBindingPanel
 		{
 			KeyStroke keystroke = oBinding.getKeyStroke();
 			
-			mCurrentTxt.setText(KeyBinding.prepareToString(keystroke));
-			mTogglePressedCheck.setSelected(!keystroke.isOnKeyRelease());
+			if(keystroke == null)
+			{
+				mCurrentTxt.setText("");
+				mTogglePressedCheck.setSelected(false);
+			}
+			else
+			{
+				mCurrentTxt.setText(KeyBinding.prepareToString(keystroke));
+				mTogglePressedCheck.setSelected(!keystroke.isOnKeyRelease());
+			}
 
 			mShortcutTxt.setEnabled(true);
 			mAssignBtn.setEnabled(true);
@@ -338,24 +348,27 @@ public class KeyBindingPanel
 			return;
 
 		// Check if the key already exists and if it should be replaced.
-		KeyBindingConfig binding = null;
+		KeyBindingConfig binding = mTableModel.getDisplayRow(row);
 		int exists = mTableModel.getRowByKey(mKeyPressed);
 		if(exists != -1)
 		{
-			binding = mTableModel.getRow(row);
-			StringInputDlg dlg = new StringInputDlg(null, "Message", "Assign", "Wert");
+			String text = GlobalSettings.getResourceString("keybinder.exists", binding.getActionId());
+			StringInputDlg dlg = new StringInputDlg();
+			dlg.setOKText("keybinder.assign");
+			dlg.setParams(GlobalSettings.getResourceString("keybinder.exists_title"), text, null);
+			dlg.center(this, 400, 200);
 			boolean ok = dlg.showModal();
 			if(!ok)
-			{
 				binding = null;
-			}
 			else
-			{
-			}
+				mTableModel.getRow(exists).setOverride((KeyStroke)null);
 		}
 
 		if(binding != null)
+		{
 			binding.setOverride(mKeyPressed);
+			mTableModel.refresh();
+		}
 
 		clearKeypress();
 	}

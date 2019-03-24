@@ -1,6 +1,8 @@
 package crossdev64.keybinding;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.KeyStroke;
@@ -17,6 +19,15 @@ public class KeyBindingTableModel
 	private List<KeyBindingConfig> mTotalRows = new ArrayList<>();
 	private List<KeyBindingConfig> mRows = new ArrayList<>();
 	private String mFilter = "";
+
+	class Sorter
+	implements Comparator<KeyBindingConfig> 
+	{
+		public int compare(KeyBindingConfig a, KeyBindingConfig b) 
+		{
+			return a.toString().compareTo(b.toString());
+		}
+	}
 
 	public KeyBindingTableModel()
 	{
@@ -53,7 +64,7 @@ public class KeyBindingTableModel
 	@Override
 	public Object getValueAt(int nRow, int nColumn)
 	{
-		KeyBindingConfig row = getRow(nRow);
+		KeyBindingConfig row = getDisplayRow(nRow);
 		if(row == null)
 			return "MISSING ROW";
 
@@ -96,6 +107,8 @@ public class KeyBindingTableModel
 		mRows.clear();
 		for(KeyBindingConfig binding : mTotalRows)
 			mRows.add(binding);
+
+		Collections.<KeyBindingConfig>sort(mRows, new Sorter());
 	}
 
 	public void refresh()
@@ -104,17 +117,24 @@ public class KeyBindingTableModel
 		fireTableDataChanged();
 	}
 
-	public void addRow(KeyBindingConfig oBinding)
+	public void addRow(KeyBindingConfig oBinding, boolean bRefresh)
 	{
 		if(oBinding != null)
-		{
 			mTotalRows.add(oBinding);
-		}
 
-		refresh();
+		if(bRefresh)
+			refresh();
 	}
 
 	public KeyBindingConfig getRow(int nRow)
+	{
+		if(nRow >= mTotalRows.size())
+			return null;
+
+		return mTotalRows.get(nRow);
+	}
+
+	public KeyBindingConfig getDisplayRow(int nRow)
 	{
 		if(nRow >= mRows.size())
 			return null;
