@@ -147,7 +147,7 @@ public class KeyBindingPanel
 					mKeyState.remove(key);
 
 				if(mKeyState.size() == 0)
-					mShortcutTxt.setText(KeyBinding.prepareToString(mKeyPressed));
+					mShortcutTxt.setText(KeyBinding.prepareToString(mKeyPressed, false));
 
 				e.consume();
 			}
@@ -162,7 +162,7 @@ public class KeyBindingPanel
 					// Store the pressed key, so we can see that it is already pressed.
 					mKeyState.put(key, ks);
 					mKeyPressed = ks;
-					mShortcutTxt.setText(KeyBinding.prepareToString(mKeyPressed));
+					mShortcutTxt.setText(KeyBinding.prepareToString(mKeyPressed, false));
 					//System.out.println(Stack.getSourcePosition()+": keyPressed: " + ks + " Code: " + e.getKeyCode() + " Mod:" + e.getModifiers());
 				}
 
@@ -209,13 +209,13 @@ public class KeyBindingPanel
 			}
 		});
 
-		JButton mResetAllBtn = new JButton(GlobalSettings.getResourceString("string.reset_all"));
+		JButton mResetAllBtn = new JButton(GlobalSettings.getResourceString("string.reset"));
 		panel.add(mResetAllBtn);
 		mResetAllBtn.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				onResetAll();
+				onReset();
 			}
 		});
 		
@@ -295,7 +295,7 @@ public class KeyBindingPanel
 			}
 			else
 			{
-				mCurrentTxt.setText(KeyBinding.prepareToString(keystroke));
+				mCurrentTxt.setText(KeyBinding.prepareToString(keystroke, false));
 				mTogglePressedCheck.setSelected(!keystroke.isOnKeyRelease());
 			}
 
@@ -375,13 +375,35 @@ public class KeyBindingPanel
 
 	protected void onRemove()
 	{
-		System.out.println(Stack.getSourcePosition()+": OnRemove");
+		int row = mShortcutTable.getSelectionModel().getMinSelectionIndex();
+		if(row == -1)
+			return;
+
+		// Check if the key already exists and if it should be replaced.
+		KeyBindingConfig binding = mTableModel.getDisplayRow(row);
+		if(binding != null)
+		{
+			binding.setOverride((KeyStroke)null);
+			mTableModel.refresh();
+		}
+
 		clearKeypress();
 	}
 
-	protected void onResetAll()
+	protected void onReset()
 	{
-		System.out.println(Stack.getSourcePosition()+": OnResetAll");
+		int row = mShortcutTable.getSelectionModel().getMinSelectionIndex();
+		if(row == -1)
+			return;
+
+		// Check if the key already exists and if it should be replaced.
+		KeyBindingConfig binding = mTableModel.getDisplayRow(row);
+		if(binding != null)
+		{
+			binding.setOverride((KeyStroke)null);
+			mTableModel.refresh();
+		}
+
 		clearKeypress();
 	}
 }

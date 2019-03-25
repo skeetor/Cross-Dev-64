@@ -143,13 +143,35 @@ public class KeyBinding
 
 	public static String prepareToString(KeyStroke oKeyStroke)
 	{
+		return KeyBinding.prepareToString(oKeyStroke, true);
+	}
+
+	public static String prepareToString(KeyStroke oKeyStroke, boolean bIncludePressState)
+	{
 		if(oKeyStroke == null)
 			return null;
 
 		String mod = "";
 		String s  = oKeyStroke.toString().toUpperCase();
-		s = s.replaceAll("PRESSED ", "");
-		s = s.replaceAll("RELEASED ", "");
+		boolean pressed = false;
+		
+		if(s.indexOf("[X]") != -1)
+			s = s.replaceAll("[X]", "PRESSED");
+
+		if(s.indexOf("[-]") != -1)
+			s = s.replaceAll("[-]", "RELEASED");
+
+		if(s.indexOf("PRESSED") != -1)
+		{
+			s = s.replaceAll("PRESSED ", "");
+			pressed = true;
+		}
+
+		if(s.indexOf("RELEASED") != -1)
+		{
+			s = s.replaceAll("RELEASED ", "");
+			pressed = false;
+		}
 
 		if(s.indexOf("META") != -1)
 		{
@@ -176,6 +198,16 @@ public class KeyBinding
 		if(!mod.isEmpty())
 			mod += " ";
 
-		return mod+s;
+		s = mod+s;
+
+		if(bIncludePressState)
+		{
+			if(pressed)
+				s = "[X] " + s;
+			else
+				s = "[-] " + s;
+		}
+
+		return s;
 	}
 }
